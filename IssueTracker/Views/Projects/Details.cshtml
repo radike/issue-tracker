@@ -17,10 +17,47 @@
         <dd>
             @Html.DisplayFor(model => model.Title)
         </dd>
-
     </dl>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<table class="table">
+    <tr>
+        <th>
+            State
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Assignee @*@TODO*@
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+        @foreach (var item in Model.Issues)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                    <br/>
+                    <i><small>reported by @Html.DisplayFor(modelItem => item.ApplicationUser.Email)</small></i>
+                </td>
+                <td>
+                    @*TODO: assignee*@
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", "Issues", new { id = item.Id }, null)
+                </td>
+            </tr>
+        }
+
+    </table>
