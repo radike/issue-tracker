@@ -1,10 +1,8 @@
 ﻿@model IssueTracker.Models.Project
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Project Details";
 }
-
-<h2>Details</h2>
 
 <div>
     <h4>Project</h4>
@@ -21,7 +19,7 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Browse Projects", "Index")
 </p>
 
 <table class="table">
