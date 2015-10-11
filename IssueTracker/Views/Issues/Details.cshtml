@@ -4,63 +4,35 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>Issue</h4>
-    <hr />
+    <br/>
+    <p>
+        @Html.DisplayNameFor(model => model.Project):
+        @Html.ActionLink(Model.Project.Title, "Details", "Projects", new {id = Model.ProjectId}, null)
+    </p>
+    <h4>@Html.DisplayFor(model => model.Name)</h4>
+    reported by @Html.DisplayFor(model => model.Reporter.Email)
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Assignee.Email)
+            @Html.DisplayNameFor(model => model.State):
         </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Assignee.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Reporter.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Reporter.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Project.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.State.Title)
-        </dt>
-
         <dd>
             @Html.DisplayFor(model => model.State.Title)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Assignee):
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Assignee.Email)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Description):
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
-
     </dl>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
