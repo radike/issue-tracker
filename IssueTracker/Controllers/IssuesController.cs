@@ -15,7 +15,7 @@ namespace IssueTracker.Controllers
         // GET: Issues
         public ActionResult Index()
         {
-            var issues = db.Issues.Include(i => i.ApplicationUser).Include(i => i.Project).Include(i => i.State);
+            var issues = db.Issues.Include(i => i.Reporter).Include(i => i.Assignee).Include(i => i.Project).Include(i => i.State);
             return View(issues.ToList());
         }
 
@@ -37,7 +37,7 @@ namespace IssueTracker.Controllers
         // GET: Issues/Create
         public ActionResult Create()
         {
-            ViewBag.ApplicationUserId = new SelectList(db.Users, "Id", "Email");
+            ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email");
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title");
             ViewBag.StateId = new SelectList(db.States, "Id", "Title");
             return View();
@@ -48,20 +48,36 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,StateId,Description,ApplicationUserId,ProjectId")] Issue issue)
+        public ActionResult Create([Bind(Include = "Id,Name,StateId,Description,AssigneeId,ProjectId")] Issue issue)
         {
             if (ModelState.IsValid)
             {
                 issue.Id = Guid.NewGuid();
+                ApplicationUser user = GetLoggedUser();
+                if (user != null)
+                {
+                    issue.ReporterId = user.Id;
+                    issue.Reporter = user;
+                }
                 db.Issues.Add(issue);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ApplicationUserId = new SelectList(db.Users, "Id", "Email", issue.ApplicationUserId);
+            ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
             return View(issue);
+        }
+
+        private ApplicationUser GetLoggedUser()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                ApplicationUser user = db.Users.Where(dbUser => dbUser.Email == User.Identity.Name).First();
+                return user;
+            }
+            return null;
         }
 
         // GET: Issues/Edit/5
@@ -76,7 +92,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ApplicationUserId = new SelectList(db.Users, "Id", "Email", issue.ApplicationUserId);
+            ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
             return View(issue);
@@ -87,7 +103,7 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,StateId,Description,ApplicationUserId,ProjectId")] Issue issue)
+        public ActionResult Edit([Bind(Include = "Id,Name,StateId,Description,AssigneeId,ProjectId")] Issue issue)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +111,7 @@ namespace IssueTracker.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ApplicationUserId = new SelectList(db.Users, "Id", "Email", issue.ApplicationUserId);
+            ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
             return View(issue);

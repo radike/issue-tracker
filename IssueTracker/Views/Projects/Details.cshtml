@@ -33,7 +33,7 @@
             Name
         </th>
         <th>
-            Assignee @*@TODO*@
+            Assignee
         </th>
         <th>
 
@@ -49,10 +49,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                     <br/>
-                    <i><small>reported by @Html.DisplayFor(modelItem => item.ApplicationUser.Email)</small></i>
+                    <i><small>reported by @Html.DisplayFor(modelItem => item.Reporter.Email)</small></i>
                 </td>
                 <td>
-                    @*TODO: assignee*@
+                    @Html.DisplayFor(modelItem => item.Assignee.Email)
                 </td>
                 <td>
                     @Html.ActionLink("Details", "Details", "Issues", new { id = item.Id }, null)

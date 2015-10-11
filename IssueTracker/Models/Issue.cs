@@ -8,7 +8,8 @@ namespace IssueTracker.Models
         // Foreign keys
         public Guid ProjectId { get; set; }
         public Guid StateId { get; set; }
-        public string ApplicationUserId { get; set; }
+        public string ReporterId { get; set; }
+        public string AssigneeId { get; set; }
 
         // Parameters
         public string Name { get; set; }
@@ -17,7 +18,8 @@ namespace IssueTracker.Models
 
         // Table definitions
         public virtual Project Project { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser Reporter { get; set; }
+        public virtual ApplicationUser Assignee { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
     }
