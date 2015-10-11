@@ -25,7 +25,7 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = db.Projects.Find(id);
+            Project project = db.Projects.Where(p => p.Id == id).Include(p => p.Issues.Select(i => i.State)).First();
             if (project == null)
             {
                 return HttpNotFound();
