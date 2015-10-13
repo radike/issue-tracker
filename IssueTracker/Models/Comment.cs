@@ -13,6 +13,6 @@ namespace IssueTracker.Models
 
         // Table definitions
         public ApplicationUser User { get; set; }
-        public Issue Issue { get; set; }
+        public virtual Issue Issue { get; set; }
     }
 }

@@ -3,16 +3,23 @@
 @{
     ViewBag.Title = "Details";
 }
-
 <div>
     <br/>
     <p>
         @Html.DisplayNameFor(model => model.Project):
         @Html.ActionLink(Model.Project.Title, "Details", "Projects", new {id = Model.ProjectId}, null)
     </p>
-    <h4>@Html.DisplayFor(model => model.Name)</h4>
-    reported by @Html.DisplayFor(model => model.Reporter.Email)
+    <hr />
+    <h2>@Html.DisplayFor(model => model.Name)</h2>
+
+    <h4>Details</h4>
     <dl class="dl-horizontal">
+        <dt>
+            Reporter
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Reporter.Email)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.State):
         </dt>
@@ -34,5 +41,25 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+
+    <h4>Description</h4>
+    <div>
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <h4>Activity</h4>
+
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }) 
+
+    <h4>Comments</h4>
+
+    @using (Html.BeginForm("Create", "Comments", new { id = Model.Id }, FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+        <input class="btn btn-default dropdown-toggle" type="submit" value="Comment" />
+     
+    }  
+
+    
 </div>

@@ -21,6 +21,6 @@ namespace IssueTracker.Models
         public virtual ApplicationUser Reporter { get; set; }
         public virtual ApplicationUser Assignee { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

@@ -35,9 +35,9 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Comments/Create
-        public ActionResult Create()
+        public ActionResult Create(Guid id)
         {
-            ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name");
+            ViewBag.IssueId = id;
             return View();
         }
 
@@ -50,6 +50,7 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+               // comment.IssueId = new Guid("06138F5E-21AA-486F-927A-F233113FF4C5");
                 comment.Id = Guid.NewGuid();
                 comment.Posted = DateTime.Now;
                 db.Comments.Add(comment);
