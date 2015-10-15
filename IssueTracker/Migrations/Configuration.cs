@@ -10,6 +10,7 @@ namespace IssueTracker.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(IssueTracker.DAL.ApplicationDbContext context)

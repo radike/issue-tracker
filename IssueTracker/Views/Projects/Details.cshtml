@@ -16,6 +16,21 @@
             @Html.DisplayFor(model => model.Title)
         </dd>
     </dl>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SelectedUsers)
+        </dt>
+
+        <dd>
+            <ul>
+                @foreach (var user in Model.Users)
+                {
+                    <li>@user.Email</li>
+                }
+            </ul>
+        </dd>
+</dl>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
