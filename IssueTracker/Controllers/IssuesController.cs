@@ -51,7 +51,7 @@ namespace IssueTracker.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,StateId,Description,ReporterId,AssigneeId,ProjectId")] Issue issue)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,ReporterId,AssigneeId,ProjectId")] Issue issue)
         {
             ModelState.Clear();
             issue.ReporterId = GetLoggedUser().Id;
@@ -59,13 +59,19 @@ namespace IssueTracker.Controllers
             if (TryValidateModel(issue))
             {
                 issue.Id = Guid.NewGuid();
+                foreach (var s in db.States.Where(s => s.IsInitial))
+                {
+                    issue.State = s;
+                    issue.StateId = s.Id;
+                }
                 db.Issues.Add(issue);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
-            ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
+            //ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
             return View(issue);
         }
 

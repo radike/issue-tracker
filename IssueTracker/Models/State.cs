@@ -10,6 +10,10 @@ namespace IssueTracker.Models
         [Display(Name = "Title")]
         public string Title { get; set; }
 
+        [Required]
+        [Display(Name = "Is initial?")]
+        public bool IsInitial { get; set; }
+
         // Table definitions
         public virtual ICollection<Issue> Issues { get; set; }
     }

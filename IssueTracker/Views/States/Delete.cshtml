@@ -10,6 +10,7 @@
 <div>
     <h4>State</h4>
     <hr />
+    <span class="text-danger">@ViewBag.ErrorSQL</span>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Title)
@@ -17,6 +18,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsInitial)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsInitial)
         </dd>
 
     </dl>

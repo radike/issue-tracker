@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -44,11 +45,18 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title")] State state)
+        public ActionResult Create([Bind(Include = "Id,Title,IsInitial")] State state)
         {
             if (ModelState.IsValid)
             {
                 state.Id = Guid.NewGuid();
+
+                // if there is already initial state, change it to this one
+                if (state.IsInitial)
+                {
+                    RemoveInitialState();
+                }
+
                 db.States.Add(state);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -77,11 +85,18 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title")] State state)
+        public ActionResult Edit([Bind(Include = "Id,Title,IsInitial")] State state)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(state).State = EntityState.Modified;
+
+                // if there is already initial state, change it to this one
+                if (state.IsInitial)
+                {
+                    RemoveInitialState();
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -100,6 +115,10 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
+            ViewBag.SecondErrorSQL = "second one";
+
             return View(state);
         }
 
@@ -108,10 +127,20 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            State state = db.States.Find(id);
-            db.States.Remove(state);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                State state = db.States.Find(id);
+                db.States.Remove(state);
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                TempData["ErrorSQL"] = "There is some workflow transition or issue using this state. The removal was terminated.";
+                return RedirectToAction("Delete", "States", new { id = id });
+            }
+
         }
 
         protected override void Dispose(bool disposing)
@@ -121,6 +150,17 @@ namespace IssueTracker.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Removes IsInitial flag on each state in database
+        /// </summary>
+        private void RemoveInitialState()
+        {
+            foreach (var s in db.States.Where(s => s.IsInitial))
+            {
+                s.IsInitial = false;
+            }
         }
     }
 }
