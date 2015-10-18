@@ -5,7 +5,6 @@ using System.Net;
 using System.Web.Mvc;
 using IssueTracker.DAL;
 using IssueTracker.Models;
-using System.Diagnostics;
 
 namespace IssueTracker.Controllers
 {
@@ -62,11 +61,6 @@ namespace IssueTracker.Controllers
                 db.Issues.Add(issue);
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            foreach (var e in ModelState)
-            {
-                Trace.WriteLine(e);
-                Debug.WriteLine(e);
             }
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
