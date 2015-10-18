@@ -174,6 +174,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\StatesController.cs" />
+    <Compile Include="Controllers\StateWorkflowsController.cs" />
     <Compile Include="DAL\ApplicationDbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -185,6 +186,7 @@
     <Compile Include="Models\Issue.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\State.cs" />
+    <Compile Include="Models\StateWorkflow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
@@ -270,6 +272,11 @@
     <Content Include="Views\Issues\Details.cshtml" />
     <Content Include="Views\Issues\Edit.cshtml" />
     <Content Include="Views\Issues\Index.cshtml" />
+    <Content Include="Views\StateWorkflows\Create.cshtml" />
+    <Content Include="Views\StateWorkflows\Delete.cshtml" />
+    <Content Include="Views\StateWorkflows\Details.cshtml" />
+    <Content Include="Views\StateWorkflows\Edit.cshtml" />
+    <Content Include="Views\StateWorkflows\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using IssueTracker.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -20,5 +21,15 @@ namespace IssueTracker.DAL
         public DbSet<Issue> Issues { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<State> States { get; set; }
+        public DbSet<StateWorkflow> StateWorkflows { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+        }
+
     }
 }
