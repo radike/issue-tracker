@@ -5,6 +5,7 @@ using System.Net;
 using System.Web.Mvc;
 using IssueTracker.DAL;
 using IssueTracker.Models;
+using System.Diagnostics;
 
 namespace IssueTracker.Controllers
 {
@@ -35,11 +36,13 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Issues/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email");
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title");
             ViewBag.StateId = new SelectList(db.States, "Id", "Title");
+            ViewBag.ReporterId = GetLoggedUser().Id;
             return View();
         }
 
@@ -47,23 +50,24 @@ namespace IssueTracker.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,StateId,Description,AssigneeId,ProjectId")] Issue issue)
+        public ActionResult Create([Bind(Include = "Id,Name,StateId,Description,ReporterId,AssigneeId,ProjectId")] Issue issue)
         {
-            if (ModelState.IsValid)
+            ModelState.Clear();
+            issue.ReporterId = GetLoggedUser().Id;
+            if (TryValidateModel(issue))
             {
                 issue.Id = Guid.NewGuid();
-                ApplicationUser user = GetLoggedUser();
-                if (user != null)
-                {
-                    issue.ReporterId = user.Id;
-                    issue.Reporter = user;
-                }
                 db.Issues.Add(issue);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            foreach (var e in ModelState)
+            {
+                Trace.WriteLine(e);
+                Debug.WriteLine(e);
+            }
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
