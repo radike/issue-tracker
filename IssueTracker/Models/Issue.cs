@@ -33,6 +33,9 @@ namespace IssueTracker.Models
         public State State { get; set; }
 
         [Required]
+        [Display(Name = "Created")]
+        public DateTime Created { get; set; }
+
         [Display(Name = "Issue description")]
         public string Description { get; set; }
 

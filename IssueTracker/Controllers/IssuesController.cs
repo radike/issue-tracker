@@ -55,6 +55,7 @@ namespace IssueTracker.Controllers
         {
             ModelState.Clear();
             issue.ReporterId = GetLoggedUser().Id;
+            issue.Created = DateTime.UtcNow;
             if (TryValidateModel(issue))
             {
                 issue.Id = Guid.NewGuid();
