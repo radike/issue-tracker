@@ -1,4 +1,4 @@
-﻿@model IssueTracker.Models.Issue
+﻿@model IssueTracker.ViewModels.IssueEditViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -48,11 +48,6 @@
                 @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        @* Hidden fields *@
-        @Html.HiddenFor(m => m.ReporterId)
-        @Html.HiddenFor(m => m.Created)
-        @Html.HiddenFor(m => m.StateId)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

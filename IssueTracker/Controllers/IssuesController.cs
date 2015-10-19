@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using AutoMapper;
 using IssueTracker.DAL;
 using IssueTracker.Models;
 using IssueTracker.ViewModels;
@@ -27,8 +28,12 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            IssueDetailViewModel viewModel = new IssueDetailViewModel();
-            viewModel.Issue = db.Issues.Where(i => i.Id == id).Include(i => i.State).First();
+
+            var viewModel = new IssueDetailViewModel
+            {
+                Issue = db.Issues.Where(i => i.Id == id).Include(i => i.State).First()
+            };
+
             if (viewModel.Issue == null)
             {
                 return HttpNotFound();
@@ -97,15 +102,23 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Issue issue = db.Issues.Find(id);
             if (issue == null)
             {
                 return HttpNotFound();
             }
+
+            // configure AutoMapper
+            Mapper.CreateMap<Issue, IssueEditViewModel>();
+            // perform mapping
+            IssueEditViewModel viewModel = Mapper.Map<IssueEditViewModel>(issue);
+            
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
-            return View(issue);
+
+            return View(viewModel);
         }
 
         // POST: Issues/Edit/5
@@ -113,18 +126,28 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,StateId,Description,AssigneeId,ProjectId,ReporterId,Created")] Issue issue)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,AssigneeId,ProjectId")] IssueEditViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(issue).State = EntityState.Modified;
+                // first, get from the database original issue
+                var issueUpdated = db.Issues.AsNoTracking().First(x => x.Id == viewModel.Id);
+
+                // and then rewrite updated fields
+                // configure AutoMapper
+                Mapper.CreateMap<IssueEditViewModel, Issue>();
+                // perform mapping without overriding whole object
+                issueUpdated = Mapper.Map(viewModel, issueUpdated);
+
+                db.Entry(issueUpdated).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                return RedirectToAction("Details", new { id = viewModel.Id });
             }
-            ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
-            ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
-            return View(issue);
+
+            ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", viewModel.AssigneeId);
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", viewModel.ProjectId);
+            return View(viewModel);
         }
 
         // GET: Issues/Delete/5
