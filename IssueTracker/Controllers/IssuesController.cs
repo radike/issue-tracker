@@ -113,7 +113,7 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,StateId,Description,AssigneeId,ProjectId")] Issue issue)
+        public ActionResult Edit([Bind(Include = "Id,Name,StateId,Description,AssigneeId,ProjectId,ReporterId,Created")] Issue issue)
         {
             if (ModelState.IsValid)
             {
