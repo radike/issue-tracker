@@ -5,6 +5,7 @@ using System.Net;
 using System.Web.Mvc;
 using IssueTracker.DAL;
 using IssueTracker.Models;
+using IssueTracker.ViewModels;
 
 namespace IssueTracker.Controllers
 {
@@ -26,12 +27,16 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Issue issue = db.Issues.Where(i => i.Id == id).Include(i => i.State).First();
-            if (issue == null)
+            IssueDetailViewModel viewModel = new IssueDetailViewModel();
+            viewModel.Issue = db.Issues.Where(i => i.Id == id).Include(i => i.State).First();
+            if (viewModel.Issue == null)
             {
                 return HttpNotFound();
             }
-            return View(issue);
+
+            viewModel.StateWorkflows = db.StateWorkflows.ToList().Where(c => c.FromState == viewModel.Issue.State);
+
+            return View(viewModel);
         }
 
         // GET: Issues/Create
@@ -155,6 +160,23 @@ namespace IssueTracker.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult ChangeStatus(Guid issueId, Guid to)
+        {
+            var issue = db.Issues.Find(issueId);
+            issue.StateId = to; 
+            
+            db.SaveChanges();
+
+            if (HttpContext.Request.UrlReferrer != null)
+            {
+                return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

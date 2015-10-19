@@ -1,4 +1,4 @@
-﻿@model IssueTracker.Models.Issue
+﻿@model IssueTracker.ViewModels.IssueDetailViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -6,53 +6,59 @@
 <div>
     <br/>
     <p>
-        @Html.DisplayNameFor(model => model.Project):
-        @Html.ActionLink(Model.Project.Title, "Details", "Projects", new {id = Model.ProjectId}, null)
+        @Html.DisplayNameFor(model => model.Issue.Project):
+        @Html.ActionLink(Model.Issue.Project.Title, "Details", "Projects", new {id = Model.Issue.ProjectId }, null)
     </p>
     <hr />
-    <h2>@Html.DisplayFor(model => model.Name)</h2>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+    <h2>@Html.DisplayFor(model => model.Issue.Name)</h2>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Issue.Id })
+    @foreach (var item in Model.StateWorkflows)
+    {
+        <strong>
+            | @Html.ActionLink(@Html.DisplayFor(modelItem => item.ToState.Title).ToString(), "ChangeStatus", new { issueId = Model.Issue.Id, to = item.ToStateId })
+        </strong>
+    }
     <h4>Details</h4>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Created):
+            @Html.DisplayNameFor(model => model.Issue.Created):
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Created)
+            @Html.DisplayFor(model => model.Issue.Created)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.State):
+            @Html.DisplayNameFor(model => model.Issue.State):
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.State.Title)
+            @Html.DisplayFor(model => model.Issue.State.Title)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Reporter):
+            @Html.DisplayNameFor(model => model.Issue.Reporter):
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Reporter.Email)
+            @Html.DisplayFor(model => model.Issue.Reporter.Email)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Assignee):
+            @Html.DisplayNameFor(model => model.Issue.Assignee):
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Assignee.Email)
+            @Html.DisplayFor(model => model.Issue.Assignee.Email)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description):
+            @Html.DisplayNameFor(model => model.Issue.Description):
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Issue.Description)
         </dd>
     </dl>
 
     <h4>Comments</h4>
 
-    @using (Html.BeginForm("Create", "Comments", new { id = Model.Id }, FormMethod.Get))
+    @using (Html.BeginForm("Create", "Comments", new { id = Model.Issue.Id }, FormMethod.Get))
     {
         @Html.AntiForgeryToken()
         <input class="btn btn-default dropdown-toggle" type="submit" value="Comment" />
