@@ -1,79 +1,79 @@
-using System;
-using System.Collections.Generic;
-using IssueTracker.Models;
-
 namespace IssueTracker.Migrations
 {
+    using DAL;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<DAL.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<IssueTracker.DAL.ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
         }
 
-        protected override void Seed(DAL.ApplicationDbContext context)
+        public string PasswordHash { get; private set; }
+
+        protected override void Seed(IssueTracker.DAL.ApplicationDbContext context)
         {
-            /*
-            var open = new State { Id = Guid.NewGuid(), Title = "Open", IsInitial = true };
-            var toSolve = new State { Id = Guid.NewGuid(), Title = "To Solve", IsInitial = false };
-            var toCancel = new State { Id = Guid.NewGuid(), Title = "To Cancel", IsInitial = false };
-            var inProgress = new State { Id = Guid.NewGuid(), Title = "In Progress", IsInitial = false };
-            var progressSuspended = new State { Id = Guid.NewGuid(), Title = "Progress Suspended", IsInitial = false };
-            var readyForDeployment = new State { Id = Guid.NewGuid(), Title = "Ready for deployment", IsInitial = false };
-            var toTest = new State { Id = Guid.NewGuid(), Title = "To Test", IsInitial = false };
-            var inTesting = new State { Id = Guid.NewGuid(), Title = "In Testing", IsInitial = false };
-            var closed = new State { Id = Guid.NewGuid(), Title = "Closed", IsInitial = false };
-            var cancelled = new State { Id = Guid.NewGuid(), Title = "Cancelled", IsInitial = false };
-            var testSuspended = new State { Id = Guid.NewGuid(), Title = "Test Suspended", IsInitial = false };
+            //  This method will be called after migrating to the latest version.
 
-            var states = new List<State>
+            SeedUsersAndRoles(context);
+        }
+
+        private static void SeedUsersAndRoles(ApplicationDbContext context)
+        {
+            var roleStore = new RoleStore<IdentityRole>(context);
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+            var roles = new List<IdentityRole>()
             {
-                open,
-                toSolve,
-                toCancel,
-                inProgress,
-                progressSuspended,
-                readyForDeployment,
-                toTest,
-                inTesting,
-                closed,
-                cancelled,
-                testSuspended
+                new IdentityRole { Name = "Administrators" },
+                new IdentityRole { Name = "Users" }
             };
 
-            var stateWorkflows = new List<StateWorkflow>
+            roles.ForEach(role =>
             {
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = open, ToState = toSolve},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = toSolve, ToState = toCancel},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = toSolve, ToState = inProgress},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = inProgress, ToState = progressSuspended},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = inProgress, ToState = readyForDeployment},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = inProgress, ToState = toTest},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = readyForDeployment, ToState = toTest},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = toTest, ToState = inTesting},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = toTest, ToState = closed},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = toTest, ToState = toSolve},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = toCancel, ToState = toSolve},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = toCancel, ToState = cancelled},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = inTesting, ToState = testSuspended},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = inTesting, ToState = toSolve},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = inTesting, ToState = closed},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = progressSuspended, ToState = inProgress},
-                new StateWorkflow {Id = Guid.NewGuid(), FromState = testSuspended, ToState = inTesting}
-            };
+                if (!context.Roles.Any(r => r.Name == role.Name))
+                {
+                    roleManager.Create(role);
+                }
+            });
 
-            context.Database.ExecuteSqlCommand("delete from [dbo].[Issue]");
-            context.Database.ExecuteSqlCommand("delete from [dbo].[StateWorkflow]");
-            context.Database.ExecuteSqlCommand("delete from [dbo].[State]"); 
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var users = new List<User>();
 
-            states.ForEach(p => context.States.Add(p));
-            stateWorkflows.ForEach(p => context.StateWorkflows.Add(p));
+            users.Add(new User("admin@admin.com", "Password@123", "Administrators"));
+            users.Add(new User("user@user.com", "Password@123", "Users"));
 
-            context.SaveChanges();
-            */
+            users.ForEach(user =>
+            {
+                if (!context.Users.Any(u => u.UserName == user.UserName))
+                {
+                    var newUser = new ApplicationUser { UserName = user.UserName, Email = user.UserName };
+                    userManager.Create(newUser, user.Password);
+                    userManager.AddToRole(newUser.Id, user.Role);
+                }
+            });
+        }
+
+        private class User
+        {
+            public string UserName { get; private set; }
+            public string Password { get; private set; }
+            public string Role { get; private set; }
+
+            public User(string userName, string password, string role)
+            {
+                UserName = userName;
+                Password = password;
+                Role = role;
+            }
         }
     }
 }
