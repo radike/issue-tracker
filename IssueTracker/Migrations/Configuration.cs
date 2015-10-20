@@ -16,6 +16,7 @@ namespace IssueTracker.Migrations
 
         protected override void Seed(DAL.ApplicationDbContext context)
         {
+            /*
             var open = new State { Id = Guid.NewGuid(), Title = "Open", IsInitial = true };
             var toSolve = new State { Id = Guid.NewGuid(), Title = "To Solve", IsInitial = false };
             var toCancel = new State { Id = Guid.NewGuid(), Title = "To Cancel", IsInitial = false };
@@ -64,10 +65,15 @@ namespace IssueTracker.Migrations
                 new StateWorkflow {Id = Guid.NewGuid(), FromState = testSuspended, ToState = inTesting}
             };
 
+            context.Database.ExecuteSqlCommand("delete from [dbo].[Issue]");
+            context.Database.ExecuteSqlCommand("delete from [dbo].[StateWorkflow]");
+            context.Database.ExecuteSqlCommand("delete from [dbo].[State]"); 
+
             states.ForEach(p => context.States.Add(p));
             stateWorkflows.ForEach(p => context.StateWorkflows.Add(p));
 
             context.SaveChanges();
+            */
         }
     }
 }

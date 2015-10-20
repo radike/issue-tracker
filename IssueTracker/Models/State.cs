@@ -14,6 +14,8 @@ namespace IssueTracker.Models
         [Display(Name = "Is initial?")]
         public bool IsInitial { get; set; }
 
+        public string Colour { get; set; }
+
         // Table definitions
         public virtual ICollection<Issue> Issues { get; set; }
     }

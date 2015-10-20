@@ -31,7 +31,7 @@
             @Html.DisplayNameFor(model => model.Issue.State):
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Issue.State.Title)
+            <span class="label state" style="background-color: @Html.DisplayFor(model => model.Issue.State.Colour);">@Html.DisplayFor(model => model.Issue.State.Title)</span>
         </dd>
 
         <dt>

@@ -23,7 +23,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Title)
+            <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.Colour);">@Html.DisplayFor(modelItem => item.Title)</span>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.IsInitial)

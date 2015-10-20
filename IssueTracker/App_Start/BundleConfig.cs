@@ -25,6 +25,10 @@ namespace IssueTracker
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            // Pick colour
+            bundles.Add(new ScriptBundle("~/bundles/pick-colour").Include(
+                        "~/Scripts/pick-colour.js"));
         }
     }
 }

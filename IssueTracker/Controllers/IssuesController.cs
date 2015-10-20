@@ -17,6 +17,8 @@ namespace IssueTracker.Controllers
         // GET: Issues
         public ActionResult Index()
         {
+            ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
+
             var issues = db.Issues.Include(i => i.Reporter).Include(i => i.Assignee).Include(i => i.Project).Include(i => i.State);
             return View(issues.ToList());
         }
@@ -74,9 +76,18 @@ namespace IssueTracker.Controllers
                     issue.State = s;
                     issue.StateId = s.Id;
                 }
-                db.Issues.Add(issue);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                if (issue.State == null)
+                {
+                    TempData["ErrorSQL"] = "There is no initial state. The issue couldn't be created.";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    db.Issues.Add(issue);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
 
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);

@@ -22,3 +22,20 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/* Pick colour of state */
+#pick-colour span {
+    cursor: pointer;
+    margin: 1px;
+}
+
+#pick-colour span:hover {
+    border: 1px solid darkgrey;
+    margin: 0;
+}
+
+.state {
+    font-size: 100%;
+    background-color: black;
+    line-height: 2;
+}
