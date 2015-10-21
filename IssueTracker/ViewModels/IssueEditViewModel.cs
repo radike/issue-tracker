@@ -12,7 +12,7 @@ namespace IssueTracker.ViewModels
         [Required]
         public Guid ProjectId { get; set; }
 
-        public Guid AssigneeId { get; set; }
+        public string AssigneeId { get; set; }
 
         [Required]
         public string Name { get; set; }
