@@ -10,8 +10,10 @@ namespace IssueTracker.ViewModels
 
         // Issue editable fields
         [Required]
+        [Display(Name = "Project")]
         public Guid ProjectId { get; set; }
 
+        [Display(Name = "Assignee")]
         public string AssigneeId { get; set; }
 
         [Required]
