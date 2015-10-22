@@ -63,37 +63,36 @@ namespace IssueTracker.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,ReporterId,AssigneeId,ProjectId")] Issue issue)
+        public ActionResult Create(IssueCreateViewModel viewModel)
         {
-            ModelState.Clear();
-            issue.ReporterId = GetLoggedUser().Id;
-            issue.Created = DateTime.UtcNow;
-            if (TryValidateModel(issue))
+            if (ModelState.IsValid)
             {
-                issue.Id = Guid.NewGuid();
-                foreach (var s in db.States.Where(s => s.IsInitial))
-                {
-                    issue.State = s;
-                    issue.StateId = s.Id;
-                }
-
-                if (issue.State == null)
+                var initialState = GetInitialState();
+                if (initialState == null)
                 {
                     TempData["ErrorSQL"] = "There is no initial state. The issue couldn't be created.";
                     return RedirectToAction("Index");
                 }
-                else
-                {
-                    db.Issues.Add(issue);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+                Mapper.CreateMap<IssueCreateViewModel, Issue>();
+                Issue issue = Mapper.Map<Issue>(viewModel);
+                issue.StateId = initialState.Id;
+                issue.ReporterId = GetLoggedUser().Id;
+                issue.Created = DateTime.UtcNow;
+                issue.Id = Guid.NewGuid();
+                db.Issues.Add(issue);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
 
-            ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
+            ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", viewModel.AssigneeId);
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", viewModel.ProjectId);
             //ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
-            return View(issue);
+            return View(viewModel);
+        }
+
+        private State GetInitialState()
+        {
+            return db.States.Where(s => s.IsInitial).First();
         }
 
         private ApplicationUser GetLoggedUser()
@@ -124,7 +123,7 @@ namespace IssueTracker.Controllers
             Mapper.CreateMap<Issue, IssueEditViewModel>();
             // perform mapping
             IssueEditViewModel viewModel = Mapper.Map<IssueEditViewModel>(issue);
-            
+
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
@@ -199,7 +198,7 @@ namespace IssueTracker.Controllers
         public ActionResult ChangeStatus(Guid issueId, Guid to)
         {
             var issue = db.Issues.Find(issueId);
-            issue.StateId = to; 
+            issue.StateId = to;
             
             db.SaveChanges();
 
