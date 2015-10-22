@@ -11,6 +11,7 @@ namespace IssueTracker.Models
     {
         // Table definitions
         public virtual ICollection<Issue> Issues { get; set; }
+        public virtual ICollection<Project> Projects { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
