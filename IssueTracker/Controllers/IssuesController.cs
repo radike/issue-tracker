@@ -7,6 +7,7 @@ using AutoMapper;
 using IssueTracker.DAL;
 using IssueTracker.Models;
 using IssueTracker.ViewModels;
+using PagedList;
 
 namespace IssueTracker.Controllers
 {
@@ -15,12 +16,14 @@ namespace IssueTracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Issues
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
 
-            var issues = db.Issues.Include(i => i.Reporter).Include(i => i.Assignee).Include(i => i.Project).Include(i => i.State);
-            return View(issues.ToList());
+            IQueryable<Issue> issues = db.Issues.OrderByDescending(i => i.Created);
+            int pageNumber = page ?? 1;
+            const int pageSize = 20;
+            return View(issues.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Issues/Details/5
@@ -199,7 +202,7 @@ namespace IssueTracker.Controllers
         {
             var issue = db.Issues.Find(issueId);
             issue.StateId = to;
-            
+
             db.SaveChanges();
 
             if (HttpContext.Request.UrlReferrer != null)
