@@ -1,4 +1,6 @@
-﻿@model IEnumerable<IssueTracker.Models.Issue>
+﻿@model PagedList.IPagedList<IssueTracker.Models.Issue>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Index";
@@ -23,7 +25,7 @@
             Created
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Reporter)
+            Reporter
         </th>
         <th>
             Project
@@ -31,31 +33,36 @@
         <th>
             Status
         </th>
-        
+
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new { id = item.Id }, null)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Assignee.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Created)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Reporter.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Project.Title)
-        </td>
-        <td>
-            <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
-        </td>
-    </tr>
-}
-
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new { id = item.Id }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assignee.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reporter.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Title)
+            </td>
+            <td>
+                <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
+            </td>
+        </tr>
+    }
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

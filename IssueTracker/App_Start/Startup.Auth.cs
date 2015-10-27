@@ -6,6 +6,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using IssueTracker.Models;
+using Microsoft.Owin.Security.Google;
 
 namespace IssueTracker
 {
@@ -58,11 +59,12 @@ namespace IssueTracker
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "1067810994532-tm3pr6k6bffj8e4c2mfdepfdkgnfvmgn.apps.googleusercontent.com",
+                
+                ClientSecret = "h_c3NGtvg4owWX5FTnNE3YOB"
+            });
         }
     }
 }
