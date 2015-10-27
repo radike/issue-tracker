@@ -57,7 +57,16 @@
     </dl>
 
     <h4>Comments</h4>
-
+    <table>
+        @foreach (var item in Model.Comments)
+        {
+            <tr>
+                @*<td>@item.User.Email</td>*@
+                <td>@item.Posted</td>
+                <td>@item.Text</td>
+            </tr>
+        }
+    </table>
     @using (Html.BeginForm("Create", "Comments", new { id = Model.Issue.Id }, FormMethod.Get))
     {
         @Html.AntiForgeryToken()

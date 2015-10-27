@@ -11,5 +11,7 @@ namespace IssueTracker.ViewModels
         // Change status, possible workflows
         public IEnumerable<StateWorkflow> StateWorkflows { get; set; }
 
+        public IEnumerable<Comment> Comments { get; set; }
+
     }
 }
