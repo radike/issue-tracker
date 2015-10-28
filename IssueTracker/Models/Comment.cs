@@ -21,8 +21,11 @@ namespace IssueTracker.Models
         [Display(Name = "Posted on")]
         public DateTime? Posted { get; set; }
 
+        [Display(Name = "Author")]
+        public string AuthorId { get; set; }
+
         // Table definitions
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public virtual Issue Issue { get; set; }
     }

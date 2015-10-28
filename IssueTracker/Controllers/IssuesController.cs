@@ -45,7 +45,11 @@ namespace IssueTracker.Controllers
             }
 
             viewModel.StateWorkflows = db.StateWorkflows.ToList().Where(c => c.FromState == viewModel.Issue.State);
-            viewModel.Comments = db.Comments.ToList().Where(c => c.IssueId == id);
+            viewModel.Comments = db.Comments.Where(c => c.IssueId == id).OrderBy(o => o.Posted).ToList();
+            foreach (var comment in viewModel.Comments)
+            {
+                comment.User = db.Users.Find(comment.AuthorId);
+            }
 
             return View(viewModel);
         }

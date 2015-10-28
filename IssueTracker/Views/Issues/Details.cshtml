@@ -57,22 +57,30 @@
     </dl>
 
     <h4>Comments</h4>
-    <table>
+    <table class="table">
         @foreach (var item in Model.Comments)
         {
             <tr>
-                @*<td>@item.User.Email</td>*@
+                <td style="font-weight:bold">@item.User.UserName</td>
                 <td>@item.Posted</td>
-                <td>@item.Text</td>
             </tr>
+            <tr>
+                <td>@item.Text</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Comments", new { id = item.Id }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Comments", new { id = item.Id }, null)
+                </td>
+            </tr>
+
+
         }
     </table>
-    @using (Html.BeginForm("Create", "Comments", new { id = Model.Issue.Id }, FormMethod.Get))
+    @using (Html.BeginForm("Create", "Comments", new { id = Model.Issue.Id }))
     {
-        @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()         
+        @Html.TextArea("Text", new { @class = "form-control" })           
+        @Html.Hidden("IssueId", Model.Issue.Id)
         <input class="btn btn-default dropdown-toggle" type="submit" value="Comment" />
-     
-    }  
 
-    
+    }    
 </div>

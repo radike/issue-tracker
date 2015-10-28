@@ -27,6 +27,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Comment comment = db.Comments.Find(id);
+            comment.User = db.Users.Find(comment.AuthorId);
             if (comment == null)
             {
                 return HttpNotFound();
@@ -53,9 +54,10 @@ namespace IssueTracker.Controllers
                // comment.IssueId = new Guid("06138F5E-21AA-486F-927A-F233113FF4C5");
                 comment.Id = Guid.NewGuid();
                 comment.Posted = DateTime.Now;
+                comment.AuthorId = GetLoggedUser().Id;
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
             }
 
             ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
@@ -87,12 +89,16 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                comment.AuthorId = GetLoggedUser().Id;
+                comment.Posted = DateTime.Now;
                 db.Entry(comment).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
+                //return RedirectToAction("Index");
             }
             ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
-            return View(comment);
+            return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
+            //return View(comment);
         }
 
         // GET: Comments/Delete/5
@@ -118,7 +124,8 @@ namespace IssueTracker.Controllers
             Comment comment = db.Comments.Find(id);
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
+            //return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
@@ -129,5 +136,16 @@ namespace IssueTracker.Controllers
             }
             base.Dispose(disposing);
         }
+
+        private ApplicationUser GetLoggedUser()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                ApplicationUser user = db.Users.Where(dbUser => dbUser.Email == User.Identity.Name).First();
+                return user;
+            }
+            return null;
+        }
+
     }
 }
