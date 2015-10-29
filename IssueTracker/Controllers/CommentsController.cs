@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using IssueTracker.DAL;
 using IssueTracker.Models;
 
@@ -58,6 +59,11 @@ namespace IssueTracker.Controllers
                 db.Comments.Add(comment);
                 db.SaveChanges();
                 return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
+            }
+
+            if (comment.Text.IsEmpty())
+            {
+                return RedirectToAction("Details", "Issues", new {id = comment.IssueId});
             }
 
             ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
