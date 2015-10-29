@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Web.Mvc;
 using IssueTracker.DAL;
 using IssueTracker.Models;
+using PagedList;
 
 namespace IssueTracker.Controllers
 {
@@ -14,10 +15,18 @@ namespace IssueTracker.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        private const int ProjectsPerPage = 20;
+        private const int IssuesPerProjectPage = 10;
+
         // GET: Projects
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.Projects.ToList());
+            ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
+
+            var projects = db.Projects.ToList();
+            int pageNumber = page ?? 1;
+
+            return View(projects.ToPagedList(pageNumber, ProjectsPerPage));
         }
 
         // GET: Projects/Details/5
