@@ -5,9 +5,10 @@ using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
 using IssueTracker.DAL;
-using IssueTracker.Models;
+using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using PagedList;
+using System.Collections.Generic;
 
 namespace IssueTracker.Controllers
 {
@@ -20,7 +21,7 @@ namespace IssueTracker.Controllers
         {
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
 
-            IQueryable<Issue> issues = db.Issues.OrderByDescending(i => i.Created);
+            var issues = Mapper.Map<IEnumerable<IssueViewModel>>(db.Issues.OrderByDescending(i => i.Created));
             int pageNumber = page ?? 1;
             const int pageSize = 20;
             return View(issues.ToPagedList(pageNumber, pageSize));
@@ -36,7 +37,7 @@ namespace IssueTracker.Controllers
 
             var viewModel = new IssueDetailViewModel
             {
-                Issue = db.Issues.Where(i => i.Id == id).Include(i => i.State).First()
+                Issue = Mapper.Map<IssueViewModel>(db.Issues.Where(i => i.Id == id).Include(i => i.State).First())
             };
 
             if (viewModel.Issue == null)
@@ -44,8 +45,10 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
-            viewModel.StateWorkflows = db.StateWorkflows.ToList().Where(c => c.FromState == viewModel.Issue.State);
-            viewModel.Comments = db.Comments.Where(c => c.IssueId == id).OrderBy(o => o.Posted).ToList();
+            var workflows = db.StateWorkflows.Where(c => c.FromState.Id == viewModel.Issue.State.Id);
+            viewModel.StateWorkflows = Mapper.Map<IEnumerable<StateWorkflowViewModel>>(workflows);
+            var comments = db.Comments.Where(c => c.IssueId == id).OrderBy(o => o.Posted).ToList();
+            viewModel.Comments = Mapper.Map<IEnumerable<CommentViewModel>>(comments);
             foreach (var comment in viewModel.Comments)
             {
                 comment.User = db.Users.Find(comment.AuthorId);
@@ -81,7 +84,6 @@ namespace IssueTracker.Controllers
                     TempData["ErrorSQL"] = "There is no initial state. The issue couldn't be created.";
                     return RedirectToAction("Index");
                 }
-                Mapper.CreateMap<IssueCreateViewModel, Issue>();
                 Issue issue = Mapper.Map<Issue>(viewModel);
                 issue.StateId = initialState.Id;
                 issue.ReporterId = GetLoggedUser().Id;
@@ -127,11 +129,7 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
-            // configure AutoMapper
-            Mapper.CreateMap<Issue, IssueEditViewModel>();
-            // perform mapping
             IssueEditViewModel viewModel = Mapper.Map<IssueEditViewModel>(issue);
-
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
@@ -149,15 +147,12 @@ namespace IssueTracker.Controllers
             if (ModelState.IsValid)
             {
                 // first, get from the database original issue
-                var issueUpdated = db.Issues.AsNoTracking().First(x => x.Id == viewModel.Id);
+                var updatedIssue = db.Issues.AsNoTracking().First(x => x.Id == viewModel.Id);
 
                 // and then rewrite updated fields
-                // configure AutoMapper
-                Mapper.CreateMap<IssueEditViewModel, Issue>();
                 // perform mapping without overriding whole object
-                issueUpdated = Mapper.Map(viewModel, issueUpdated);
-
-                db.Entry(issueUpdated).State = EntityState.Modified;
+                updatedIssue = Mapper.Map(viewModel, updatedIssue);
+                db.Entry(updatedIssue).State = EntityState.Modified;
                 db.SaveChanges();
 
                 return RedirectToAction("Details", new { id = viewModel.Id });
@@ -180,7 +175,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(issue);
+            return View(Mapper.Map<IssueViewModel>(issue));
         }
 
         // POST: Issues/Delete/5

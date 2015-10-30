@@ -5,7 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using IssueTracker.DAL;
-using IssueTracker.Models;
+using IssueTracker.Entities;
+using AutoMapper;
+using IssueTracker.ViewModels;
+using System.Collections.Generic;
 
 namespace IssueTracker.Controllers
 {
@@ -16,7 +19,7 @@ namespace IssueTracker.Controllers
         // GET: States
         public ActionResult Index()
         {
-            return View(db.States.ToList());
+            return View(Mapper.Map<IEnumerable<StateViewModel>>(db.States).ToList());
         }
 
         // GET: States/Details/5
@@ -31,7 +34,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(state);
+            return View(Mapper.Map<StateViewModel>(state));
         }
 
         // GET: States/Create
@@ -57,7 +60,7 @@ namespace IssueTracker.Controllers
                     RemoveInitialState();
                 }
 
-                db.States.Add(state);
+                db.States.Add(Mapper.Map<State>(state));
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -77,7 +80,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(state);
+            return View(Mapper.Map<StateViewModel>(state));
         }
 
         // POST: States/Edit/5
@@ -85,11 +88,11 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Colour,IsInitial")] State state)
+        public ActionResult Edit([Bind(Include = "Id,Title,Colour,IsInitial")] StateViewModel state)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(state).State = EntityState.Modified;
+                db.Entry(Mapper.Map<State>(state)).State = EntityState.Modified;
 
                 // if there is already initial state, change it to this one
                 if (state.IsInitial)
@@ -115,10 +118,8 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
-
-            return View(state);
+            return View(Mapper.Map<StateViewModel>(state));
         }
 
         // POST: States/Delete/5
@@ -131,7 +132,6 @@ namespace IssueTracker.Controllers
                 State state = db.States.Find(id);
                 db.States.Remove(state);
                 db.SaveChanges();
-
                 return RedirectToAction("Index");
             }
             catch (Exception)

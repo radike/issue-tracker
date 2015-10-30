@@ -6,8 +6,10 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Web.Mvc;
 using IssueTracker.DAL;
-using IssueTracker.Models;
 using PagedList;
+using IssueTracker.Entities;
+using IssueTracker.ViewModels;
+using AutoMapper;
 
 namespace IssueTracker.Controllers
 {
@@ -23,7 +25,7 @@ namespace IssueTracker.Controllers
         {
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
 
-            var projects = db.Projects.ToList();
+            var projects = Mapper.Map<IEnumerable<ProjectViewModel>>(db.Projects);
             int pageNumber = page ?? 1;
 
             return View(projects.ToPagedList(pageNumber, ProjectsPerPage));
@@ -41,7 +43,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(project);
+            return View(Mapper.Map<ProjectViewModel>(project));
         }
 
         // GET: Projects/Create
@@ -56,7 +58,7 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,SelectedUsers")] Project project)
+        public ActionResult Create([Bind(Include = "Id,Title,SelectedUsers")] ProjectViewModel project)
         {
             if (ModelState.IsValid)
             {
@@ -64,10 +66,11 @@ namespace IssueTracker.Controllers
 
                 if (project.SelectedUsers != null)
                 {
-                    project.Users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
+                    var users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
+                    project.Users = users;//Mapper.Map<IEnumerable<ApplicationUserViewModel>>(users);
                 }
 
-                db.Projects.Add(project);
+                db.Projects.Add(Mapper.Map<Project>(project));
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -82,7 +85,7 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             Project project = db.Projects.Find(id);
             if (project == null)
             {
@@ -97,9 +100,7 @@ namespace IssueTracker.Controllers
                 Selected = userIds.Contains(u.Id)
             });
             ViewBag.UsersList = usersSelectList;
-
-
-            return View(project);
+            return View(Mapper.Map<ProjectViewModel>(project));
         }
 
         // POST: Projects/Edit/5
@@ -107,23 +108,24 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,SelectedUsers")] Project project)
+        public ActionResult Edit([Bind(Include = "Id,Title,SelectedUsers")] ProjectViewModel project)
         {
             if (ModelState.IsValid)
             {
-                db.Projects.Attach(project);
-                db.Entry(project).Collection(p => p.Users).Load(); // Users need to be loaded in order to change them
+                Project projectEntity = Mapper.Map<Project>(project);
+                db.Projects.Attach(projectEntity);
+                db.Entry(projectEntity).Collection(p => p.Users).Load(); // Users need to be loaded in order to change them
 
                 if (project.SelectedUsers != null)
                 {
-                    project.Users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
+                    projectEntity.Users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
                 }
                 else
                 {
-                    project.Users = null;
+                    projectEntity.Users = null;
                 }
 
-                db.Entry(project).State = EntityState.Modified;
+                db.Entry(projectEntity).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -142,7 +144,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(project);
+            return View(Mapper.Map<ProjectViewModel>(project));
         }
 
         // POST: Projects/Delete/5

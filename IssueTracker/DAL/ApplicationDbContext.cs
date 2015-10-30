@@ -1,6 +1,6 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using IssueTracker.Models;
+using IssueTracker.Entities;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace IssueTracker.DAL

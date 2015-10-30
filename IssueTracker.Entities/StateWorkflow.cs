@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace IssueTracker.Models
+namespace IssueTracker.Entities
 {
     public class StateWorkflow : BaseEntity
     {

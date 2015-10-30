@@ -5,7 +5,10 @@ using System.Net;
 using System.Web.Mvc;
 using System.Web.WebPages;
 using IssueTracker.DAL;
-using IssueTracker.Models;
+using IssueTracker.Entities;
+using IssueTracker.ViewModels;
+using System.Collections.Generic;
+using AutoMapper;
 
 namespace IssueTracker.Controllers
 {
@@ -17,7 +20,7 @@ namespace IssueTracker.Controllers
         public ActionResult Index()
         {
             var comments = db.Comments.Include(c => c.Issue);
-            return View(comments.ToList());
+            return View(Mapper.Map<IEnumerable<CommentViewModel>>(comments).ToList());
         }
 
         // GET: Comments/Details/5
@@ -33,7 +36,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(comment);
+            return View(Mapper.Map<CommentViewModel>(comment));
         }
 
         // GET: Comments/Create
@@ -48,22 +51,22 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Text,Posted,IssueId")] Comment comment)
+        public ActionResult Create([Bind(Include = "Id,Text,Posted,IssueId")] CommentViewModel comment)
         {
             if (ModelState.IsValid)
             {
-               // comment.IssueId = new Guid("06138F5E-21AA-486F-927A-F233113FF4C5");
                 comment.Id = Guid.NewGuid();
                 comment.Posted = DateTime.Now;
                 comment.AuthorId = GetLoggedUser().Id;
-                db.Comments.Add(comment);
+
+                db.Comments.Add(Mapper.Map<Comment>(comment));
                 db.SaveChanges();
                 return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
             }
 
             if (comment.Text.IsEmpty())
             {
-                return RedirectToAction("Details", "Issues", new {id = comment.IssueId});
+                return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
             }
 
             ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
@@ -83,7 +86,7 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
             ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
-            return View(comment);
+            return View(Mapper.Map<CommentViewModel>(comment));
         }
 
         // POST: Comments/Edit/5
@@ -91,13 +94,13 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Text,Posted,IssueId")] Comment comment)
+        public ActionResult Edit([Bind(Include = "Id,Text,Posted,IssueId")] CommentViewModel comment)
         {
             if (ModelState.IsValid)
             {
                 comment.AuthorId = GetLoggedUser().Id;
                 comment.Posted = DateTime.Now;
-                db.Entry(comment).State = EntityState.Modified;
+                db.Entry(Mapper.Map<Comment>(comment)).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
                 //return RedirectToAction("Index");
@@ -119,7 +122,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(comment);
+            return View(Mapper.Map<CommentViewModel>(comment));
         }
 
         // POST: Comments/Delete/5

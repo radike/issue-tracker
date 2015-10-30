@@ -3,11 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.ViewModels
 {
-    public class IssueEditViewModel
+    public class IssueEditViewModel : BaseViewModel
     {
-        // Id
-        public Guid Id { get; set; }
-
         // Issue editable fields
         [Required]
         [Display(Name = "Project")]

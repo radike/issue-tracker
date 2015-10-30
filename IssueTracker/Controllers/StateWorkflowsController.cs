@@ -4,7 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using IssueTracker.DAL;
-using IssueTracker.Models;
+using IssueTracker.Entities;
+using AutoMapper;
+using IssueTracker.ViewModels;
+using System.Collections.Generic;
 
 namespace IssueTracker.Controllers
 {
@@ -16,7 +19,7 @@ namespace IssueTracker.Controllers
         public ActionResult Index()
         {
             var stateWorkflows = db.StateWorkflows.Include(s => s.FromState).Include(s => s.ToState);
-            return View(stateWorkflows.ToList());
+            return View(Mapper.Map<IEnumerable<StateWorkflowViewModel>>(stateWorkflows).ToList());
         }
 
         // GET: StateWorkflows/Details/5
@@ -31,7 +34,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(stateWorkflow);
+            return View(Mapper.Map<StateWorkflowViewModel>(stateWorkflow));
         }
 
         // GET: StateWorkflows/Create
@@ -47,12 +50,12 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FromStateId,ToStateId")] StateWorkflow stateWorkflow)
+        public ActionResult Create([Bind(Include = "Id,FromStateId,ToStateId")] StateWorkflowViewModel stateWorkflow)
         {
             if (ModelState.IsValid)
             {
                 stateWorkflow.Id = Guid.NewGuid();
-                db.StateWorkflows.Add(stateWorkflow);
+                db.StateWorkflows.Add(Mapper.Map<StateWorkflow>(stateWorkflow));
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -76,7 +79,7 @@ namespace IssueTracker.Controllers
             }
             ViewBag.FromStateId = new SelectList(db.States, "Id", "Title", stateWorkflow.FromStateId);
             ViewBag.ToStateId = new SelectList(db.States, "Id", "Title", stateWorkflow.ToStateId);
-            return View(stateWorkflow);
+            return View(Mapper.Map<StateWorkflowViewModel>(stateWorkflow));
         }
 
         // POST: StateWorkflows/Edit/5
@@ -84,11 +87,11 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FromStateId,ToStateId")] StateWorkflow stateWorkflow)
+        public ActionResult Edit([Bind(Include = "Id,FromStateId,ToStateId")] StateWorkflowViewModel stateWorkflow)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(stateWorkflow).State = EntityState.Modified;
+                db.Entry(Mapper.Map<StateWorkflow>(stateWorkflow)).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -109,7 +112,7 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(stateWorkflow);
+            return View(Mapper.Map<StateWorkflowViewModel>(stateWorkflow));
         }
 
         // POST: StateWorkflows/Delete/5
