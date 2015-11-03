@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IssueTracker.Entities
 {
-    public class Issue : BaseEntity
+    public class Issue : BaseEntityWithHistorization
     {
         // Foreign keys
         [Required]
@@ -44,5 +44,9 @@ namespace IssueTracker.Entities
         public virtual ApplicationUser Assignee { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        // Custom properties
+        [NotMapped]
+        public string Code => Project.Code + "-" + CodeNumber;
     }
 }

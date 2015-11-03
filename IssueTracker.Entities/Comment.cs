@@ -1,11 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IssueTracker.Entities
 {
-    public class Comment : BaseEntity
+    public class Comment : BaseEntityWithHistorization
     {
         // Foreign keys
         [Required]

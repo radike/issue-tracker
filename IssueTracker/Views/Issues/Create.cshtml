@@ -15,6 +15,8 @@
 
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <span class="text-danger">@ViewBag.ErrorSQL</span>
+        <br /><br />
 
         <div class="form-group">
             @Html.LabelFor(model => model.ProjectId, "Project", htmlAttributes: new { @class = "control-label col-md-2" })

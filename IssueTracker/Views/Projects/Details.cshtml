@@ -57,7 +57,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.State.Title)
+                    <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
@@ -68,7 +68,7 @@
                     @Html.DisplayFor(modelItem => item.Assignee.Email)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", "Issues", new { id = item.Id }, null)
+                    @Html.ActionLink("Details", "Details", "Issues", new { id = item.Code }, null)
                 </td>
             </tr>
         }

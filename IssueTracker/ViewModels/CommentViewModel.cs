@@ -1,13 +1,10 @@
 ﻿using IssueTracker.Entities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace IssueTracker.ViewModels
 {
-    public class CommentViewModel : BaseViewModel
+    public class CommentViewModel : BaseEntityWithHistorization
     {
         // Foreign keys
         [Required]
@@ -28,6 +25,6 @@ namespace IssueTracker.ViewModels
         // Table definitions
         public virtual ApplicationUser User { get; set; }
 
-        public virtual IssueViewModel Issue { get; set; }
+        public virtual Issue Issue { get; set; }
     }
 }

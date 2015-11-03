@@ -7,7 +7,7 @@
     <br/>
     <p>
         @Html.DisplayNameFor(model => model.Issue.Project):
-        @Html.ActionLink(Model.Issue.Project.Title, "Details", "Projects", new {id = Model.Issue.ProjectId }, null)
+        @Html.ActionLink(Model.Issue.Project.Title, "Details", "Projects", new {id = Model.Issue.Project.Code}, null)
     </p>
     <hr />
     <h2>@Html.DisplayFor(model => model.Issue.Name)</h2>
@@ -57,24 +57,30 @@
     </dl>
 
     <h4>Comments</h4>
-    <table class="table">
-        @foreach (var item in Model.Comments)
-        {
-            <tr>
-                <td style="font-weight:bold">@item.User.UserName</td>
-                <td>@item.Posted</td>
-            </tr>
-            <tr>
-                <td>@item.Text</td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", "Comments", new { id = item.Id }, null) |
-                    @Html.ActionLink("Delete", "Delete", "Comments", new { id = item.Id }, null)
-                </td>
-            </tr>
-
-
-        }
-    </table>
+    @if (Model.Comments.ToList().Count == 0)
+    {
+        <i>No comments</i>
+        <br /><br />
+    }
+    else
+    {
+        <table class="table">
+            @foreach (var item in Model.Comments)
+            {
+                <tr>
+                    <td style="font-weight: bold">@item.User.UserName</td>
+                    <td>@item.Posted</td>
+                </tr>
+                <tr>
+                    <td>@item.Text</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "Comments", new {id = item.Id}, null) |
+                        @Html.ActionLink("Delete", "Delete", "Comments", new {id = item.Id}, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    }
     @using (Html.BeginForm("Create", "Comments", new { id = Model.Issue.Id }))
     {
         @Html.AntiForgeryToken()         

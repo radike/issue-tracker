@@ -9,6 +9,7 @@ using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using PagedList;
 using System.Collections.Generic;
+using IssueTracker.Abstractions;
 
 namespace IssueTracker.Controllers
 {
@@ -16,28 +17,42 @@ namespace IssueTracker.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        private const int ProjectsPerPage = 20;
+
         // GET: Issues
         public ActionResult Index(int? page)
         {
-            ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
-
-            var issues = Mapper.Map<IEnumerable<IssueViewModel>>(db.Issues.OrderByDescending(i => i.Created));
+            var issues = Mapper.Map<IEnumerable<IssueViewModel>>(db.Issues.Where(i => i.DeletedAt == null).OrderByDescending(i => i.Created).Include(i => i.State));
             int pageNumber = page ?? 1;
-            const int pageSize = 20;
-            return View(issues.ToPagedList(pageNumber, pageSize));
+
+            return View(issues.ToPagedList(pageNumber, ProjectsPerPage));
         }
 
         // GET: Issues/Details/5
-        public ActionResult Details(Guid? id)
+        public ActionResult Details(string id)
         {
+            if (!Helper.CheckIssueCodePattern(id))
+            {
+                return new HttpStatusCodeResult((HttpStatusCode.BadRequest));
+            }
+
             if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var codeSplitted = Helper.SplitIssueCode(id);
+            var projectCode = codeSplitted[0];
+            var issueNumber = int.Parse(codeSplitted[1]);
+
+            if (projectCode == null || issueNumber == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             var viewModel = new IssueDetailViewModel
             {
-                Issue = Mapper.Map<IssueViewModel>(db.Issues.Where(i => i.Id == id).Include(i => i.State).First())
+                Issue = Mapper.Map<IssueViewModel>(db.Issues.Where(i => i.Project.Code == projectCode && i.CodeNumber == issueNumber && i.DeletedAt == null).Include(i => i.State).First())
             };
 
             if (viewModel.Issue == null)
@@ -45,9 +60,11 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
+            // possible workflows
             var workflows = db.StateWorkflows.Where(c => c.FromState.Id == viewModel.Issue.State.Id);
             viewModel.StateWorkflows = Mapper.Map<IEnumerable<StateWorkflowViewModel>>(workflows);
-            var comments = db.Comments.Where(c => c.IssueId == id).OrderBy(o => o.Posted).ToList();
+            // comments from all versions of the issue
+            var comments = db.Comments.Where(c => c.Issue.Project.Code == projectCode && c.Issue.CodeNumber == issueNumber && c.DeletedAt == null).OrderBy(o => o.Posted).ToList();
             viewModel.Comments = Mapper.Map<IEnumerable<CommentViewModel>>(comments);
             foreach (var comment in viewModel.Comments)
             {
@@ -61,10 +78,13 @@ namespace IssueTracker.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
+
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email");
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title");
             ViewBag.StateId = new SelectList(db.States, "Id", "Title");
             ViewBag.ReporterId = GetLoggedUser().Id;
+
             return View();
         }
 
@@ -82,15 +102,20 @@ namespace IssueTracker.Controllers
                 if (initialState == null)
                 {
                     TempData["ErrorSQL"] = "There is no initial state. The issue couldn't be created.";
-                    return RedirectToAction("Index");
+
+                    return RedirectToAction("Create");
                 }
-                Issue issue = Mapper.Map<Issue>(viewModel);
+
+                var issue = Mapper.Map<Issue>(viewModel);
                 issue.StateId = initialState.Id;
                 issue.ReporterId = GetLoggedUser().Id;
                 issue.Created = DateTime.UtcNow;
                 issue.Id = Guid.NewGuid();
+                issue.CodeNumber = db.Issues.Max(x => (int?)x.CodeNumber) + 1 ?? 1;
+
                 db.Issues.Add(issue);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
@@ -102,14 +127,21 @@ namespace IssueTracker.Controllers
 
         private State GetInitialState()
         {
-            return db.States.Where(s => s.IsInitial).First();
+            try
+            {
+                return db.States.First(s => s.IsInitial);
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
         }
 
         private ApplicationUser GetLoggedUser()
         {
             if (User.Identity.IsAuthenticated)
             {
-                ApplicationUser user = db.Users.Where(dbUser => dbUser.Email == User.Identity.Name).First();
+                ApplicationUser user = db.Users.First(dbUser => dbUser.Email == User.Identity.Name);
                 return user;
             }
             return null;
@@ -123,13 +155,13 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Issue issue = db.Issues.Find(id);
+            var issue = db.Issues.Find(id);
             if (issue == null)
             {
                 return HttpNotFound();
             }
 
-            IssueEditViewModel viewModel = Mapper.Map<IssueEditViewModel>(issue);
+            var viewModel = Mapper.Map<IssueEditViewModel>(issue);
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
@@ -146,16 +178,30 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                // first, get from the database original issue
-                var updatedIssue = db.Issues.AsNoTracking().First(x => x.Id == viewModel.Id);
+                // deactivate original entity
+                var entityToDeactivate = db.Issues.AsNoTracking().FirstOrDefault(x => x.Id == viewModel.Id);
+                if (entityToDeactivate != null)
+                {
+                    entityToDeactivate.DeletedAt = DateTime.Now;
+                    db.Entry(entityToDeactivate).State = EntityState.Modified;
+                    db.SaveChanges();
 
-                // and then rewrite updated fields
-                // perform mapping without overriding whole object
-                updatedIssue = Mapper.Map(viewModel, updatedIssue);
-                db.Entry(updatedIssue).State = EntityState.Modified;
-                db.SaveChanges();
+                    // create a new entity
+                    var entityNew = db.Issues.AsNoTracking().FirstOrDefault(x => x.Id == viewModel.Id);
+                    // map viewModel to the entity
+                    Mapper.CreateMap<IssueViewModel, Issue>();
+                    entityNew = Mapper.Map(viewModel, entityNew);
+                    // create a new Id and set the issue to active
+                    entityNew.Id = Guid.NewGuid();
+                    entityNew.DeletedAt = null;
+                    // save the entity
+                    db.Issues.Add(entityNew);
+                    db.SaveChanges();
+                
+                    return RedirectToAction("Details", new { id = entityToDeactivate.Code });
+                }
 
-                return RedirectToAction("Details", new { id = viewModel.Id });
+                return RedirectToAction("Index");
             }
 
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", viewModel.AssigneeId);
@@ -183,9 +229,11 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            Issue issue = db.Issues.Find(id);
-            db.Issues.Remove(issue);
+            var issue = db.Issues.Find(id);
+            issue.DeletedAt = DateTime.Now;
+            db.Entry(issue).State = EntityState.Modified;
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
@@ -200,19 +248,35 @@ namespace IssueTracker.Controllers
 
         public ActionResult ChangeStatus(Guid issueId, Guid to)
         {
-            var issue = db.Issues.Find(issueId);
-            issue.StateId = to;
-
-            db.SaveChanges();
-
-            if (HttpContext.Request.UrlReferrer != null)
+            // deactivate original entity
+            var entityToDeactivate = db.Issues.AsNoTracking().FirstOrDefault(x => x.Id == issueId);
+            if (entityToDeactivate != null)
             {
-                return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
+                entityToDeactivate.DeletedAt = DateTime.Now;
+                db.Entry(entityToDeactivate).State = EntityState.Modified;
+                db.SaveChanges();
+
+                // create a new entity
+                var entityNew = db.Issues.AsNoTracking().FirstOrDefault(x => x.Id == issueId);
+                // change status
+                if (entityNew != null)
+                {
+                    entityNew.StateId = to;
+                    // create a new Id and set the issue to active
+                    entityNew.Id = Guid.NewGuid();
+                    entityNew.DeletedAt = null;
+                    // save the entity
+                    db.Issues.Add(entityNew);
+                }
+                db.SaveChanges();
+
+                if (HttpContext.Request.UrlReferrer != null)
+                {       
+                    return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
+                }
             }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+
+            return RedirectToAction("Index");
         }
     }
 }

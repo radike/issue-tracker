@@ -12,7 +12,6 @@
     @Html.ActionLink("Create New Issue", "Create")
 </p>
 
-<span class="text-danger">@ViewBag.ErrorSQL</span>
 <table class="table">
     <tr>
         <th>
@@ -41,7 +40,7 @@
     {
         <tr>
             <td>
-                @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new { id = item.Id }, null)
+                @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new { id = item.Code }, null)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Assignee.Email)

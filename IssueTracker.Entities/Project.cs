@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace IssueTracker.Entities
 {
-    public class Project : BaseEntity
+    public class Project : BaseEntityWithHistorization
     {
         // Parameters
         [Required]
         [Display(Name = "Project title")]
         [MaxLength(255)]
         public string Title { get; set; }
+
+        [Required]
+        public string Code { get; set; }
 
         // Table definitions
         public virtual ICollection<Issue> Issues { get; set; }

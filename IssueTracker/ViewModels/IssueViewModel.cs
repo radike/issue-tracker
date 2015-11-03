@@ -2,12 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace IssueTracker.ViewModels
 {
-    public class IssueViewModel : BaseViewModel
+    public class IssueViewModel : BaseWithHistorizationViewModel
     {
         // Foreign keys
         [Required]
@@ -42,5 +40,8 @@ namespace IssueTracker.ViewModels
         public virtual ApplicationUser Assignee { get; set; }
 
         public virtual ICollection<CommentViewModel> Comments { get; set; }
+
+        // Custom properties
+        public string Code => Project.Code + "-" + CodeNumber;
     }
 }

@@ -1,5 +1,5 @@
 @using PagedList.Mvc
-@model PagedList.IPagedList<IssueTracker.Models.Project>
+@model PagedList.IPagedList<IssueTracker.ViewModels.ProjectViewModel>
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css"/>
 
@@ -12,8 +12,6 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-
-<span class="text-danger">@ViewBag.ErrorSQL</span>
 
 <table class="table">
     <tr>
@@ -31,7 +29,7 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
-                @Html.ActionLink("Details", "Details", new {id = item.Id}) |
+                @Html.ActionLink("Details", "Details", new {id = item.Code}) |
                 @Html.ActionLink("Delete", "Delete", new {id = item.Id})
             </td>
         </tr>

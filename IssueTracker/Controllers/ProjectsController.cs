@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Runtime.Serialization;
 using System.Web.Mvc;
 using IssueTracker.DAL;
 using PagedList;
 using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
+using IssueTracker.Abstractions;
 
 namespace IssueTracker.Controllers
 {
@@ -18,31 +18,32 @@ namespace IssueTracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         private const int ProjectsPerPage = 20;
-        private const int IssuesPerProjectPage = 10;
 
         // GET: Projects
         public ActionResult Index(int? page)
         {
-            ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
-
-            var projects = Mapper.Map<IEnumerable<ProjectViewModel>>(db.Projects);
-            int pageNumber = page ?? 1;
+            var projectsTemp = db.Projects.Where(x => x.DeletedAt == null).OrderBy(x => x.Title);
+            var projects = Mapper.Map<IEnumerable<ProjectViewModel>>(projectsTemp);
+            var pageNumber = page ?? 1;
 
             return View(projects.ToPagedList(pageNumber, ProjectsPerPage));
         }
 
-        // GET: Projects/Details/5
-        public ActionResult Details(Guid? id)
+        // GET: Projects/Details/XYZ
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = db.Projects.Where(p => p.Id == id).Include(p => p.Issues.Select(i => i.State)).First();
+
+            var project = db.Projects.Where(x => x.Code == id && x.DeletedAt == null).Include(p => p.Issues.Select(i => i.State)).First();
             if (project == null)
             {
                 return HttpNotFound();
             }
+            project.Issues = project.Issues.Where(x => x.DeletedAt == null).ToList();
+
             return View(Mapper.Map<ProjectViewModel>(project));
         }
 
@@ -58,16 +59,33 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,SelectedUsers")] ProjectViewModel project)
+        public ActionResult Create([Bind(Include = "Id,Title,Code,SelectedUsers")] ProjectViewModel project)
         {
             if (ModelState.IsValid)
             {
+                // if the code already exists
+                if (Enumerable.Any(db.Projects, p => p.Code.Equals(project.Code.ToUpper())))
+                {
+                    ViewBag.ErrorUniqueCode = "Entered code is already associated with another project.";
+                    ViewBag.UsersList = new MultiSelectList(db.Users, "Id", "Email");
+                    return View(project);
+                }
+                
+                // if the code has invalid format
+                if (!Helper.CheckProjectCodePattern(project.Code))
+                {
+                    ViewBag.ErrorInvalidFormatCode = "Entered code has invalid format. Only characters are allowed.";
+                    ViewBag.UsersList = new MultiSelectList(db.Users, "Id", "Email");
+                    return View(project);
+                }
+
                 project.Id = Guid.NewGuid();
+                project.Code = project.Code.ToUpper();
 
                 if (project.SelectedUsers != null)
                 {
                     var users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
-                    project.Users = users;//Mapper.Map<IEnumerable<ApplicationUserViewModel>>(users);
+                    project.Users = users;
                 }
 
                 db.Projects.Add(Mapper.Map<Project>(project));
@@ -86,7 +104,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Project project = db.Projects.Find(id);
+            var project = db.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -100,6 +118,7 @@ namespace IssueTracker.Controllers
                 Selected = userIds.Contains(u.Id)
             });
             ViewBag.UsersList = usersSelectList;
+
             return View(Mapper.Map<ProjectViewModel>(project));
         }
 
@@ -108,28 +127,35 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,SelectedUsers")] ProjectViewModel project)
+        public ActionResult Edit([Bind(Include = "Id,Title,Code,SelectedUsers")] ProjectViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                Project projectEntity = Mapper.Map<Project>(project);
-                db.Projects.Attach(projectEntity);
-                db.Entry(projectEntity).Collection(p => p.Users).Load(); // Users need to be loaded in order to change them
-
-                if (project.SelectedUsers != null)
-                {
-                    projectEntity.Users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
-                }
-                else
-                {
-                    projectEntity.Users = null;
-                }
-
-                db.Entry(projectEntity).State = EntityState.Modified;
+                // deactivate original entity 
+                var entityToDeactivate = db.Projects.AsNoTracking().First(x => x.Code == viewModel.Code && x.DeletedAt == null);
+                entityToDeactivate.DeletedAt = DateTime.Now;
+                var oldId = entityToDeactivate.Id;
+                db.Entry(entityToDeactivate).State = EntityState.Modified;
                 db.SaveChanges();
+
+                // create a new entity
+                var entityNew = db.Projects.AsNoTracking().FirstOrDefault(x => x.Id == oldId);
+                // map viewModel to the entity
+                Mapper.CreateMap<ProjectViewModel, Project>();
+                entityNew = Mapper.Map(viewModel, entityNew);
+                // create a new Id
+                entityNew.Id = Guid.NewGuid();
+                // attach the entity in order to load the selected users
+                db.Projects.Attach(entityNew);
+                db.Entry(entityNew).Collection(p => p.Users).Load();
+                entityNew.Users = viewModel.SelectedUsers != null ? db.Users.Where(u => viewModel.SelectedUsers.Contains(u.Id.ToString())).ToList() : null;
+                // save the entity
+                db.Projects.Add(entityNew);
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            return View(project);
+            return View(viewModel);
         }
 
         // GET: Projects/Delete/5
@@ -152,9 +178,11 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            Project project = db.Projects.Find(id);
-            db.Projects.Remove(project);
+            var project = db.Projects.Find(id);
+            project.DeletedAt = DateTime.Now;
+            db.Entry(project).State = EntityState.Modified;
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 

@@ -19,7 +19,7 @@ namespace IssueTracker.Controllers
         // GET: Comments
         public ActionResult Index()
         {
-            var comments = db.Comments.Include(c => c.Issue);
+            var comments = db.Comments.Where(c => c.DeletedAt == null).Include(c => c.Issue);
             return View(Mapper.Map<IEnumerable<CommentViewModel>>(comments).ToList());
         }
 
@@ -30,12 +30,16 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Comment comment = db.Comments.Find(id);
-            comment.User = db.Users.Find(comment.AuthorId);
+
+            var comment = db.Comments.Find(id);
+
             if (comment == null)
             {
                 return HttpNotFound();
             }
+
+            comment.User = db.Users.Find(comment.AuthorId);
+
             return View(Mapper.Map<CommentViewModel>(comment));
         }
 
@@ -55,18 +59,23 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                comment.Issue = db.Issues.Find(comment.IssueId);
+
                 comment.Id = Guid.NewGuid();
                 comment.Posted = DateTime.Now;
                 comment.AuthorId = GetLoggedUser().Id;
+                comment.CodeNumber = db.Comments.Max(x => (int?)x.CodeNumber) + 1 ?? 1;
 
                 db.Comments.Add(Mapper.Map<Comment>(comment));
                 db.SaveChanges();
-                return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
+                return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
 
             if (comment.Text.IsEmpty())
             {
-                return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
+                comment.Issue = db.Issues.Find(comment.IssueId);
+
+                return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
 
             ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
@@ -94,20 +103,42 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Text,Posted,IssueId")] CommentViewModel comment)
+        public ActionResult Edit([Bind(Include = "Id,Text,Posted,IssueId")] CommentViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                comment.AuthorId = GetLoggedUser().Id;
-                comment.Posted = DateTime.Now;
-                db.Entry(Mapper.Map<Comment>(comment)).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
-                //return RedirectToAction("Index");
+                viewModel.Issue = db.Issues.Find(viewModel.IssueId);
+
+                // deactivate original entity
+                var entityToDeactivate = db.Comments.AsNoTracking().FirstOrDefault(x => x.Id == viewModel.Id);
+                if (entityToDeactivate != null)
+                {
+                    entityToDeactivate.DeletedAt = DateTime.Now;
+                    db.Entry(entityToDeactivate).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    // create a new entity
+                    var entityNew = db.Comments.AsNoTracking().FirstOrDefault(x => x.Id == viewModel.Id);
+                    if (entityNew != null)
+                    {
+                        // edit comment text
+                        entityNew.Text = viewModel.Text;
+                        // create a new Id and set the issue to active
+                        entityNew.Id = Guid.NewGuid();
+                        entityNew.DeletedAt = null;
+                        // save the entity
+                        db.Comments.Add(entityNew);
+                    }
+                    db.SaveChanges();
+
+                    return RedirectToAction("Details", "Issues", new {id = viewModel.Issue.Code});
+                }
             }
-            ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
-            return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
-            //return View(comment);
+
+            viewModel.Issue = db.Issues.Find(viewModel.IssueId);
+            ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", viewModel.IssueId);
+
+            return RedirectToAction("Details", "Issues", new {id = viewModel.Issue.Code});
         }
 
         // GET: Comments/Delete/5
@@ -117,11 +148,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Comment comment = db.Comments.Find(id);
+
+            var comment = db.Comments.Find(id);
+
             if (comment == null)
             {
                 return HttpNotFound();
             }
+
             return View(Mapper.Map<CommentViewModel>(comment));
         }
 
@@ -130,11 +164,12 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            Comment comment = db.Comments.Find(id);
-            db.Comments.Remove(comment);
+            var comment = db.Comments.Find(id);
+            comment.DeletedAt = DateTime.Now;
+            db.Entry(comment).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Details", "Issues", new { id = comment.IssueId });
-            //return RedirectToAction("Index");
+
+            return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code});
         }
 
         protected override void Dispose(bool disposing)
@@ -150,7 +185,7 @@ namespace IssueTracker.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                ApplicationUser user = db.Users.Where(dbUser => dbUser.Email == User.Identity.Name).First();
+                var user = db.Users.First(dbUser => dbUser.Email == User.Identity.Name);
                 return user;
             }
             return null;
