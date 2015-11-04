@@ -18,19 +18,19 @@
             Summary
         </th>
         <th>
-            Assigneee
+            @Html.ActionLink("Assignee", "Index", new { sort = ViewBag.AssigneeSort })
         </th>
         <th>
-            Created
+            @Html.ActionLink("Created", "Index", new { sort = ViewBag.CreatedSort })
         </th>
         <th>
-            Reporter
+            @Html.ActionLink("Reporter", "Index", new { sort = ViewBag.ReporterSort })
         </th>
         <th>
-            Project
+            @Html.ActionLink("Project", "Index", new { sort = ViewBag.ProjectSort })
         </th>
         <th>
-            Status
+            @Html.ActionLink("Status", "Index", new { sort = ViewBag.StatusSort })
         </th>
 
         <th></th>

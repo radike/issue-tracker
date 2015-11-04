@@ -20,10 +20,52 @@ namespace IssueTracker.Controllers
         private const int ProjectsPerPage = 20;
 
         // GET: Issues
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string sort)
         {
+            // viewbag items are used in the header to sort the records
+            ViewBag.CreatedSort = String.IsNullOrEmpty(sort) ? "created_desc" : string.Empty;
+            ViewBag.ReporterSort = sort == "reporter" ? "reporter_desc" : "reporter";
+            ViewBag.ProjectSort = sort == "project" ? "project_desc" : "project";
+            ViewBag.AssigneeSort = sort == "assignee" ? "assignee_desc" : "assignee";
+            ViewBag.StatusSort = sort == "status" ? "status_desc" : "project";
+
             var issues = Mapper.Map<IEnumerable<IssueViewModel>>(db.Issues.Where(i => i.DeletedAt == null).OrderByDescending(i => i.Created).Include(i => i.State));
             int pageNumber = page ?? 1;
+
+            // logic implemented to sort the records by clicking on the header
+            switch(sort)
+            {
+                case "reporter_desc":
+                    issues = issues.OrderByDescending(ii => ii.Reporter);
+                    break;
+                case "reporter":
+                    issues = issues.OrderBy(ii => ii.Reporter);
+                    break;
+                case "status_desc":
+                    issues = issues.OrderByDescending(ii => ii.State);
+                    break;
+                case "status":
+                    issues = issues.OrderBy(ii => ii.State);
+                    break;
+                case "assignee_desc":
+                    issues = issues.OrderByDescending(ii => ii.Assignee);
+                    break;
+                case "assignee":
+                    issues = issues.OrderBy(ii => ii.Assignee);
+                    break;
+                case "project_desc":
+                    issues = issues.OrderByDescending(ii => ii.Project);
+                    break;
+                case "project":
+                    issues = issues.OrderBy(ii => ii.Project);
+                    break;
+                case "created_desc":
+                    issues = issues.OrderByDescending(ii => ii.Created);
+                    break;
+                default:
+                    issues = issues.OrderBy(ii => ii.Created);
+                    break;
+            }
 
             return View(issues.ToPagedList(pageNumber, ProjectsPerPage));
         }
