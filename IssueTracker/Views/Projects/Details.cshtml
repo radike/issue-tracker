@@ -19,6 +19,16 @@
 
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.OwnerId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Owner.Email)
+        </dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>
             @Html.DisplayNameFor(model => model.SelectedUsers)
         </dt>
 

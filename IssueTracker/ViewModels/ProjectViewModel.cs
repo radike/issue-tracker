@@ -22,5 +22,10 @@ namespace IssueTracker.ViewModels
         public IEnumerable<string> SelectedUsers { get; set; }
 
         public virtual IEnumerable<ApplicationUser> Users { get; set; }
+
+        [Display(Name = "Project owner")]
+        public string OwnerId { get; set; }
+
+        public virtual ApplicationUser Owner { get; set; }
     }
 }

@@ -27,10 +27,18 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Users, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.OwnerId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.ListBoxFor(model => model.SelectedUsers, (IEnumerable<SelectListItem>) ViewBag.UsersList)
-                @Html.ValidationMessageFor(model => model.SelectedUsers, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.OwnerId, new SelectList(ViewBag.UsersList, "Id", "Email"))
+                @Html.ValidationMessageFor(model => model.OwnerId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Users, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.ListBoxFor(model => model.SelectedUsers, new MultiSelectList(ViewBag.UsersList, "Id", "Email", Model.SelectedUsers))
+                @Html.ValidationMessageFor(model => model.SelectedUsers, "", new {@class = "text-danger"})
             </div>
         </div>
 

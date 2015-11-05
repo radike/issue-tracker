@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,5 +24,11 @@ namespace IssueTracker.Entities
         public ICollection<string> SelectedUsers { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
+
+        [Display(Name = "Project owner")]
+        public string OwnerId { get; set; }
+
+        [ForeignKey("OwnerId")]
+        public virtual ApplicationUser Owner { get; set; }
     }
 }

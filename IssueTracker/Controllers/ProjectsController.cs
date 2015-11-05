@@ -59,7 +59,7 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Code,SelectedUsers")] ProjectViewModel project)
+        public ActionResult Create([Bind(Include = "Id,Title,Code,SelectedUsers,OwnerId")] ProjectViewModel project)
         {
             if (ModelState.IsValid)
             {
@@ -82,11 +82,17 @@ namespace IssueTracker.Controllers
                 project.Id = Guid.NewGuid();
                 project.Code = project.Code.ToUpper();
 
-                if (project.SelectedUsers != null)
+                // add selected owner among users, if not already there
+                if (project.SelectedUsers == null)
                 {
-                    var users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
-                    project.Users = users;
+                    project.SelectedUsers = new [] { project.OwnerId };
                 }
+                else if (project.SelectedUsers != null && !project.SelectedUsers.Contains(project.OwnerId))
+                {
+                    project.SelectedUsers = project.SelectedUsers.Concat(new[] { project.OwnerId });
+                }
+                
+                project.Users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
 
                 db.Projects.Add(Mapper.Map<Project>(project));
                 db.SaveChanges();
@@ -110,15 +116,11 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
-            var userIds = project.Users.Select(u => u.Id.ToString()).ToList();
-            var usersSelectList = db.Users.Select(u => new SelectListItem
-            {
-                Text = u.Email,
-                Value = u.Id,
-                Selected = userIds.Contains(u.Id)
-            });
-            ViewBag.UsersList = usersSelectList;
+            project.SelectedUsers = project.Users.Select(u => u.Id.ToString()).ToList();
 
+            ViewBag.UsersList = db.Users;
+
+            Mapper.CreateMap<Project, ProjectViewModel>();
             return View(Mapper.Map<ProjectViewModel>(project));
         }
 
@@ -127,7 +129,7 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Code,SelectedUsers")] ProjectViewModel viewModel)
+        public ActionResult Edit([Bind(Include = "Id,Title,Code,SelectedUsers,OwnerId")] ProjectViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -137,6 +139,16 @@ namespace IssueTracker.Controllers
                 var oldId = entityToDeactivate.Id;
                 db.Entry(entityToDeactivate).State = EntityState.Modified;
                 db.SaveChanges();
+
+                // add selected owner among users, if not already there
+                if (viewModel.SelectedUsers == null)
+                {
+                    viewModel.SelectedUsers = new[] { viewModel.OwnerId };
+                }
+                else if (viewModel.SelectedUsers != null && !viewModel.SelectedUsers.Contains(viewModel.OwnerId))
+                {
+                    viewModel.SelectedUsers = viewModel.SelectedUsers.Concat(new[] { viewModel.OwnerId });
+                }
 
                 // create a new entity
                 var entityNew = db.Projects.AsNoTracking().FirstOrDefault(x => x.Id == oldId);
@@ -148,7 +160,7 @@ namespace IssueTracker.Controllers
                 // attach the entity in order to load the selected users
                 db.Projects.Attach(entityNew);
                 db.Entry(entityNew).Collection(p => p.Users).Load();
-                entityNew.Users = viewModel.SelectedUsers != null ? db.Users.Where(u => viewModel.SelectedUsers.Contains(u.Id.ToString())).ToList() : null;
+                entityNew.Users = db.Users.Where(u => viewModel.SelectedUsers.Contains(u.Id.ToString())).ToList();
                 // save the entity
                 db.Projects.Add(entityNew);
                 db.SaveChanges();
