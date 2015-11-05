@@ -47,6 +47,9 @@ namespace IssueTracker.Entities
 
         // Custom properties
         [NotMapped]
-        public string Code => Project.Code + "-" + CodeNumber;
+        public string Code
+        {
+            get { return Project.Code + "-" + CodeNumber; }
+        }
     }
 }
