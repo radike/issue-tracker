@@ -209,7 +209,7 @@
     <Compile Include="ViewModels\IssueCreateViewModel.cs" />
     <Compile Include="ViewModels\IssueDetailViewModel.cs" />
     <Compile Include="ViewModels\IssueEditViewModel.cs" />
-    <Compile Include="ViewModels\IssueViewModel.cs" />
+    <Compile Include="ViewModels\IssueIndexViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="ViewModels\ProjectViewModel.cs" />
     <Compile Include="ViewModels\StateViewModel.cs" />
@@ -293,7 +293,6 @@
     <Content Include="Views\Comments\Edit.cshtml" />
     <Content Include="Views\Comments\Index.cshtml" />
     <Content Include="Views\Issues\Create.cshtml" />
-    <Content Include="Views\Issues\Delete.cshtml" />
     <Content Include="Views\Issues\Details.cshtml" />
     <Content Include="Views\Issues\Edit.cshtml" />
     <Content Include="Views\Issues\Index.cshtml" />

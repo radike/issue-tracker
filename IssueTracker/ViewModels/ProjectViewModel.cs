@@ -16,7 +16,7 @@ namespace IssueTracker.ViewModels
         public string Code { get; set; }
 
         // Table definitions
-        public virtual IEnumerable<IssueViewModel> Issues { get; set; }
+        public virtual IEnumerable<IssueIndexViewModel> Issues { get; set; }
 
         [Display(Name = "Users")]
         public IEnumerable<string> SelectedUsers { get; set; }

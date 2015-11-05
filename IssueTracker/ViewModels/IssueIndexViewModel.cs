@@ -5,29 +5,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.ViewModels
 {
-    public class IssueViewModel : BaseWithHistorizationViewModel
+    public class IssueIndexViewModel : BaseWithHistorizationViewModel
     {
-        // Foreign keys
-        [Required]
-        public Guid ProjectId { get; set; }
-
-        [Required]
-        public Guid StateId { get; set; }
-
-        [Required]
-        public string ReporterId { get; set; }
-
-        public string AssigneeId { get; set; }
-
         // Parameters
-        [Required]
         [Display(Name = "Issue title")]
-        [MaxLength(255)]
         public string Name { get; set; }
 
         public StateViewModel State { get; set; }
 
-        [Required]
         [Display(Name = "Created")]
         public DateTime Created { get; set; }
 
@@ -42,6 +27,9 @@ namespace IssueTracker.ViewModels
         public virtual ICollection<CommentViewModel> Comments { get; set; }
 
         // Custom properties
-        public string Code => Project.Code + "-" + CodeNumber;
+        public string Code
+        {
+            get { return Project.Code + "-" + CodeNumber; }
+        }
     }
 }

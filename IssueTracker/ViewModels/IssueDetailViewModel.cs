@@ -5,7 +5,7 @@ namespace IssueTracker.ViewModels
     public class IssueDetailViewModel
     {
         // Issue deatil
-        public IssueViewModel Issue { get; set; }
+        public IssueIndexViewModel Issue { get; set; }
 
         // Change status, possible workflows
         public IEnumerable<StateWorkflowViewModel> StateWorkflows { get; set; }

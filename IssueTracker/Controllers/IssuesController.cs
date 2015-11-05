@@ -29,7 +29,7 @@ namespace IssueTracker.Controllers
             ViewBag.AssigneeSort = sort == "assignee" ? "assignee_desc" : "assignee";
             ViewBag.StatusSort = sort == "status" ? "status_desc" : "project";
 
-            var issues = Mapper.Map<IEnumerable<IssueViewModel>>(db.Issues.Where(i => i.DeletedAt == null).OrderByDescending(i => i.Created).Include(i => i.State));
+            var issues = Mapper.Map<IEnumerable<IssueIndexViewModel>>(db.Issues.Where(i => i.DeletedAt == null).OrderByDescending(i => i.Created).Include(i => i.State));
             int pageNumber = page ?? 1;
 
             // logic implemented to sort the records by clicking on the header
@@ -94,7 +94,7 @@ namespace IssueTracker.Controllers
 
             var viewModel = new IssueDetailViewModel
             {
-                Issue = Mapper.Map<IssueViewModel>(db.Issues.Where(i => i.Project.Code == projectCode && i.CodeNumber == issueNumber && i.DeletedAt == null).Include(i => i.State).First())
+                Issue = Mapper.Map<IssueIndexViewModel>(db.Issues.Where(i => i.Project.Code == projectCode && i.CodeNumber == issueNumber && i.DeletedAt == null).Include(i => i.State).First())
             };
 
             if (viewModel.Issue == null)
@@ -231,7 +231,6 @@ namespace IssueTracker.Controllers
                     // create a new entity
                     var entityNew = db.Issues.AsNoTracking().FirstOrDefault(x => x.Id == viewModel.Id);
                     // map viewModel to the entity
-                    Mapper.CreateMap<IssueViewModel, Issue>();
                     entityNew = Mapper.Map(viewModel, entityNew);
                     // create a new Id and set the issue to active
                     entityNew.Id = Guid.NewGuid();
@@ -249,34 +248,6 @@ namespace IssueTracker.Controllers
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", viewModel.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", viewModel.ProjectId);
             return View(viewModel);
-        }
-
-        // GET: Issues/Delete/5
-        public ActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Issue issue = db.Issues.Find(id);
-            if (issue == null)
-            {
-                return HttpNotFound();
-            }
-            return View(Mapper.Map<IssueViewModel>(issue));
-        }
-
-        // POST: Issues/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
-        {
-            var issue = db.Issues.Find(id);
-            issue.DeletedAt = DateTime.Now;
-            db.Entry(issue).State = EntityState.Modified;
-            db.SaveChanges();
-
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
