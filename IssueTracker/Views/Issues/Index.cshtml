@@ -8,60 +8,67 @@
 
 <h2>All Issues</h2>
 
-<p>
-    @Html.ActionLink("Create New Issue", "Create")
-</p>
+@if (Model.Count == 0)
+{
+    <i>No issue found. Create @Html.ActionLink("a new issue", "Create").</i>
+}
+else
+{
 
-<table class="table">
-    <tr>
-        <th>
-            Summary
-        </th>
-        <th>
-            @Html.ActionLink("Assignee", "Index", new { sort = ViewBag.AssigneeSort })
-        </th>
-        <th>
-            @Html.ActionLink("Created", "Index", new { sort = ViewBag.CreatedSort })
-        </th>
-        <th>
-            @Html.ActionLink("Reporter", "Index", new { sort = ViewBag.ReporterSort })
-        </th>
-        <th>
-            @Html.ActionLink("Project", "Index", new { sort = ViewBag.ProjectSort })
-        </th>
-        <th>
-            @Html.ActionLink("Status", "Index", new { sort = ViewBag.StatusSort })
-        </th>
-
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+    <p>
+        @Html.ActionLink("Create New Issue", "Create")
+    </p>
+    <table class="table">
         <tr>
-            <td>
-                @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new { id = item.Code }, null)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Assignee.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reporter.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Title)
-            </td>
-            <td>
-                <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
-            </td>
-        </tr>
-    }
-</table>
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            <th>
+                Summary
+            </th>
+            <th>
+                @Html.ActionLink("Assignee", "Index", new { sort = ViewBag.AssigneeSort })
+            </th>
+            <th>
+                @Html.ActionLink("Created", "Index", new { sort = ViewBag.CreatedSort })
+            </th>
+            <th>
+                @Html.ActionLink("Reporter", "Index", new { sort = ViewBag.ReporterSort })
+            </th>
+            <th>
+                @Html.ActionLink("Project", "Index", new { sort = ViewBag.ProjectSort })
+            </th>
+            <th>
+                @Html.ActionLink("Status", "Index", new { sort = ViewBag.StatusSort })
+            </th>
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new { id = item.Code }, null)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assignee.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reporter.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Project.Title)
+                </td>
+                <td>
+                    <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+
+    <Text>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</Text>
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+}
