@@ -10,6 +10,7 @@ using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
 using IssueTracker.Abstractions;
+using Microsoft.AspNet.Identity;
 
 namespace IssueTracker.Controllers
 {
@@ -25,6 +26,8 @@ namespace IssueTracker.Controllers
             var projectsTemp = db.Projects.Where(x => x.DeletedAt == null).OrderBy(x => x.Title);
             var projects = Mapper.Map<IEnumerable<ProjectViewModel>>(projectsTemp);
             var pageNumber = page ?? 1;
+
+            ViewBag.ErrorMessageNotOwner = TempData["ErrorMessageNotOwner"] as string;
 
             return View(projects.ToPagedList(pageNumber, ProjectsPerPage));
         }
@@ -82,15 +85,7 @@ namespace IssueTracker.Controllers
                 project.Id = Guid.NewGuid();
                 project.Code = project.Code.ToUpper();
 
-                // add selected owner among users, if not already there
-                if (project.SelectedUsers == null)
-                {
-                    project.SelectedUsers = new [] { project.OwnerId };
-                }
-                else if (project.SelectedUsers != null && !project.SelectedUsers.Contains(project.OwnerId))
-                {
-                    project.SelectedUsers = project.SelectedUsers.Concat(new[] { project.OwnerId });
-                }
+                addOwnerToUsers(project);
                 
                 project.Users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
 
@@ -103,6 +98,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -116,18 +112,26 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
-            project.SelectedUsers = project.Users.Select(u => u.Id.ToString()).ToList();
+            Mapper.CreateMap<Project, ProjectViewModel>();
+            var viewModel = Mapper.Map<ProjectViewModel>(project);
 
+            if (!HasOwnerOrAdminRights(viewModel))
+            {
+                TempData["ErrorMessageNotOwner"] = "Only project owners and administrators can edit projects.";
+                return RedirectToAction("Index");
+            }
+
+            viewModel.SelectedUsers = viewModel.Users.Select(u => u.Id.ToString()).ToList();
             ViewBag.UsersList = db.Users;
 
-            Mapper.CreateMap<Project, ProjectViewModel>();
-            return View(Mapper.Map<ProjectViewModel>(project));
+            return View(viewModel);
         }
 
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Code,SelectedUsers,OwnerId")] ProjectViewModel viewModel)
         {
@@ -140,15 +144,7 @@ namespace IssueTracker.Controllers
                 db.Entry(entityToDeactivate).State = EntityState.Modified;
                 db.SaveChanges();
 
-                // add selected owner among users, if not already there
-                if (viewModel.SelectedUsers == null)
-                {
-                    viewModel.SelectedUsers = new[] { viewModel.OwnerId };
-                }
-                else if (viewModel.SelectedUsers != null && !viewModel.SelectedUsers.Contains(viewModel.OwnerId))
-                {
-                    viewModel.SelectedUsers = viewModel.SelectedUsers.Concat(new[] { viewModel.OwnerId });
-                }
+                addOwnerToUsers(viewModel);
 
                 // create a new entity
                 var entityNew = db.Projects.AsNoTracking().FirstOrDefault(x => x.Id == oldId);
@@ -171,6 +167,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Projects/Delete/5
+        [Authorize]
         public ActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -182,11 +179,21 @@ namespace IssueTracker.Controllers
             {
                 return HttpNotFound();
             }
-            return View(Mapper.Map<ProjectViewModel>(project));
+
+            var viewModel = Mapper.Map<ProjectViewModel>(project);
+
+            if (!HasOwnerOrAdminRights(viewModel))
+            {
+                TempData["ErrorMessageNotOwner"] = "Only project owners and administrators can delete projects.";
+                return RedirectToAction("Index");
+            }
+
+            return View(viewModel);
         }
 
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
@@ -205,6 +212,18 @@ namespace IssueTracker.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public bool HasOwnerOrAdminRights(ProjectViewModel project)
+        {
+            return project.OwnerId == User.Identity.GetUserId() || User.IsInRole("Administrator");
+        }
+
+        private void addOwnerToUsers(ProjectViewModel project)
+        {
+            project.SelectedUsers = project.SelectedUsers == null
+                ? new[] { project.OwnerId }
+                : project.SelectedUsers.Union(new[] { project.OwnerId });
         }
     }
 }
