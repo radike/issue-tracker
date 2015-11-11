@@ -5,12 +5,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IssueTracker.Entities
 {
-    public class Issue : BaseEntityWithHistorization
+    public class Issue
     {
+        // Composite primary key
+        [Key, Column(Order = 2)]
+        public Guid Id { get; set; }
+
+        [Key, Column(Order = 3)]
+        public DateTime CreatedAt { get; set; }
+
         // Foreign keys
         [Required]
-        [ForeignKey("Project")]
+        [ForeignKey("Project"), Column(Order = 0)]
         public Guid ProjectId { get; set; }
+
+        [ForeignKey("Project"), Column(Order = 1)]
+        public DateTime ProjectCreatedAt { get; set; }
 
         [Required]
         [ForeignKey("State")]
@@ -22,6 +32,9 @@ namespace IssueTracker.Entities
 
         [ForeignKey("Assignee")]
         public string AssigneeId { get; set; }
+
+        [Required]
+        public bool Active { get; set; }
 
         // Parameters
         [Required]
@@ -38,6 +51,9 @@ namespace IssueTracker.Entities
         [Display(Name = "Issue description")]
         public string Description { get; set; }
 
+        [Required]
+        public int CodeNumber { get; set; }
+
         // Table definitions
         public virtual Project Project { get; set; }
         public virtual ApplicationUser Reporter { get; set; }
@@ -51,5 +67,6 @@ namespace IssueTracker.Entities
         {
             get { return Project.Code + "-" + CodeNumber; }
         }
+        
     }
 }

@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace IssueTracker.ViewModels
 {
-    public class IssueCreateViewModel
+    public class IssueCreateViewModel : BaseVersioningViewModel
     {
         [Required]
         public Guid ProjectId { get; set; }
+
+        [Required]
+        public DateTime ProjectCreatedAt { get; set; }
 
         public string AssigneeId { get; set; }
 

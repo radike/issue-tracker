@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.ViewModels
 {
-    public class IssueIndexViewModel : BaseWithHistorizationViewModel
+    public class IssueIndexViewModel : BaseVersioningViewModel
     {
         // Parameters
         [Display(Name = "Issue title")]
@@ -19,6 +19,8 @@ namespace IssueTracker.ViewModels
         [Display(Name = "Issue description")]
         public string Description { get; set; }
 
+        public int CodeNumber { get; set; }
+
         // Table definitions
         public virtual ProjectViewModel Project { get; set; }
         public virtual ApplicationUser Reporter { get; set; }
@@ -31,5 +33,6 @@ namespace IssueTracker.ViewModels
         {
             get { return Project.Code + "-" + CodeNumber; }
         }
+        
     }
 }

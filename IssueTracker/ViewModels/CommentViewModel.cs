@@ -4,12 +4,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.ViewModels
 {
-    public class CommentViewModel : BaseEntityWithHistorization
+    public class CommentViewModel : BaseVersioningViewModel
     {
         // Foreign keys
         [Required]
         [Display(Name = "Issue")]
         public Guid IssueId { get; set; }
+
+        [Required]
+        public DateTime IssueCreatedAt { get; set; }
 
         // Parameters
         [Required]
@@ -26,5 +29,6 @@ namespace IssueTracker.ViewModels
         public virtual ApplicationUser User { get; set; }
 
         public virtual Issue Issue { get; set; }
+        
     }
 }

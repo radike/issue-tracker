@@ -1,10 +1,11 @@
-﻿using IssueTracker.Entities;
+﻿using System;
+using IssueTracker.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.ViewModels
 {
-    public class ProjectViewModel : BaseWithHistorizationViewModel
+    public class ProjectViewModel : BaseVersioningViewModel
     {
         // Parameters
         [Required]
@@ -27,5 +28,6 @@ namespace IssueTracker.ViewModels
         public string OwnerId { get; set; }
 
         public virtual ApplicationUser Owner { get; set; }
+        
     }
 }

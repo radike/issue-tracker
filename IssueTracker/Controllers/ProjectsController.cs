@@ -23,7 +23,12 @@ namespace IssueTracker.Controllers
         // GET: Projects
         public ActionResult Index(int? page)
         {
-            var projectsTemp = db.Projects.Where(x => x.DeletedAt == null).OrderBy(x => x.Title);
+            var projectsTemp = db.Projects
+                .Where(n => n.Active)
+                .GroupBy(n => n.Id)
+                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
+                .ToList();
+
             var projects = Mapper.Map<IEnumerable<ProjectViewModel>>(projectsTemp);
             var pageNumber = page ?? 1;
 
@@ -40,12 +45,21 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var project = db.Projects.Where(x => x.Code == id && x.DeletedAt == null).Include(p => p.Issues.Select(i => i.State)).First();
+            var project = db.Projects
+                .Where(x => x.Code == id)
+                .OrderByDescending(x => x.CreatedAt)
+                .Include(p => p.Issues.Select(i => i.State)).First();
+
             if (project == null)
             {
                 return HttpNotFound();
             }
-            project.Issues = project.Issues.Where(x => x.DeletedAt == null).ToList();
+
+            project.Issues = db.Issues
+                .GroupBy(n => n.Id)
+                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
+                .Where(n => n.ProjectId == project.Id)
+                .ToList();
 
             return View(Mapper.Map<ProjectViewModel>(project));
         }
@@ -58,8 +72,6 @@ namespace IssueTracker.Controllers
         }
 
         // POST: Projects/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Title,Code,SelectedUsers,OwnerId")] ProjectViewModel project)
@@ -106,7 +118,8 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var project = db.Projects.Find(id);
+            var project = db.Projects.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
+
             if (project == null)
             {
                 return HttpNotFound();
@@ -128,8 +141,6 @@ namespace IssueTracker.Controllers
         }
 
         // POST: Projects/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -137,22 +148,15 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                // deactivate original entity 
-                var entityToDeactivate = db.Projects.AsNoTracking().First(x => x.Code == viewModel.Code && x.DeletedAt == null);
-                entityToDeactivate.DeletedAt = DateTime.Now;
-                var oldId = entityToDeactivate.Id;
-                db.Entry(entityToDeactivate).State = EntityState.Modified;
-                db.SaveChanges();
-
                 addOwnerToUsers(viewModel);
 
                 // create a new entity
-                var entityNew = db.Projects.AsNoTracking().FirstOrDefault(x => x.Id == oldId);
+                var entityNew = db.Projects.AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
                 // map viewModel to the entity
                 Mapper.CreateMap<ProjectViewModel, Project>();
                 entityNew = Mapper.Map(viewModel, entityNew);
-                // create a new Id
-                entityNew.Id = Guid.NewGuid();
+                // change CreatedAt
+                entityNew.CreatedAt = DateTime.Now;
                 // attach the entity in order to load the selected users
                 db.Projects.Attach(entityNew);
                 db.Entry(entityNew).Collection(p => p.Users).Load();
@@ -174,7 +178,9 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = db.Projects.Find(id);
+
+            var project = db.Projects.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
+
             if (project == null)
             {
                 return HttpNotFound();
@@ -197,9 +203,15 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            var project = db.Projects.Find(id);
-            project.DeletedAt = DateTime.Now;
-            db.Entry(project).State = EntityState.Modified;
+            var projects = db.Projects.Where(x => x.Id == id);
+
+            foreach (var project in projects)
+            {
+                project.Active = false;
+                db.Entry(project).State = EntityState.Modified;
+
+            }
+
             db.SaveChanges();
 
             return RedirectToAction("Index");
@@ -219,11 +231,9 @@ namespace IssueTracker.Controllers
             return project.OwnerId == User.Identity.GetUserId() || User.IsInRole("Administrator");
         }
 
-        private void addOwnerToUsers(ProjectViewModel project)
+        private static void addOwnerToUsers(ProjectViewModel project)
         {
-            project.SelectedUsers = project.SelectedUsers == null
-                ? new[] { project.OwnerId }
-                : project.SelectedUsers.Union(new[] { project.OwnerId });
+            project.SelectedUsers = project.SelectedUsers?.Union(new[] { project.OwnerId }) ?? new[] { project.OwnerId };
         }
     }
 }

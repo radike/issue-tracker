@@ -7,7 +7,6 @@ using System.Web.WebPages;
 using IssueTracker.DAL;
 using IssueTracker.Entities;
 using IssueTracker.ViewModels;
-using System.Collections.Generic;
 using AutoMapper;
 
 namespace IssueTracker.Controllers
@@ -15,14 +14,14 @@ namespace IssueTracker.Controllers
     public class CommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        /*
         // GET: Comments
         public ActionResult Index()
         {
             var comments = db.Comments.Where(c => c.DeletedAt == null).Include(c => c.Issue);
             return View(Mapper.Map<IEnumerable<CommentViewModel>>(comments).ToList());
         }
-
+    
         // GET: Comments/Details/5
         public ActionResult Details(Guid? id)
         {
@@ -42,29 +41,27 @@ namespace IssueTracker.Controllers
 
             return View(Mapper.Map<CommentViewModel>(comment));
         }
-
+        */
         // GET: Comments/Create
         public ActionResult Create(Guid id)
         {
             ViewBag.IssueId = id;
             return View();
         }
-
+        
         // POST: Comments/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Text,Posted,IssueId")] CommentViewModel comment)
         {
             if (ModelState.IsValid)
             {
-                comment.Issue = db.Issues.Find(comment.IssueId);
+                comment.Issue = db.Issues.Where(x => x.Id == comment.IssueId).OrderByDescending(x => x.Created).First();
 
                 comment.Id = Guid.NewGuid();
                 comment.Posted = DateTime.Now;
-                comment.AuthorId = GetLoggedUser().Id;
-                comment.CodeNumber = db.Comments.Max(x => (int?)x.CodeNumber) + 1 ?? 1;
+                comment.AuthorId = getLoggedUser().Id;
+                comment.IssueCreatedAt = comment.Issue.CreatedAt;
 
                 db.Comments.Add(Mapper.Map<Comment>(comment));
                 db.SaveChanges();
@@ -73,7 +70,7 @@ namespace IssueTracker.Controllers
 
             if (comment.Text.IsEmpty())
             {
-                comment.Issue = db.Issues.Find(comment.IssueId);
+                comment.Issue = db.Issues.Where(x => x.Id == comment.IssueId).OrderByDescending(x => x.Created).First();
 
                 return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
@@ -89,54 +86,47 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Comment comment = db.Comments.Find(id);
+
+            var comment = db.Comments.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
+
             if (comment == null)
             {
                 return HttpNotFound();
             }
+
             ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
+
             return View(Mapper.Map<CommentViewModel>(comment));
         }
 
         // POST: Comments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Text,Posted,IssueId")] CommentViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                viewModel.Issue = db.Issues.Find(viewModel.IssueId);
+                viewModel.Issue = db.Issues.Where(x => x.Id == viewModel.IssueId).OrderByDescending(x => x.Created).First();
 
-                // deactivate original entity
-                var entityToDeactivate = db.Comments.AsNoTracking().FirstOrDefault(x => x.Id == viewModel.Id);
-                if (entityToDeactivate != null)
+                // create a new entity
+                var entityNew = db.Comments.AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
+                if (entityNew != null)
                 {
-                    entityToDeactivate.DeletedAt = DateTime.Now;
-                    db.Entry(entityToDeactivate).State = EntityState.Modified;
+                    // edit comment text
+                    entityNew.Text = viewModel.Text;
+                    // change CreatedAt
+                    entityNew.CreatedAt = DateTime.Now;
+                    // save the entity
+                    db.Comments.Add(entityNew);
                     db.SaveChanges();
-
-                    // create a new entity
-                    var entityNew = db.Comments.AsNoTracking().FirstOrDefault(x => x.Id == viewModel.Id);
-                    if (entityNew != null)
-                    {
-                        // edit comment text
-                        entityNew.Text = viewModel.Text;
-                        // create a new Id and set the issue to active
-                        entityNew.Id = Guid.NewGuid();
-                        entityNew.DeletedAt = null;
-                        // save the entity
-                        db.Comments.Add(entityNew);
-                    }
-                    db.SaveChanges();
-
-                    return RedirectToAction("Details", "Issues", new {id = viewModel.Issue.Code});
                 }
-            }
 
-            viewModel.Issue = db.Issues.Find(viewModel.IssueId);
-            ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", viewModel.IssueId);
+                return RedirectToAction("Details", "Issues", new {id = viewModel.Issue.Code});
+                
+            }
+            // todo: otestovat
+            //viewModel.Issue = db.Issues.Find(viewModel.IssueId);
+            //ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", viewModel.IssueId);
 
             return RedirectToAction("Details", "Issues", new {id = viewModel.Issue.Code});
         }
@@ -149,12 +139,14 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var comment = db.Comments.Find(id);
+            var comment = db.Comments.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).Include(x => x.Issue).First();
 
             if (comment == null)
             {
                 return HttpNotFound();
             }
+
+            ViewBag.IssueCode = comment.Issue.Code;
 
             return View(Mapper.Map<CommentViewModel>(comment));
         }
@@ -164,12 +156,22 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            var comment = db.Comments.Find(id);
-            comment.DeletedAt = DateTime.Now;
-            db.Entry(comment).State = EntityState.Modified;
+            var commentIssueIdTemp = new Guid();
+
+            var comments = db.Comments.Where(x => x.Id == id);
+            foreach (var comment in comments)
+            {
+                commentIssueIdTemp = comment.IssueId;
+
+                comment.Active = false;
+                db.Entry(comment).State = EntityState.Modified;
+            }
+
             db.SaveChanges();
 
-            return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code});
+            var commentIssueCodeTemp = db.Issues.Where(x => x.Id == commentIssueIdTemp).OrderByDescending(x => x.CreatedAt).First();
+
+            return RedirectToAction("Details", "Issues", new { id = commentIssueCodeTemp.Code });
         }
 
         protected override void Dispose(bool disposing)
@@ -181,7 +183,7 @@ namespace IssueTracker.Controllers
             base.Dispose(disposing);
         }
 
-        private ApplicationUser GetLoggedUser()
+        private ApplicationUser getLoggedUser()
         {
             if (User.Identity.IsAuthenticated)
             {

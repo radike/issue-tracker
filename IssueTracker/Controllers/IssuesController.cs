@@ -23,14 +23,21 @@ namespace IssueTracker.Controllers
         public ActionResult Index(int? page, string sort)
         {
             // viewbag items are used in the header to sort the records
-            ViewBag.CreatedSort = String.IsNullOrEmpty(sort) ? "created_desc" : string.Empty;
+            ViewBag.CreatedSort = string.IsNullOrEmpty(sort) ? "created_desc" : string.Empty;
             ViewBag.ReporterSort = sort == "reporter" ? "reporter_desc" : "reporter";
             ViewBag.ProjectSort = sort == "project" ? "project_desc" : "project";
             ViewBag.AssigneeSort = sort == "assignee" ? "assignee_desc" : "assignee";
             ViewBag.StatusSort = sort == "status" ? "status_desc" : "project";
 
-            var issues = Mapper.Map<IEnumerable<IssueIndexViewModel>>(db.Issues.Where(i => i.DeletedAt == null).OrderByDescending(i => i.Created).Include(i => i.State));
-            int pageNumber = page ?? 1;
+            var issuesTemp = db.Issues
+                .Where(n => n.Active)
+                .GroupBy(n => n.Id)
+                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
+                .Include(p => p.State).ToList()
+                .OrderByDescending(x => x.Created);
+
+            var issues = Mapper.Map<IEnumerable<IssueIndexViewModel>>(issuesTemp);
+            var pageNumber = page ?? 1;
 
             // logic implemented to sort the records by clicking on the header
             switch(sort)
@@ -91,10 +98,15 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            
+            var issue = db.Issues
+                .Where(i => i.Project.Code == projectCode && i.CodeNumber == issueNumber)
+                .OrderByDescending(x => x.CreatedAt)
+                .Include(i => i.State).First();
 
             var viewModel = new IssueDetailViewModel
             {
-                Issue = Mapper.Map<IssueIndexViewModel>(db.Issues.Where(i => i.Project.Code == projectCode && i.CodeNumber == issueNumber && i.DeletedAt == null).Include(i => i.State).First())
+                Issue = Mapper.Map<IssueIndexViewModel>(issue)
             };
 
             if (viewModel.Issue == null)
@@ -105,8 +117,16 @@ namespace IssueTracker.Controllers
             // possible workflows
             var workflows = db.StateWorkflows.Where(c => c.FromState.Id == viewModel.Issue.State.Id);
             viewModel.StateWorkflows = Mapper.Map<IEnumerable<StateWorkflowViewModel>>(workflows);
+
             // comments from all versions of the issue
-            var comments = db.Comments.Where(c => c.Issue.Project.Code == projectCode && c.Issue.CodeNumber == issueNumber && c.DeletedAt == null).OrderBy(o => o.Posted).ToList();
+            var comments = db.Comments
+                .Where(n => n.Active)
+                .GroupBy(n => n.Id)
+                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
+                .Where(n => n.IssueId == issue.Id)
+                .Include(n => n.User)
+                .ToList();
+
             viewModel.Comments = Mapper.Map<IEnumerable<CommentViewModel>>(comments);
             foreach (var comment in viewModel.Comments)
             {
@@ -122,17 +142,20 @@ namespace IssueTracker.Controllers
         {
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
 
+            var projectsTemp = db.Projects
+                .Where(n => n.Active)
+                .GroupBy(n => n.Id)
+                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
+                .ToList();
+
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email");
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title");
-            ViewBag.StateId = new SelectList(db.States, "Id", "Title");
-            ViewBag.ReporterId = GetLoggedUser().Id;
+            ViewBag.ProjectId = new SelectList(projectsTemp, "Id", "Title");
+            ViewBag.ReporterId = getLoggedUser().Id;
 
             return View();
         }
 
         // POST: Issues/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -140,7 +163,7 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                var initialState = GetInitialState();
+                var initialState = getInitialState();
                 if (initialState == null)
                 {
                     TempData["ErrorSQL"] = "There is no initial state. The issue couldn't be created.";
@@ -148,10 +171,15 @@ namespace IssueTracker.Controllers
                     return RedirectToAction("Create");
                 }
 
+                var projectTemp = db.Projects
+                    .Where(x => x.Id == viewModel.ProjectId)
+                    .OrderByDescending(x => x.CreatedAt).First();
+
                 var issue = Mapper.Map<Issue>(viewModel);
                 issue.StateId = initialState.Id;
-                issue.ReporterId = GetLoggedUser().Id;
-                issue.Created = DateTime.UtcNow;
+                issue.ReporterId = getLoggedUser().Id;
+                issue.Created = DateTime.Now;
+                issue.ProjectCreatedAt = projectTemp.CreatedAt;
                 issue.Id = Guid.NewGuid();
                 issue.CodeNumber = db.Issues.Max(x => (int?)x.CodeNumber) + 1 ?? 1;
 
@@ -163,11 +191,11 @@ namespace IssueTracker.Controllers
 
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", viewModel.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", viewModel.ProjectId);
-            //ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
+
             return View(viewModel);
         }
 
-        private State GetInitialState()
+        private State getInitialState()
         {
             try
             {
@@ -179,7 +207,7 @@ namespace IssueTracker.Controllers
             }
         }
 
-        private ApplicationUser GetLoggedUser()
+        private ApplicationUser getLoggedUser()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -197,56 +225,58 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var issue = db.Issues.Find(id);
+            var issue = db.Issues.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
+
             if (issue == null)
             {
                 return HttpNotFound();
             }
 
+            var projectsTemp = db.Projects
+                .Where(n => n.Active)
+                .GroupBy(n => n.Id)
+                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
+                .ToList();
+
             var viewModel = Mapper.Map<IssueEditViewModel>(issue);
+
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", issue.AssigneeId);
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", issue.ProjectId);
+            ViewBag.ProjectId = new SelectList(projectsTemp, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(db.States, "Id", "Title", issue.StateId);
 
             return View(viewModel);
         }
 
         // POST: Issues/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,AssigneeId,ProjectId")] IssueEditViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                // deactivate original entity
-                var entityToDeactivate = db.Issues.AsNoTracking().FirstOrDefault(x => x.Id == viewModel.Id);
-                if (entityToDeactivate != null)
+                // create a new entity
+                var entityNew = db.Issues.AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
+                // in case the project was changed
+                if (viewModel.ProjectId != entityNew.ProjectId)
                 {
-                    entityToDeactivate.DeletedAt = DateTime.Now;
-                    db.Entry(entityToDeactivate).State = EntityState.Modified;
-                    db.SaveChanges();
-
-                    // create a new entity
-                    var entityNew = db.Issues.AsNoTracking().FirstOrDefault(x => x.Id == viewModel.Id);
-                    // map viewModel to the entity
-                    entityNew = Mapper.Map(viewModel, entityNew);
-                    // create a new Id and set the issue to active
-                    entityNew.Id = Guid.NewGuid();
-                    entityNew.DeletedAt = null;
-                    // save the entity
-                    db.Issues.Add(entityNew);
-                    db.SaveChanges();
-                
-                    return RedirectToAction("Details", new { id = entityToDeactivate.Code });
+                    var projectTemp = db.Projects.Where(x => x.Id == viewModel.ProjectId).OrderByDescending(x => x.CreatedAt).First();
+                    entityNew.ProjectCreatedAt = projectTemp.CreatedAt;
                 }
-
-                return RedirectToAction("Index");
+                // map viewModel to the entity
+                entityNew = Mapper.Map(viewModel, entityNew);
+                // change CreatedAt
+                entityNew.CreatedAt = DateTime.Now;
+                // save the entity
+                db.Issues.Add(entityNew);
+                db.SaveChanges();
+                
+                return RedirectToAction("Details", new { id = entityNew.Code });
+                
             }
 
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", viewModel.AssigneeId);
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", viewModel.ProjectId);
+
             return View(viewModel);
         }
 
@@ -261,32 +291,23 @@ namespace IssueTracker.Controllers
 
         public ActionResult ChangeStatus(Guid issueId, Guid to)
         {
-            // deactivate original entity
-            var entityToDeactivate = db.Issues.AsNoTracking().FirstOrDefault(x => x.Id == issueId);
-            if (entityToDeactivate != null)
+
+            // create a new entity
+            var entityNew = db.Issues.AsNoTracking().Where(x => x.Id == issueId).OrderByDescending(x => x.CreatedAt).First();
+            if (entityNew != null)
             {
-                entityToDeactivate.DeletedAt = DateTime.Now;
-                db.Entry(entityToDeactivate).State = EntityState.Modified;
-                db.SaveChanges();
-
-                // create a new entity
-                var entityNew = db.Issues.AsNoTracking().FirstOrDefault(x => x.Id == issueId);
                 // change status
-                if (entityNew != null)
-                {
-                    entityNew.StateId = to;
-                    // create a new Id and set the issue to active
-                    entityNew.Id = Guid.NewGuid();
-                    entityNew.DeletedAt = null;
-                    // save the entity
-                    db.Issues.Add(entityNew);
-                }
+                entityNew.StateId = to;
+                // change CreatedAt
+                entityNew.CreatedAt = DateTime.Now;
+                // save the entity
+                db.Issues.Add(entityNew);
                 db.SaveChanges();
+            }
 
-                if (HttpContext.Request.UrlReferrer != null)
-                {       
-                    return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
-                }
+            if (HttpContext.Request.UrlReferrer != null)
+            {
+                return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
             }
 
             return RedirectToAction("Index");

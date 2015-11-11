@@ -5,8 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IssueTracker.Entities
 {
-    public class Project : BaseEntityWithHistorization
+    public class Project
     {
+        // Composite primary key
+        [Key, Column(Order = 0)]
+        public Guid Id { get; set; }
+
+        [Key, Column(Order = 1)]
+        public DateTime CreatedAt { get; set; }
+
         // Parameters
         [Required]
         [Display(Name = "Project title")]
@@ -15,6 +22,9 @@ namespace IssueTracker.Entities
 
         [Required]
         public string Code { get; set; }
+
+        [Required]
+        public bool Active { get; set; }
 
         // Table definitions
         public virtual ICollection<Issue> Issues { get; set; }
@@ -30,5 +40,6 @@ namespace IssueTracker.Entities
 
         [ForeignKey("OwnerId")]
         public virtual ApplicationUser Owner { get; set; }
+
     }
 }
