@@ -39,3 +39,9 @@ textarea {
     background-color: black;
     line-height: 2;
 }
+
+.initial {
+    color: limegreen;
+    font-size: 70%;
+    border: 1px solid limegreen;
+}

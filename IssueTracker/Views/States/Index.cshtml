@@ -20,27 +20,30 @@ else
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsInitial)
-            </th>
             <th></th>
         </tr>
-
+        @{var hasInitialState = false;}
         @foreach (var item in Model)
         {
             <tr>
                 <td>
                     <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.Colour);">@Html.DisplayFor(modelItem => item.Title)</span>
+                    @if (item.IsInitial)
+                    {
+                        <span class="label initial">INITIAL</span>
+                        hasInitialState = true;
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsInitial)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
+                    @Html.ActionLink("Details", "Details", new {id = item.Id}) |
+                    @Html.ActionLink("Delete", "Delete", new {id = item.Id})
                 </td>
             </tr>
         }
     </table>
+    if (!hasInitialState)
+    {
+        <i class="text-danger">No state is set as initial.</i>
+    }
 }
