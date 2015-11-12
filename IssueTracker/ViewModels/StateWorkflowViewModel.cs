@@ -6,8 +6,10 @@ namespace IssueTracker.ViewModels
     public class StateWorkflowViewModel : BaseViewModel
     {
         // Foreign keys
+        [Display(Name = "From")]
         public Guid FromStateId { get; set; }
 
+        [Display(Name = "To")]
         public Guid ToStateId { get; set; }
 
         // Table definitions

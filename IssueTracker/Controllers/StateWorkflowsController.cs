@@ -19,6 +19,7 @@ namespace IssueTracker.Controllers
         public ActionResult Index()
         {
             var stateWorkflows = db.StateWorkflows.Include(s => s.FromState).Include(s => s.ToState);
+
             return View(Mapper.Map<IEnumerable<StateWorkflowViewModel>>(stateWorkflows).ToList());
         }
 
@@ -29,11 +30,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            StateWorkflow stateWorkflow = db.StateWorkflows.Find(id);
+
+            var stateWorkflow = db.StateWorkflows.Find(id);
+
             if (stateWorkflow == null)
             {
                 return HttpNotFound();
             }
+
             return View(Mapper.Map<StateWorkflowViewModel>(stateWorkflow));
         }
 
@@ -42,27 +46,37 @@ namespace IssueTracker.Controllers
         {
             ViewBag.FromStateId = new SelectList(db.States, "Id", "Title");
             ViewBag.ToStateId = new SelectList(db.States, "Id", "Title");
+
             return View();
         }
 
         // POST: StateWorkflows/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FromStateId,ToStateId")] StateWorkflowViewModel stateWorkflow)
+        public ActionResult Create([Bind(Include = "Id,FromStateId,ToStateId")] StateWorkflowViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                stateWorkflow.Id = Guid.NewGuid();
-                db.StateWorkflows.Add(Mapper.Map<StateWorkflow>(stateWorkflow));
+                if (viewModel.FromStateId == viewModel.ToStateId)
+                {
+                    ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
+                    ViewBag.FromStateId = new SelectList(db.States, "Id", "Title", viewModel.FromStateId);
+                    ViewBag.ToStateId = new SelectList(db.States, "Id", "Title", viewModel.ToStateId);
+
+                    return View(viewModel);
+                }
+
+                viewModel.Id = Guid.NewGuid();
+                db.StateWorkflows.Add(Mapper.Map<StateWorkflow>(viewModel));
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
-            ViewBag.FromStateId = new SelectList(db.States, "Id", "Title", stateWorkflow.FromStateId);
-            ViewBag.ToStateId = new SelectList(db.States, "Id", "Title", stateWorkflow.ToStateId);
-            return View(stateWorkflow);
+            ViewBag.FromStateId = new SelectList(db.States, "Id", "Title", viewModel.FromStateId);
+            ViewBag.ToStateId = new SelectList(db.States, "Id", "Title", viewModel.ToStateId);
+
+            return View(viewModel);
         }
 
         // GET: StateWorkflows/Edit/5
@@ -72,32 +86,46 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            StateWorkflow stateWorkflow = db.StateWorkflows.Find(id);
+
+            var stateWorkflow = db.StateWorkflows.Find(id);
+
             if (stateWorkflow == null)
             {
                 return HttpNotFound();
             }
+
             ViewBag.FromStateId = new SelectList(db.States, "Id", "Title", stateWorkflow.FromStateId);
             ViewBag.ToStateId = new SelectList(db.States, "Id", "Title", stateWorkflow.ToStateId);
+
             return View(Mapper.Map<StateWorkflowViewModel>(stateWorkflow));
         }
 
         // POST: StateWorkflows/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FromStateId,ToStateId")] StateWorkflowViewModel stateWorkflow)
+        public ActionResult Edit([Bind(Include = "Id,FromStateId,ToStateId")] StateWorkflowViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(Mapper.Map<StateWorkflow>(stateWorkflow)).State = EntityState.Modified;
+                if (viewModel.FromStateId == viewModel.ToStateId)
+                {
+                    ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
+                    ViewBag.FromStateId = new SelectList(db.States, "Id", "Title", viewModel.FromStateId);
+                    ViewBag.ToStateId = new SelectList(db.States, "Id", "Title", viewModel.ToStateId);
+
+                    return View(viewModel);
+                }
+
+                db.Entry(Mapper.Map<StateWorkflow>(viewModel)).State = EntityState.Modified;
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            ViewBag.FromStateId = new SelectList(db.States, "Id", "Title", stateWorkflow.FromStateId);
-            ViewBag.ToStateId = new SelectList(db.States, "Id", "Title", stateWorkflow.ToStateId);
-            return View(stateWorkflow);
+
+            ViewBag.FromStateId = new SelectList(db.States, "Id", "Title", viewModel.FromStateId);
+            ViewBag.ToStateId = new SelectList(db.States, "Id", "Title", viewModel.ToStateId);
+
+            return View(viewModel);
         }
 
         // GET: StateWorkflows/Delete/5
@@ -107,11 +135,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            StateWorkflow stateWorkflow = db.StateWorkflows.Find(id);
+
+            var stateWorkflow = db.StateWorkflows.Find(id);
+
             if (stateWorkflow == null)
             {
                 return HttpNotFound();
             }
+
             return View(Mapper.Map<StateWorkflowViewModel>(stateWorkflow));
         }
 
@@ -120,9 +151,10 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            StateWorkflow stateWorkflow = db.StateWorkflows.Find(id);
+            var stateWorkflow = db.StateWorkflows.Find(id);
             db.StateWorkflows.Remove(stateWorkflow);
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 

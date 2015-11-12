@@ -16,6 +16,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        <span class="text-danger">@ViewBag.ErrorSameFromAndTo</span><br /><br />
 
         <div class="form-group">
             @Html.LabelFor(model => model.FromStateId, "From", htmlAttributes: new { @class = "control-label col-md-2" })

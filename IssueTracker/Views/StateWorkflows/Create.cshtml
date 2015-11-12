@@ -15,6 +15,7 @@
         <h4>State workflow transition</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <span class="text-danger">@ViewBag.ErrorSameFromAndTo</span><br /><br />
         <div class="form-group">
             @Html.LabelFor(model => model.FromStateId, "From", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
