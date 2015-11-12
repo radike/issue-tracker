@@ -29,11 +29,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            State state = db.States.Find(id);
+
+            var state = db.States.Find(id);
+
             if (state == null)
             {
                 return HttpNotFound();
             }
+
             return View(Mapper.Map<StateViewModel>(state));
         }
 
@@ -44,28 +47,28 @@ namespace IssueTracker.Controllers
         }
 
         // POST: States/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Colour,IsInitial")] StateViewModel state)
+        public ActionResult Create([Bind(Include = "Id,Title,Colour,IsInitial")] StateViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                state.Id = Guid.NewGuid();
+                viewModel.Id = Guid.NewGuid();
 
                 // if there is already initial state, change it to this one
-                if (state.IsInitial)
+                if (viewModel.IsInitial)
                 {
                     removeInitialState();
                 }
 
-                db.States.Add(Mapper.Map<State>(state));
+                viewModel.OrderIndex = db.States.Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+                db.States.Add(Mapper.Map<State>(viewModel));
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
-            return View(state);
+            return View(viewModel);
         }
 
         // GET: States/Edit/5
@@ -87,18 +90,16 @@ namespace IssueTracker.Controllers
         }
 
         // POST: States/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Colour,IsInitial")] StateViewModel state)
+        public ActionResult Edit([Bind(Include = "Id,Title,Colour,IsInitial")] StateViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(Mapper.Map<State>(state)).State = EntityState.Modified;
+                db.Entry(Mapper.Map<State>(viewModel)).State = EntityState.Modified;
 
                 // if there is already initial state, change it to this one
-                if (state.IsInitial)
+                if (viewModel.IsInitial)
                 {
                     removeInitialState();
                 }
@@ -107,7 +108,7 @@ namespace IssueTracker.Controllers
 
                 return RedirectToAction("Index");
             }
-            return View(state);
+            return View(viewModel);
         }
 
         // GET: States/Delete/5
@@ -117,12 +118,16 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            State state = db.States.Find(id);
+
+            var state = db.States.Find(id);
+
             if (state == null)
             {
                 return HttpNotFound();
             }
+
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
+
             return View(Mapper.Map<StateViewModel>(state));
         }
 
@@ -142,6 +147,7 @@ namespace IssueTracker.Controllers
             catch (Exception)
             {
                 TempData["ErrorSQL"] = "There is some workflow transition or issue using this state. The removal was terminated.";
+
                 return RedirectToAction("Delete", "States", new { id = id });
             }
 
