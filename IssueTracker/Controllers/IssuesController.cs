@@ -225,7 +225,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var issue = db.Issues.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
+            var issue = db.Issues.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).Include(x => x.Project).First();
 
             if (issue == null)
             {
