@@ -24,11 +24,27 @@ namespace IssueTracker
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/reordering-tr.css",
                       "~/Content/site.css"));
 
             // Pick colour
             bundles.Add(new ScriptBundle("~/bundles/pick-colour").Include(
                         "~/Scripts/pick-colour.js"));
+
+            // reordering
+            bundles.Add(new ScriptBundle("~/bundles/reordering").Include(
+                        "~/Scripts/jquery.dataTables.rowReordering.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/dataTables").Include(
+                        "~/Scripts/jquery.dataTables.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
+                        "~/Scripts/jquery-ui.min.js"));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-browser").Include(
+                        "~/Scripts/jquery.browser.min.js"));
+            
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.ViewModels
 {
@@ -17,5 +13,8 @@ namespace IssueTracker.ViewModels
         public bool IsInitial { get; set; }
 
         public string Colour { get; set; }
+
+        public int OrderIndex { get; set; }
+
     }
 }

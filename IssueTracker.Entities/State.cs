@@ -16,6 +16,8 @@ namespace IssueTracker.Entities
 
         public string Colour { get; set; }
 
+        public int OrderIndex { get; set; }
+
         // Table definitions
         public virtual ICollection<Issue> Issues { get; set; }
     }

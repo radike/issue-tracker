@@ -45,3 +45,7 @@ textarea {
     font-size: 70%;
     border: 1px solid limegreen;
 }
+
+td.align-right {
+    text-align: right;
+}

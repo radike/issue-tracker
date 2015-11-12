@@ -1,5 +1,22 @@
 ﻿@model IEnumerable<IssueTracker.ViewModels.StateViewModel>
 
+@Scripts.Render("~/bundles/jquery-browser")
+@Scripts.Render("~/bundles/jquery-ui")
+@Scripts.Render("~/bundles/dataTables")
+@Scripts.Render("~/bundles/reordering")
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#orderedTable').dataTable({
+            bPaginate: false,
+            bInfo: false,
+            bSortClasses: false,
+            bFilter: false
+        }).rowReordering({
+            sURL: "/States/UpdateOrder"
+        });
+    });
+</script>
+
 @{
     ViewBag.Title = "Index";
 }
@@ -15,32 +32,42 @@ else
     <p>
         @Html.ActionLink("Create New State", "Create")
     </p>
-    <table class="table">
+    <table class="display" id="orderedTable">
+        <thead>
         <tr>
+            <th>
+                #
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th></th>
         </tr>
-        @{var hasInitialState = false;}
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.Colour);">@Html.DisplayFor(modelItem => item.Title)</span>
-                    @if (item.IsInitial)
-                    {
-                        <span class="label initial">INITIAL</span>
-                        hasInitialState = true;
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
-                    @Html.ActionLink("Details", "Details", new {id = item.Id}) |
-                    @Html.ActionLink("Delete", "Delete", new {id = item.Id})
-                </td>
-            </tr>
-        }
+        </thead>
+        <tbody>
+            @{var hasInitialState = false;}
+            @foreach (var item in Model)
+            {
+                <tr id="@item.Id">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderIndex)
+                    </td>
+                    <td>
+                        <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.Colour);">@Html.DisplayFor(modelItem => item.Title)</span>
+                        @if (item.IsInitial)
+                        {
+                            <span class="label initial">INITIAL</span>
+                            hasInitialState = true;
+                        }
+                    </td>
+                    <td class="align-right">
+                        @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
+                        @Html.ActionLink("Details", "Details", new {id = item.Id}) |
+                        @Html.ActionLink("Delete", "Delete", new {id = item.Id})
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
     if (!hasInitialState)
     {

@@ -48,7 +48,7 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Colour,IsInitial")] State state)
+        public ActionResult Create([Bind(Include = "Id,Title,Colour,IsInitial")] StateViewModel state)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace IssueTracker.Controllers
                 // if there is already initial state, change it to this one
                 if (state.IsInitial)
                 {
-                    RemoveInitialState();
+                    removeInitialState();
                 }
 
                 db.States.Add(Mapper.Map<State>(state));
@@ -75,11 +75,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            State state = db.States.Find(id);
+
+            var state = db.States.Find(id);
+
             if (state == null)
             {
                 return HttpNotFound();
             }
+
             return View(Mapper.Map<StateViewModel>(state));
         }
 
@@ -97,10 +100,11 @@ namespace IssueTracker.Controllers
                 // if there is already initial state, change it to this one
                 if (state.IsInitial)
                 {
-                    RemoveInitialState();
+                    removeInitialState();
                 }
 
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             return View(state);
@@ -129,9 +133,10 @@ namespace IssueTracker.Controllers
         {
             try
             {
-                State state = db.States.Find(id);
+                var state = db.States.Find(id);
                 db.States.Remove(state);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             catch (Exception)
@@ -141,6 +146,42 @@ namespace IssueTracker.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Updates reordering of the states in States/Index table.
+        /// </summary>
+        /// <param name="id">Id of the state</param>
+        /// <param name="fromPosition">Initial position of the state</param>
+        /// <param name="toPosition">New position of the state</param>
+        /// <param name="direction">Back or forward direction</param>
+        public void UpdateOrder(Guid id, int fromPosition, int toPosition, string direction)
+        {
+            if (direction == "back")
+            {
+                var movedStates = db.States
+                            .Where(c => (toPosition <= c.OrderIndex && c.OrderIndex <= fromPosition))
+                            .ToList();
+
+                foreach (var state in movedStates)
+                {
+                    state.OrderIndex++;
+                }
+            }
+            else
+            {
+                var movedStates = db.States
+                            .Where(c => (fromPosition <= c.OrderIndex && c.OrderIndex <= toPosition))
+                            .ToList();
+                foreach (var state in movedStates)
+                {
+                    state.OrderIndex--;
+                }
+            }
+
+            db.States.First(c => c.Id == id).OrderIndex = toPosition;
+            db.SaveChanges();
+        }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -154,7 +195,7 @@ namespace IssueTracker.Controllers
         /// <summary>
         /// Removes IsInitial flag on each state in database
         /// </summary>
-        private void RemoveInitialState()
+        private void removeInitialState()
         {
             foreach (var s in db.States.Where(s => s.IsInitial))
             {
