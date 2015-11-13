@@ -11,6 +11,7 @@ using IssueTracker.ViewModels;
 using AutoMapper;
 using IssueTracker.Abstractions;
 using Microsoft.AspNet.Identity;
+using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
@@ -228,7 +229,7 @@ namespace IssueTracker.Controllers
 
         public bool UserIsProjectOwnerOrHasAdminRights(ProjectViewModel project)
         {
-            return User.IsInRole("Administrators")
+            return User.IsInRole(UserRoles.Administrators.ToString())
                 || (project.OwnerId != null && project.OwnerId.Equals(User.Identity.GetUserId()));
         }
 
