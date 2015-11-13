@@ -128,7 +128,7 @@ namespace IssueTracker.Controllers
             Mapper.CreateMap<Project, ProjectViewModel>();
             var viewModel = Mapper.Map<ProjectViewModel>(project);
 
-            if (!HasOwnerOrAdminRights(viewModel))
+            if (!UserIsProjectOwnerOrHasAdminRights(viewModel))
             {
                 TempData["ErrorMessageNotOwner"] = "Only project owners and administrators can edit projects.";
                 return RedirectToAction("Index");
@@ -188,7 +188,7 @@ namespace IssueTracker.Controllers
 
             var viewModel = Mapper.Map<ProjectViewModel>(project);
 
-            if (!HasOwnerOrAdminRights(viewModel))
+            if (!UserIsProjectOwnerOrHasAdminRights(viewModel))
             {
                 TempData["ErrorMessageNotOwner"] = "Only project owners and administrators can delete projects.";
                 return RedirectToAction("Index");
@@ -226,9 +226,10 @@ namespace IssueTracker.Controllers
             base.Dispose(disposing);
         }
 
-        public bool HasOwnerOrAdminRights(ProjectViewModel project)
+        public bool UserIsProjectOwnerOrHasAdminRights(ProjectViewModel project)
         {
-            return project.OwnerId == User.Identity.GetUserId() || User.IsInRole("Administrator");
+            return User.IsInRole("Administrators")
+                || (project.OwnerId != null && project.OwnerId.Equals(User.Identity.GetUserId()));
         }
 
         private static void addOwnerToUsers(ProjectViewModel project)
