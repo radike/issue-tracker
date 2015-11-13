@@ -1,0 +1,38 @@
+﻿<div>
+    <ul id="gn-menu" class="gn-menu-main">
+        <li class="gn-trigger">
+            <a class="gn-icon gn-icon-menu">
+                <span>Menu</span>
+            </a>
+            <nav id="nav" class="gn-menu-wrapper">
+                <div class="gn-scroller">
+                    <ul class="gn-menu">
+                        <!-- <li class="gn-search-item"><i class="fa fa-search menu-icon"></i>
+                            <input placeholder="Search" type="search" class="gn-search">
+                            <a class="gn-icon">
+                                <span>Search</span>
+                            </a>
+                        </li> -->
+                        <li><a class="gn-icon" href="@Url.Action("Index", "Home")"><i class="fa fa-home menu-icon"></i>Home</a></li>
+                        <li><a class="gn-icon" href="@Url.Action("Index", "Issues")"><i class="fa fa-tasks menu-icon"></i>Tasks</a></li>
+                        <li><a class="gn-icon" href="@Url.Action("Index", "Projects")"><i class="fa fa-briefcase menu-icon"></i>Projects</a></li>
+                        <li><a class="gn-icon" href="@Url.Action("Index", "Projects")"><i class="fa fa-users menu-icon"></i>Users</a></li>
+                        <li><a class="gn-icon" href="@Url.Action("Index", "States")"><i class="fa fa-cogs menu-icon"></i>Settings</a></li>
+                        <li><a class="gn-icon" href="@Url.Action("Index", "StateWorkflows")"><i class="fa fa-cogs menu-icon"></i>Settings</a></li>
+                        <li id="logout"><a class="gn-icon"><i class="fa fa-sign-out menu-icon"></i>Logout</a></li>
+                    </ul>
+                </div>
+                <!-- /gn-scroller -->
+            </nav>
+        </li>
+        @Html.Partial("_CustomLoginPartial")
+        @*<li><a href="">Logout</a></li>*@
+        <li id="search">
+            <i class="fa fa-search menu-icon"></i>
+            <input placeholder="Search" type="search" class="gn-search">
+        </li>
+        <!-- <li><a href="http://tympanus.net/codrops">Codrops</a></li> -->
+        <!-- <li><a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Development/HeaderEffects/"><span>Previous Demo</span></a></li> -->
+        <!-- <li><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=16030"><span>Back to the Codrops Article</span></a></li> -->
+    </ul>
+</div>

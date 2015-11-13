@@ -1,0 +1,19 @@
+.menu-icon::before {
+		display: inline-block;
+		width: 60px;
+		text-align: center;
+		text-transform: none;
+		font-weight: normal;
+		font-style: normal;
+		font-variant: normal;
+		font-family: 'FontAwesome';
+		line-height: 1;
+		speak: none;
+		-webkit-font-smoothing: antialiased;
+    font-size: xx-large;
+    vertical-align: sub;
+}
+
+.gn-menu-main > li > i.fa-search::before {
+		width: 50px;
+}

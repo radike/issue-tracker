@@ -235,6 +235,20 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\component.css" />
+    <Content Include="Content\demo.css" />
+    <Content Include="Content\fa.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\Fonts\codropsicons\codropsicons.svg" />
+    <Content Include="Content\Fonts\codropsicons\license.txt" />
+    <Content Include="Content\Fonts\ecoicons\ecoicons.dev.svg" />
+    <Content Include="Content\Fonts\ecoicons\ecoicons.svg" />
+    <Content Include="Content\Fonts\ecoicons\license.txt" />
+    <Content Include="Content\Fonts\ecoicons\Read Me.txt" />
+    <Content Include="Content\Fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\mobile.css" />
+    <Content Include="Content\normalize.css" />
     <Content Include="Content\reordering-tr.css" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\Images\favicon.ico" />
@@ -244,17 +258,36 @@
     <Content Include="Content\Images\sort_desc.png" />
     <Content Include="Content\Images\sort_desc_disabled.png" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\sb-admin-2.css" />
+    <Content Include="Content\signin.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootstrap-toolkit.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Fonts\codropsicons\.DS_Store" />
+    <Content Include="Content\Fonts\codropsicons\codropsicons.eot" />
+    <Content Include="Content\Fonts\codropsicons\codropsicons.ttf" />
+    <Content Include="Content\Fonts\codropsicons\codropsicons.woff" />
+    <Content Include="Content\Fonts\ecoicons\ecoicons.eot" />
+    <Content Include="Content\Fonts\ecoicons\ecoicons.ttf" />
+    <Content Include="Content\Fonts\ecoicons\ecoicons.woff" />
+    <Content Include="Content\Fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\Fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\Fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\Fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\Fonts\FontAwesome.otf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\classie.js" />
+    <Content Include="Scripts\gnmenu.js" />
+    <Content Include="Scripts\hammer.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.browser.min.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
@@ -264,6 +297,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\modernizr.custom.js" />
     <Content Include="Scripts\pick-colour.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -329,6 +363,9 @@
     <Content Include="Views\StateWorkflows\Edit.cshtml" />
     <Content Include="Views\StateWorkflows\Index.cshtml" />
     <Content Include="Views\Shared\_PickColourPartial.cshtml" />
+    <Content Include="Views\Shared\_CustomLayout.cshtml" />
+    <Content Include="Views\Shared\_Menu.cshtml" />
+    <Content Include="Views\Shared\_CustomLoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

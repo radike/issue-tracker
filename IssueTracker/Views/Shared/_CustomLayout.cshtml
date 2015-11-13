@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @if (IsSectionDefined("AddToHead"))
+    {
+        @RenderSection("AddToHead", required: false)
+    }
+    <meta name="description" content="Your very best Issue Tracker" />
+</head>
+<body>
+    <div class="container">
+        @if (!(ViewBag.HideMenu ?? false))
+        {
+            @Html.Partial("_Menu")
+        }
+        @RenderBody()
+    </div>
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/scripts")
+    @RenderSection("scripts", required: false)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+    <script>
+		var menu = new gnMenu(document.getElementById('gn-menu'));
+		// menu._openIconMenu();
+
+		// Wrap everything in an IIFE
+		(function($, viewport) {
+
+			// Execute only after document has fully loaded
+			$(document).ready(function() {
+				var scroller = $('.gn-scroller');
+				height = scroller.height();
+				scrollHeight = scroller.get(0).scrollHeight;
+
+				scroller.bind('mousewheel', function(e, d) {
+					if ((this.scrollTop === ($('.gn-scroller').get(0).scrollHeight - $('.gn-scroller').height()) && d < 0) || (this.scrollTop === 0 && d > 0)) {
+						e.preventDefault();
+					}
+				});
+
+				scroller.bind('touchmove', function (e) {
+					if ((this.scrollTop === ($('.gn-scroller').get(0).scrollHeight - $('.gn-scroller').height())) || (this.scrollTop === 0)) {
+						e.preventDefault();
+					}
+				});
+				// var hammertime = new Hammer($('.gn-scroller'));
+				// hammertime.on("swipe", function(e) {
+				// 	if ((this.scrollTop === ($('.gn-scroller').get(0).scrollHeight - $('.gn-scroller').height()) && d < 0) || (this.scrollTop === 0 && d > 0)) {
+				// 		e.preventDefault();
+				// 	}
+				// });
+
+				// $("html, body").hammer().on("swipeup", function(e) {
+				// 	// do scroll down stuff
+				//
+				// });
+
+				// Executes only in XS breakpoint
+				if (viewport.is('xs')) {
+					// ...
+				}
+
+				// Executes only in XS breakpoint
+				if (viewport.is('xs')) {
+
+				}
+
+				// Executes in SM, MD and LG breakpoints
+				if (viewport.is('>=sm')) {
+					// menu._openIconMenu();
+				}
+
+				// Executes in XS and SM breakpoints
+				if (viewport.is('<md')) {
+					// menu._closeIconMenu();
+				}
+			});
+
+			// Execute code each time window size changes
+			$(window).resize(
+				viewport.changed(function() {
+					if (viewport.is('xs')) {
+						// menu._closeIconMenu();
+						// $("body").css("margin-left", "0");
+					}
+
+					if (viewport.is('>=sm')) {
+						// menu._openIconMenu();
+						// $("body").css("margin-left", "60px");
+					}
+				})
+			);
+
+		})(jQuery, ResponsiveBootstrapToolkit);
+    </script>
+
+</body>
+</html>

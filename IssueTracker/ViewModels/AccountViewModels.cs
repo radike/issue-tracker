@@ -49,7 +49,7 @@ namespace IssueTracker.ViewModels
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "Email"), DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; }
 

@@ -22,10 +22,25 @@ namespace IssueTracker
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
+                        "~/Content/bootstrap.css"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/reordering-tr.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/normalize.css",
+                      "~/Content/component.css",
+                      "~/Content/fa.css",
+                      "~/Content/font-awesome.min.css",
+                      "~/Content/sb-admin-2.css",
+                      "~/Content/demo.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
+                        "~/Scripts/classie.js",
+                        "~/Scripts/gnmenu.js",
+                        "~/Scripts/bootstrap-toolkit.js",
+                        "~/Scripts/js/hammer.min.js"));
 
             // Pick colour
             bundles.Add(new ScriptBundle("~/bundles/pick-colour").Include(

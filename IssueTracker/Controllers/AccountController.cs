@@ -56,6 +56,7 @@ namespace IssueTracker.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+            ViewBag.HideMenu = true;
             return View();
         }
 
@@ -137,6 +138,7 @@ namespace IssueTracker.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            ViewBag.HideMenu = true;
             return View();
         }
 

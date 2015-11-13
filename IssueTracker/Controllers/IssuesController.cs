@@ -13,6 +13,7 @@ using IssueTracker.Abstractions;
 
 namespace IssueTracker.Controllers
 {
+    [Authorize]
     public class IssuesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
