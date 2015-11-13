@@ -9,6 +9,7 @@ namespace IssueTracker.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
     using Entities;
+    using IssueTracker.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<IssueTracker.DAL.ApplicationDbContext>
     {
@@ -32,8 +33,8 @@ namespace IssueTracker.Migrations
             var roleManager = new RoleManager<IdentityRole>(roleStore);
             var roles = new List<IdentityRole>()
             {
-                new IdentityRole { Name = "Administrators" },
-                new IdentityRole { Name = "Users" }
+                new IdentityRole { Name = UserRoles.Administrators.ToString() },
+                new IdentityRole { Name = UserRoles.Users.ToString() }
             };
 
             roles.ForEach(role =>
@@ -48,8 +49,8 @@ namespace IssueTracker.Migrations
             var userManager = new UserManager<ApplicationUser>(userStore);
             var users = new List<User>();
 
-            users.Add(new User("admin@admin.com", "Password@123", "Administrators"));
-            users.Add(new User("user@user.com", "Password@123", "Users"));
+            users.Add(new User("admin@admin.com", "Password@123", UserRoles.Administrators));
+            users.Add(new User("user@user.com", "Password@123", UserRoles.Users));
 
             users.ForEach(user =>
             {
@@ -57,7 +58,7 @@ namespace IssueTracker.Migrations
                 {
                     var newUser = new ApplicationUser { UserName = user.UserName, Email = user.UserName };
                     userManager.Create(newUser, user.Password);
-                    userManager.AddToRole(newUser.Id, user.Role);
+                    userManager.AddToRole(newUser.Id, user.Role.ToString());
                 }
             });
         }
@@ -66,9 +67,9 @@ namespace IssueTracker.Migrations
         {
             public string UserName { get; private set; }
             public string Password { get; private set; }
-            public string Role { get; private set; }
+            public UserRoles Role { get; private set; }
 
-            public User(string userName, string password, string role)
+            public User(string userName, string password, UserRoles role)
             {
                 UserName = userName;
                 Password = password;
