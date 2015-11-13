@@ -126,7 +126,6 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
-            Mapper.CreateMap<Project, ProjectViewModel>();
             var viewModel = Mapper.Map<ProjectViewModel>(project);
 
             if (!UserIsProjectOwnerOrHasAdminRights(viewModel))
@@ -154,7 +153,6 @@ namespace IssueTracker.Controllers
                 // create a new entity
                 var entityNew = db.Projects.AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
                 // map viewModel to the entity
-                Mapper.CreateMap<ProjectViewModel, Project>();
                 entityNew = Mapper.Map(viewModel, entityNew);
                 // change CreatedAt
                 entityNew.CreatedAt = DateTime.Now;
