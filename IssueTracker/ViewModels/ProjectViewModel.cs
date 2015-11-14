@@ -27,7 +27,7 @@ namespace IssueTracker.ViewModels
         [Display(Name = "Project owner")]
         public string OwnerId { get; set; }
 
-        public virtual ApplicationUser Owner { get; set; }
+        public ApplicationUser Owner { get; set; }
         
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace IssueTracker.Entities
 {
@@ -38,8 +39,9 @@ namespace IssueTracker.Entities
         [Display(Name = "Project owner")]
         public string OwnerId { get; set; }
 
-        [ForeignKey("OwnerId")]
-        public virtual ApplicationUser Owner { get; set; }
+        public ApplicationUser Owner {
+            get { return Users == null ? null : Users.FirstOrDefault(u => u.Id == OwnerId); }
+        }
 
     }
 }
