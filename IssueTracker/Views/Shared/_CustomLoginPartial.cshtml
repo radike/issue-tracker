@@ -6,7 +6,13 @@
         @Html.AntiForgeryToken()
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
         <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            <a href="@Url.Action("Index", "Manage")">
+                <div class="avatarBox">
+                    <img src="http://findicons.com/files/icons/2579/iphone_icons/30/salesman.png" />
+                </div>
+                @User.Identity.GetUserName()
+            </a>
+            @*@Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
         </li>
     }
 }

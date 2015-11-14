@@ -188,6 +188,7 @@
     <Compile Include="Controllers\StatesController.cs" />
     <Compile Include="Controllers\StateWorkflowsController.cs" />
     <Compile Include="DAL\ApplicationDbContext.cs" />
+    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

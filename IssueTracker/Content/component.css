@@ -11,7 +11,7 @@
 		font-style: normal;
 		font-family: 'ecoicons';
         src: url("Fonts/ecoicons/ecoicons.eot");
-		src: url("../fonts/ecoicons/ecoicons.eot?#iefix") format("embedded-opentype"), url("../fonts/ecoicons/ecoicons.woff") format("woff"), url("../fonts/ecoicons/ecoicons.ttf") format("truetype"), url("../fonts/ecoicons/ecoicons.svg#ecoicons") format("svg");
+		src: url("Fonts/ecoicons/ecoicons.eot?#iefix") format("embedded-opentype"), url("Fonts/ecoicons/ecoicons.woff") format("woff"), url("Fonts/ecoicons/ecoicons.ttf") format("truetype"), url("Fonts/ecoicons/ecoicons.svg#ecoicons") format("svg");
 }
 
 /* Icomoon.com */
@@ -86,12 +86,16 @@
 }
 
 @media screen and (max-width:768px) {
-	.gn-menu-main > li:nth-last-child(2) {
+	/*.gn-menu-main > li:nth-last-child(2) {*/
 			/*padding: 0 30px;*/
 			/*float: right;*/
 			/*border-right: none;*/
-			display: none;
-	}
+			/*display: none;*/
+	/*}*/
+
+    #logoutForm {
+        display: none;
+    }
 }
 
 .gn-menu-main > li:last-child {
@@ -166,6 +170,7 @@
 		/*width: 370px;*/
 		width: 220px;
 		height: 100%;
+        background: #EAEAEA;
 }
 
 .gn-menu {
@@ -179,6 +184,9 @@
 		/*box-shadow: inset 0 1px #c6d0da*/
 }
 
+.gn-submenu {
+}
+
 .gn-submenu li {
 		overflow: hidden;
 		height: 0;
@@ -188,7 +196,8 @@
 }
 
 .gn-submenu li a {
-		color: #c1c9d1
+		/*color: #c1c9d1*/
+        padding-left: 10px;
 }
 
 input.gn-search {
@@ -346,7 +355,12 @@ input.gn-search:focus {
 		vertical-align: middle;
 }
 
-.gn-icon-menu.gn-selected {
+/*.gn-icon-menu.gn-selected {
+	background: #5F6F81;
+	color: white;
+}*/
+
+.gn-icon.gn-selected {
 	background: #5F6F81;
 	color: white;
 }

@@ -5,6 +5,10 @@
   margin-left: 0;
 }
 
+.container {
+    background: inherit;
+}
+
 .form-signin {
   max-width: 330px;
   padding: 15px;

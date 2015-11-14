@@ -27,7 +27,7 @@
 .container {
     background: white;
     height: 97vh;
-    padding-top: 50px;
+    padding-top: 60px;
     border-radius: 0 0 10px 10px;
 }
 
@@ -160,3 +160,20 @@
 	}
 
 }
+
+.avatarBox {
+  /*border: 1px solid #DDD;*/
+  width: 45px;
+  height: 45px;
+  float: left;
+  /*-webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;*/
+ }
+
+.avatarBox img {
+  margin: 4px;
+  -webkit-border-radius: 50%; /* Can also be 50px */
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+ }
