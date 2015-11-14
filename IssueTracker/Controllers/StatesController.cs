@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace IssueTracker.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrators")]
     public class StatesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
