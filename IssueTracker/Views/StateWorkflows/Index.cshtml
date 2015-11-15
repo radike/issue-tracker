@@ -1,13 +1,10 @@
 ﻿@model IEnumerable<IssueTracker.ViewModels.StateWorkflowViewModel>
 
 @{
+    Layout = "~/Views/Shared/_SettingsTabbedLayout.cshtml";
     ViewBag.Title = "State workflow";
 }
 
-<ul class="nav nav-tabs">
-    <li role="presentation"><a href="#">States</a></li>
-    <li role="presentation" class="active"><a href="#">Workflow</a></li>
-</ul>
 <h2>State workflow</h2>
 
 @if (Model.ToList().Count == 0)

@@ -1,0 +1,21 @@
+﻿@using IssueTracker.Extensions;
+@{
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+@section AddToHead {
+    @RenderSection("AddToHead", false)
+}
+
+@section Scripts {
+    @RenderSection("Scripts", false)
+}
+
+@section Tabs {
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="@Html.ActivePage("States")"><a href="@Url.Action("Index", "States")">States</a></li>
+        <li role="presentation" class="@Html.ActivePage("StateWorkflows")"><a href="@Url.Action("Index", "StateWorkflows")">Workflow</a></li>
+    </ul>
+}
+
+@RenderBody()

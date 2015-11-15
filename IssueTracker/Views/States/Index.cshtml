@@ -18,12 +18,10 @@
 </script>
 
 @{
+    Layout = "~/Views/Shared/_SettingsTabbedLayout.cshtml";
     ViewBag.Title = "Index";
 }
-<ul class="nav nav-tabs">
-    <li role="presentation" class="active"><a href="#">States</a></li>
-    <li role="presentation"><a href="#">Workflow</a></li>
-</ul>
+
 <h2>All States</h2>
 
 @if (Model.ToList().Count == 0)

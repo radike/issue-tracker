@@ -7,10 +7,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @if (IsSectionDefined("AddToHead"))
-    {
-        @RenderSection("AddToHead", required: false)
-    }
+    @RenderSection("AddToHead", required: false)
     <meta name="description" content="Your very best Issue Tracker" />
 </head>
 <body>
@@ -19,11 +16,12 @@
         {
             @Html.Partial("_Menu")
         }
+        @RenderSection("Tabs", required: false)
         @RenderBody()
     </div>
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/scripts")
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", required: false)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
     <script>
 		var menu = new gnMenu(document.getElementById('gn-menu'));

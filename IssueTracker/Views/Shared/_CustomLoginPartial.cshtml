@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity
+@using IssueTracker.Extensions;
+
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm"}))
@@ -6,7 +8,7 @@
         @Html.AntiForgeryToken()
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
         <li>
-            <a href="@Url.Action("Index", "Manage")">
+            <a href="@Url.Action("Index", "Manage")" class="@Html.ActivePage("Manage", "gn-selected")">
                 <div class="avatarBox">
                     <img src="http://findicons.com/files/icons/2579/iphone_icons/30/salesman.png" />
                 </div>

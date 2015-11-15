@@ -8,16 +8,21 @@ namespace IssueTracker.Extensions
 {
     public static class HtmlHelperExtensions
     {
-        public static string ActivePage(this HtmlHelper helper, string controller, string action)
+        public static string ActivePage(this HtmlHelper helper, string controller, string activeClassName = "active")
+        {
+            return helper.ActivePage(controller, null, activeClassName);
+        }
+
+        public static string ActivePage(this HtmlHelper helper, string controller, string action, string activeClassName = "active")
         {
             string classValue = "";
 
             string currentController = helper.ViewContext.Controller.ValueProvider.GetValue("controller").RawValue.ToString();
             string currentAction = helper.ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString();
 
-            if (currentController == controller && currentAction == action)
+            if (currentController == controller && (string.IsNullOrEmpty(action) ? true : currentAction == action))
             {
-                classValue = "gn-selected";
+                classValue = activeClassName;
             }
 
             return classValue;

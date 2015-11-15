@@ -1,11 +1,24 @@
 ﻿@model PagedList.IPagedList<IssueTracker.ViewModels.IssueIndexViewModel>
 @using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@section AddToHead {
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+}
 
 @{
     ViewBag.Title = "Index";
 }
 
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active"><a href="#">Assigned to me</a></li>
+    <li role="presentation"><a href="#">All</a></li>
+    <li role="presentation"><a href="#">Closed</a></li>
+    <li style="float: right; padding-right: 10px;">
+        <button type="button" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+        </button>
+    </li>
+</ul>
 <h2>All Issues</h2>
 
 @if (Model.Count == 0)
