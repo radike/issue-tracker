@@ -31,10 +31,10 @@ namespace IssueTracker
                       "~/Content/site.css",
                       "~/Content/normalize.css",
                       "~/Content/component.css",
-                      "~/Content/fa.css",
                       "~/Content/font-awesome.min.css",
-                      "~/Content/sb-admin-2.css",
-                      "~/Content/demo.css"));
+                      "~/Content/fa.css",
+                      //"~/Content/sb-admin-2.css",
+                      "~/Content/app.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                         "~/Scripts/classie.js",

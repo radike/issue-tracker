@@ -27,6 +27,7 @@
 		font-weight: 300;
 		font-family: 'Lato', Arial, sans-serif;
 		line-height: 60px;
+        z-index: 9999;
 }
 
 .gn-menu-main {
@@ -160,6 +161,7 @@
 			-webkit-transition: -webkit-transform 0.3s, width 0.3s;
 			-moz-transition: -moz-transform 0.3s, width 0.3s;
 			transition: transform 0.3s, width 0.3s;
+            box-shadow: 3px 4px 5px #888888;
 	}
 }
 

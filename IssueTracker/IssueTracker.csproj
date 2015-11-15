@@ -241,7 +241,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\component.css" />
-    <Content Include="Content\demo.css" />
+    <Content Include="Content\app.css" />
     <Content Include="Content\fa.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -371,6 +371,7 @@
     <Content Include="Views\Shared\_CustomLayout.cshtml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Shared\_CustomLoginPartial.cshtml" />
+    <Content Include="Views\Shared\_SettingsTabbedLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
