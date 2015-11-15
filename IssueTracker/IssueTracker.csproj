@@ -216,6 +216,10 @@
     <Compile Include="Migrations\201511112145015_StatesReordering.Designer.cs">
       <DependentUpon>201511112145015_StatesReordering.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511141947553_UserProjectRelationshipFix.cs" />
+    <Compile Include="Migrations\201511141947553_UserProjectRelationshipFix.Designer.cs">
+      <DependentUpon>201511141947553_UserProjectRelationshipFix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\UserRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -393,6 +397,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511112145015_StatesReordering.resx">
       <DependentUpon>201511112145015_StatesReordering.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511141947553_UserProjectRelationshipFix.resx">
+      <DependentUpon>201511141947553_UserProjectRelationshipFix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
