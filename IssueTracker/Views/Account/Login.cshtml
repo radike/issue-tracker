@@ -35,9 +35,20 @@
                 @Html.AntiForgeryToken()
                 <h2 class="form-signin-heading">Please sign in</h2>
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email address", type="email", autofocus=""})
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-envelope"></i>
+                    </span>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email address", type = "email", autofocus = "" })
+                </div>
                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", })
+
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-key"></i>
+                    </span>
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", })
+                </div>
                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                 <div class="checkbox">
                     @Html.CheckBoxFor(m => m.RememberMe)
@@ -53,7 +64,7 @@
                         @Html.ActionLink("Forgot your password?", "ForgotPassword")
                     </p>*@
             }
-        </section>
+</section>
     @*</div>*@
     @*<div class="col-md-4">
         <section id="socialLoginForm">
