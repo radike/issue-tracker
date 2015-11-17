@@ -59,7 +59,7 @@ namespace IssueTracker.Controllers
                 // if there is already initial state, change it to this one
                 if (viewModel.IsInitial)
                 {
-                    removeInitialState();
+                    removeInitialState(viewModel.Id);
                 }
 
                 viewModel.OrderIndex = db.States.Max(x => (int?)x.OrderIndex) + 1 ?? 1;
@@ -93,7 +93,7 @@ namespace IssueTracker.Controllers
         // POST: States/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Colour,IsInitial")] StateViewModel viewModel)
+        public ActionResult Edit([Bind(Include = "Id,Title,Colour,IsInitial,OrderIndex")] StateViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -102,7 +102,7 @@ namespace IssueTracker.Controllers
                 // if there is already initial state, change it to this one
                 if (viewModel.IsInitial)
                 {
-                    removeInitialState();
+                    removeInitialState(viewModel.Id);
                 }
 
                 db.SaveChanges();
@@ -200,13 +200,17 @@ namespace IssueTracker.Controllers
         }
 
         /// <summary>
-        /// Removes IsInitial flag on each state in database
+        /// Removes IsInitial flag on each state in database except one.
         /// </summary>
-        private void removeInitialState()
+        /// <param name="id">Id of state, which flag is not removed</param>
+        private void removeInitialState(Guid id)
         {
             foreach (var s in db.States.Where(s => s.IsInitial))
             {
-                s.IsInitial = false;
+                if (s.Id != id)
+                {
+                   s.IsInitial = false;
+                }
             }
         }
     }
