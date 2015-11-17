@@ -2,6 +2,7 @@
 using IssueTracker.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using PagedList;
 
 namespace IssueTracker.ViewModels
 {
@@ -18,6 +19,8 @@ namespace IssueTracker.ViewModels
 
         // Table definitions
         public virtual IEnumerable<IssueIndexViewModel> Issues { get; set; }
+
+        public IPagedList<IssueIndexViewModel> IssuesPage { get; set; }
 
         [Display(Name = "Users")]
         public IEnumerable<string> SelectedUsers { get; set; }

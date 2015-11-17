@@ -1,4 +1,5 @@
-﻿@model IssueTracker.ViewModels.ProjectViewModel
+﻿@using PagedList.Mvc
+@model IssueTracker.ViewModels.ProjectViewModel
 
 @{
     ViewBag.Title = "Project Details";
@@ -63,24 +64,28 @@
         </th>
     </tr>
 
-        @foreach (var item in Model.Issues)
-        {
-            <tr>
-                <td>
-                    <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                    <br/>
-                    <i><small>reported by @Html.DisplayFor(modelItem => item.Reporter.Email)</small></i>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Assignee.Email)
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "Details", "Issues", new { id = item.Code }, null)
-                </td>
-            </tr>
-        }
+    @foreach (var item in Model.IssuesPage)
+    {
+        <tr>
+            <td>
+                <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+                <br/>
+                <i><small>reported by @Html.DisplayFor(modelItem => item.Reporter.Email)</small></i>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assignee.Email)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", "Issues", new {id = item.Code}, null)
+            </td>
+        </tr>
+    }
 
-    </table>
+</table>
+
+<Text>Page @(Model.IssuesPage.PageCount < Model.IssuesPage.PageNumber ? 0 : Model.IssuesPage.PageNumber) of @Model.IssuesPage.PageCount</Text>
+@Html.PagedListPager(Model.IssuesPage, page => Url.Action("Details",
+    new { id = Model.Code, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

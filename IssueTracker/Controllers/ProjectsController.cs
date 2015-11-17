@@ -21,6 +21,7 @@ namespace IssueTracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         private const int ProjectsPerPage = 20;
+        private const int IssuesPerProjectPage = 10;
 
         // GET: Projects
         public ActionResult Index(int? page)
@@ -40,7 +41,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Projects/Details/XYZ
-        public ActionResult Details(string id)
+        public ActionResult Details(string id, int? page)
         {
             if (id == null)
             {
@@ -63,7 +64,12 @@ namespace IssueTracker.Controllers
                 .Where(n => n.ProjectId == project.Id)
                 .ToList();
 
-            return View(Mapper.Map<ProjectViewModel>(project));
+            var pageNumber = page ?? 1;
+
+            var viewModel = Mapper.Map<ProjectViewModel>(project);
+            viewModel.IssuesPage = viewModel.Issues.ToPagedList(pageNumber, IssuesPerProjectPage);
+
+            return View(viewModel);
         }
 
         // GET: Projects/Create
