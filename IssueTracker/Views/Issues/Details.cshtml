@@ -11,6 +11,7 @@
     </p>
     <hr />
     <h2>@Html.DisplayFor(model => model.Issue.Name)</h2>
+    <div class="text-danger">@ViewBag.ErrorMessage</div>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Issue.Id })
     @foreach (var item in Model.StateWorkflows)
     {
@@ -74,8 +75,16 @@
                 <tr>
                     <td>@Html.Raw(HttpUtility.HtmlDecode(@item.Text))</td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", "Comments", new {id = item.Id}, null) |
-                        @Html.ActionLink("Delete", "Delete", "Comments", new {id = item.Id}, null)
+                        @if (ViewBag.LoggedUser.Id == item.AuthorId)
+                        {
+                            @Html.ActionLink("Edit", "Edit", "Comments", new { id = item.Id }, null)
+                        }      
+                        
+                        @if (ViewBag.IsUserAdmin)
+                        {
+                            @:|
+                            @Html.ActionLink("Delete", "Delete", "Comments", new { id = item.Id }, null)
+                        }
                     </td>
                 </tr>
             }
@@ -87,7 +96,7 @@
         @Html.TextArea("Text", new { @class = "form-control" })           
         @Html.Hidden("IssueId", Model.Issue.Id)
         <input class="btn btn-default dropdown-toggle" type="submit" value="Comment" />
-    }
+    }  
 </div>
 
 @section Scripts {

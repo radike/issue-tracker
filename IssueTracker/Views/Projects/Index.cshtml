@@ -35,9 +35,17 @@ else
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Code }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @if (item.OwnerId == ViewBag.LoggedUserId || ViewBag.IsUserAdmin)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @:|
+                    }                    
+
+                    @Html.ActionLink("Details", "Details", new { id = item.Code })
+
+                    @if (ViewBag.IsUserAdmin)
+                    {
+                       @:| @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    }                    
                 </td>
             </tr>
         }
