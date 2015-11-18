@@ -125,6 +125,7 @@ namespace IssueTracker.Controllers
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
                 .Where(n => n.IssueId == issue.Id)
+                .OrderBy(n => n.Posted)
                 .Include(n => n.User)
                 .ToList();
 

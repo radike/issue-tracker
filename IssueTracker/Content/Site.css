@@ -48,3 +48,7 @@ textarea {
 td.align-right {
     text-align: right;
 }
+
+.table .one-line {
+    white-space: nowrap;
+}

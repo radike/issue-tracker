@@ -26,8 +26,9 @@
 
 .container {
     background: white;
-    height: 97vh;
+    min-height: 97vh;
     padding-top: 60px;
+    padding-bottom: 30px;
     border-radius: 0 0 10px 10px;
 }
 
