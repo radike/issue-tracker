@@ -67,6 +67,8 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            ViewBag.HideMenu = true;
+
             if (!ModelState.IsValid)
             {
                 return View(model);
