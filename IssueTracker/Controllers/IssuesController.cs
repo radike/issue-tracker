@@ -10,6 +10,7 @@ using IssueTracker.ViewModels;
 using PagedList;
 using System.Collections.Generic;
 using IssueTracker.Abstractions;
+using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
@@ -125,6 +126,7 @@ namespace IssueTracker.Controllers
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
                 .Where(n => n.IssueId == issue.Id)
+                .OrderBy(n => n.Posted)
                 .Include(n => n.User)
                 .ToList();
 
@@ -134,6 +136,9 @@ namespace IssueTracker.Controllers
                 comment.User = db.Users.Find(comment.AuthorId);
             }
 
+            ViewBag.LoggedUser = getLoggedUser();
+            ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators.ToString());
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
             return View(viewModel);
         }
 

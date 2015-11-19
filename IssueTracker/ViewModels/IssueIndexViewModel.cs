@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace IssueTracker.ViewModels
 {
@@ -17,6 +18,7 @@ namespace IssueTracker.ViewModels
         public DateTime Created { get; set; }
 
         [Display(Name = "Issue description")]
+        [AllowHtml]
         public string Description { get; set; }
 
         public int CodeNumber { get; set; }

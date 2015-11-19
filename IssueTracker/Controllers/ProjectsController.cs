@@ -36,6 +36,8 @@ namespace IssueTracker.Controllers
             var pageNumber = page ?? 1;
 
             ViewBag.ErrorMessageNotOwner = TempData["ErrorMessageNotOwner"] as string;
+            ViewBag.LoggedUserId = User.Identity.GetUserId();
+            ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators.ToString());
 
             return View(projects.ToPagedList(pageNumber, ProjectsPerPage));
         }
@@ -68,6 +70,7 @@ namespace IssueTracker.Controllers
 
             var viewModel = Mapper.Map<ProjectViewModel>(project);
             viewModel.IssuesPage = viewModel.Issues.ToPagedList(pageNumber, IssuesPerProjectPage);
+            ViewBag.CanEdit = UserIsProjectOwnerOrHasAdminRights(viewModel);
 
             return View(viewModel);
         }
@@ -194,9 +197,9 @@ namespace IssueTracker.Controllers
 
             var viewModel = Mapper.Map<ProjectViewModel>(project);
 
-            if (!UserIsProjectOwnerOrHasAdminRights(viewModel))
+            if (!User.IsInRole(UserRoles.Administrators.ToString()))
             {
-                TempData["ErrorMessageNotOwner"] = "Only project owners and administrators can delete projects.";
+                TempData["ErrorMessageNotOwner"] = "Only project administrators can delete projects.";
                 return RedirectToAction("Index");
             }
 

@@ -51,9 +51,10 @@
 		cursor: pointer;
 }
 
-.no-touch .gn-menu-main a:hover,
-.no-touch .gn-menu li.gn-search-item:hover,
-.no-touch .gn-menu li.gn-search-item:hover a {
+
+.gn-menu-main a:hover,
+.gn-menu li.gn-search-item:hover,
+.gn-menu li.gn-search-item:hover a {
 		background: #5F6F81;
 		color: white;
 }

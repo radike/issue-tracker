@@ -1,6 +1,7 @@
 ﻿using IssueTracker.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace IssueTracker.ViewModels
 {
@@ -17,6 +18,7 @@ namespace IssueTracker.ViewModels
         // Parameters
         [Required]
         [Display(Name = "Text")]
+        [AllowHtml]
         public string Text { get; set; }
 
         [Display(Name = "Posted on")]

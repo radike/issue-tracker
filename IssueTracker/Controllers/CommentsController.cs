@@ -8,6 +8,7 @@ using IssueTracker.DAL;
 using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
+using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
@@ -95,6 +96,12 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
+            if (getLoggedUser().Id != comment.AuthorId)
+            {
+                TempData["ErrorMessage"] = "Only owners can edit their comments.";
+                return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
+            }
+
             ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
 
             return View(Mapper.Map<CommentViewModel>(comment));
@@ -145,6 +152,12 @@ namespace IssueTracker.Controllers
             if (comment == null)
             {
                 return HttpNotFound();
+            }
+
+            if (!User.IsInRole(UserRoles.Administrators.ToString()))
+            {
+                TempData["ErrorMessage"] = "Only administrators can delete comments.";
+                return RedirectToAction("Details","Issues", new { id = comment.Issue.Code });
             }
 
             ViewBag.IssueCode = comment.Issue.Code;

@@ -56,10 +56,19 @@ namespace IssueTracker
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
                         "~/Scripts/jquery-ui.min.js"));
 
-
             bundles.Add(new ScriptBundle("~/bundles/jquery-browser").Include(
                         "~/Scripts/jquery.browser.min.js"));
-            
+
+            // Rich text editor
+            bundles.Add(new ScriptBundle("~/bundles/ckeditor").Include(
+                        "~/Scripts/ckeditor/ckeditor.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/ckeditor-replace").Include(
+                        "~/Scripts/ckeditor/replace.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/ckeditor-replace-desc").Include(
+                        "~/Scripts/ckeditor/replace-desc.js"));
+
         }
     }
 }
