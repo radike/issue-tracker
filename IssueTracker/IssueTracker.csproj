@@ -286,6 +286,7 @@
     <Content Include="Content\Fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\Fonts\FontAwesome.otf" />
     <Content Include="Scripts\ckeditor\contents.css" />
+    <Content Include="Scripts\ckeditor\replace-desc.js" />
     <Content Include="Scripts\ckeditor\replace.js" />
     <Content Include="Scripts\ckeditor\skins\minimalist\readme.md" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

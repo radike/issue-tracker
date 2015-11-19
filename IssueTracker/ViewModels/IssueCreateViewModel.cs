@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace IssueTracker.ViewModels
 {
@@ -16,6 +17,7 @@ namespace IssueTracker.ViewModels
         [Required]
         public string Name { get; set; }
 
+        [AllowHtml]
         public string Description { get; set; }
     }
 }

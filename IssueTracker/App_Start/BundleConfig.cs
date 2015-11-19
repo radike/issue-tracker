@@ -66,6 +66,9 @@ namespace IssueTracker
             bundles.Add(new ScriptBundle("~/bundles/ckeditor-replace").Include(
                         "~/Scripts/ckeditor/replace.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/ckeditor-replace-desc").Include(
+                        "~/Scripts/ckeditor/replace-desc.js"));
+
         }
     }
 }

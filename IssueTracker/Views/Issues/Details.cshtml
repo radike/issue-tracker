@@ -53,7 +53,7 @@
             @Html.DisplayNameFor(model => model.Issue.Description):
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Issue.Description)
+            @Html.Raw(HttpUtility.HtmlDecode(Model.Issue.Description))
         </dd>
     </dl>
 
