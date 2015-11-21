@@ -11,6 +11,7 @@ using IssueTracker.Entities;
 
 namespace IssueTracker.Controllers
 {
+    [AuthorizeOrErrorPage]
     public class UsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -37,7 +38,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Users/Create
-        [Authorize(Roles = "Administrators")]
+        [AuthorizeOrErrorPage(Roles = "Administrators")]
         public ActionResult Create()
         {
             return View();
@@ -48,7 +49,7 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrators")]
+        [AuthorizeOrErrorPage(Roles = "Administrators")]
         public ActionResult Create([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] ApplicationUser applicationUser)
         {
             if (ModelState.IsValid)
@@ -62,7 +63,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Users/Edit/5
-        [Authorize(Roles = "Administrators")]
+        [AuthorizeOrErrorPage(Roles = "Administrators")]
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -82,7 +83,7 @@ namespace IssueTracker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrators")]
+        [AuthorizeOrErrorPage(Roles = "Administrators")]
         public ActionResult Edit([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] ApplicationUser applicationUser)
         {
             if (ModelState.IsValid)
@@ -95,7 +96,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Users/Delete/5
-        [Authorize(Roles = "Administrators")]
+        [AuthorizeOrErrorPage(Roles = "Administrators")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -113,7 +114,7 @@ namespace IssueTracker.Controllers
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrators")]
+        [AuthorizeOrErrorPage(Roles = "Administrators")]
         public ActionResult DeleteConfirmed(string id)
         {
             ApplicationUser applicationUser = db.Users.Find(id);

@@ -15,7 +15,7 @@ using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
-    [Authorize]
+    [AuthorizeOrErrorPage]
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -121,7 +121,6 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Projects/Edit/5
-        [Authorize]
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -152,7 +151,6 @@ namespace IssueTracker.Controllers
 
         // POST: Projects/Edit/5
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Code,SelectedUsers,OwnerId")] ProjectViewModel viewModel)
         {
@@ -180,7 +178,6 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Projects/Delete/5
-        [Authorize]
         public ActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -208,7 +205,6 @@ namespace IssueTracker.Controllers
 
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {

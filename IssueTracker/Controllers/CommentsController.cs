@@ -12,7 +12,7 @@ using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
-    [Authorize]
+    [AuthorizeOrErrorPage]
     public class CommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

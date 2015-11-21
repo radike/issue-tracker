@@ -8,6 +8,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using IssueTracker.Entities;
+using System.Web.Mvc;
+using System.Web;
 
 namespace IssueTracker
 {
@@ -102,5 +104,25 @@ namespace IssueTracker
         {
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
+    }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class AuthorizeOrErrorPage: AuthorizeAttribute
+    {
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        {
+            var user = filterContext.RequestContext.HttpContext.User;
+            if (user.Identity.IsAuthenticated == false)//user == null || user.Identity == null)
+            {
+                base.HandleUnauthorizedRequest(filterContext);
+            }
+            else
+            {
+                var result = new ContentResult();
+                result.Content = "Unauthorized access";
+                filterContext.Result = result;
+            }
+        }
+
     }
 }

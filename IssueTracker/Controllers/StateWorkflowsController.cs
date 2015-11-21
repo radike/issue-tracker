@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace IssueTracker.Controllers
 {
-    [Authorize(Roles = "Administrators")]
+    [AuthorizeOrErrorPage(Roles = "Administrators")]
     public class StateWorkflowsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

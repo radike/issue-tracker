@@ -14,7 +14,7 @@ using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
-    [Authorize]
+    [AuthorizeOrErrorPage]
     public class IssuesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -143,7 +143,6 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Issues/Create
-        [Authorize]
         public ActionResult Create()
         {
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
@@ -163,7 +162,6 @@ namespace IssueTracker.Controllers
 
         // POST: Issues/Create
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IssueCreateViewModel viewModel)
         {

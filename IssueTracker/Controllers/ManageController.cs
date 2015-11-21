@@ -9,7 +9,7 @@ using IssueTracker.ViewModels;
 
 namespace IssueTracker.Controllers
 {
-    [Authorize]
+    [AuthorizeOrErrorPage]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;
