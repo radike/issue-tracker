@@ -188,7 +188,6 @@
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\StatesController.cs" />
     <Compile Include="Controllers\StateWorkflowsController.cs" />
-    <Compile Include="DAL\ApplicationDbContext.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -222,7 +221,6 @@
       <DependentUpon>201511141947553_UserProjectRelationshipFix.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\UserRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
@@ -433,6 +431,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -462,8 +461,20 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IssueTracker.Core\IssueTracker.Core.csproj">
+      <Project>{0cbfee98-7111-496b-88bd-3f4206fc10f9}</Project>
+      <Name>IssueTracker.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IssueTracker.Data.Contracts\IssueTracker.Data.Contracts.csproj">
+      <Project>{5aec97d4-f022-488f-a1b5-230e7b94cf51}</Project>
+      <Name>IssueTracker.Data.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IssueTracker.Data\IssueTracker.Data.csproj">
+      <Project>{b14a4987-9c13-4a5a-a46d-603a16a94433}</Project>
+      <Name>IssueTracker.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IssueTracker.Entities\IssueTracker.Entities.csproj">
-      <Project>{2453dfe9-fc19-47fc-bc40-36b377b04e5d}</Project>
+      <Project>{92e2b591-c2bc-4a0a-be81-ed4fbc29aea1}</Project>
       <Name>IssueTracker.Entities</Name>
     </ProjectReference>
   </ItemGroup>

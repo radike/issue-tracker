@@ -1,10 +1,18 @@
-﻿using System;
+﻿using IssueTracker.Core;
+using IssueTracker.Core.Contracts;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace IssueTracker.Entities
+namespace Entities
 {
-    public class StateWorkflow : BaseEntity
+    public class StateWorkflow : IIdentifiableEntity
     {
+        public Guid Id { get; set; }
+
         // Foreign keys
         [Required]
         [Display(Name = "From")]
@@ -18,5 +26,10 @@ namespace IssueTracker.Entities
         public virtual State FromState { get; set; }
         public virtual State ToState { get; set; }
 
+        public Guid EntityId
+        {
+            get { return Id; }
+            set { Id = value; }
+        }
     }
 }

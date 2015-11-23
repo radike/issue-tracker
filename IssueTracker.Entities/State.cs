@@ -1,11 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using IssueTracker.Core;
+using IssueTracker.Core.Contracts;
+using IssueTracker.Entities;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace IssueTracker.Entities
+namespace Entities
 {
-    public class State : BaseEntity
+    public class State  : IIdentifiableEntity
     {
         // Parameters
+        public Guid Id { get; set; }
         [Required]
         [Display(Name = "Title")]
         public string Title { get; set; }
@@ -20,5 +28,11 @@ namespace IssueTracker.Entities
 
         // Table definitions
         public virtual ICollection<Issue> Issues { get; set; }
+
+        public Guid EntityId
+        {
+            get { return Id; }
+            set { Id = value; }
+        }
     }
 }

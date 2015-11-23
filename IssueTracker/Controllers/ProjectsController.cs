@@ -4,21 +4,21 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using IssueTracker.DAL;
 using PagedList;
 using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
 using IssueTracker.Abstractions;
 using Microsoft.AspNet.Identity;
-using IssueTracker.Models;
+using IssueTracker.Data;
+using Entities;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class ProjectsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private IssueTrackerContext db = new IssueTrackerContext();
 
         private const int ProjectsPerPage = 20;
         private const int IssuesPerProjectPage = 10;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Entities;
 using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using System;

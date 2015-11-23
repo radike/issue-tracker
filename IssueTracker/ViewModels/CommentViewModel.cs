@@ -1,4 +1,5 @@
-﻿using IssueTracker.Entities;
+﻿using Entities;
+using IssueTracker.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;

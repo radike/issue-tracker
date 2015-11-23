@@ -3,6 +3,7 @@ using IssueTracker.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using PagedList;
+using Entities;
 
 namespace IssueTracker.ViewModels
 {

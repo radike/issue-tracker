@@ -4,18 +4,18 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using IssueTracker.DAL;
-using IssueTracker.Entities;
 using AutoMapper;
 using IssueTracker.ViewModels;
 using System.Collections.Generic;
+using IssueTracker.Data;
+using Entities;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage(Roles = "Administrators")]
     public class StatesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private IssueTrackerContext db = new IssueTrackerContext();
 
         // GET: States
         public ActionResult Index()

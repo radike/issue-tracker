@@ -4,18 +4,18 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.WebPages;
-using IssueTracker.DAL;
 using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
-using IssueTracker.Models;
+using IssueTracker.Data;
+using Entities;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class CommentsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private IssueTrackerContext db = new IssueTrackerContext();
         /*
         // GET: Comments
         public ActionResult Index()

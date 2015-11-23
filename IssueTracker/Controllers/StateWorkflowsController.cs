@@ -3,18 +3,18 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using IssueTracker.DAL;
-using IssueTracker.Entities;
 using AutoMapper;
 using IssueTracker.ViewModels;
 using System.Collections.Generic;
+using Entities;
+using IssueTracker.Data;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage(Roles = "Administrators")]
     public class StateWorkflowsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private IssueTrackerContext db = new IssueTrackerContext();
 
         // GET: StateWorkflows
         public ActionResult Index()

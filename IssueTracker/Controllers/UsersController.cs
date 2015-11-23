@@ -6,15 +6,16 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using IssueTracker.DAL;
 using IssueTracker.Entities;
+using IssueTracker.Data;
+using Entities;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class UsersController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private IssueTrackerContext db = new IssueTrackerContext();
 
         // GET: Users
         public ActionResult Index()

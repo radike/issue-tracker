@@ -4,20 +4,20 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
-using IssueTracker.DAL;
 using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using PagedList;
 using System.Collections.Generic;
 using IssueTracker.Abstractions;
-using IssueTracker.Models;
+using Entities;
+using IssueTracker.Data;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class IssuesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private IssueTrackerContext db = new IssueTrackerContext();
 
         private const int ProjectsPerPage = 20;
 
@@ -117,7 +117,12 @@ namespace IssueTracker.Controllers
             }
 
             // possible workflows
-            var workflows = db.StateWorkflows.Where(c => c.FromState.Id == viewModel.Issue.State.Id);
+            /*
+            changing this: var workflows = db.StateWorkflows.Where(c => c.FromState.Id == viewModel.Issue.State.Id);
+            to this: var workflows = db.StateWorkflows.Where(c => c.FromStateId == viewModel.Issue.State.Id); 
+            because i was getting this excpetion: The specified type member 'FromState' is not supported in LINQ to Entities. Only initializers, entity members, and entity navigation properties are supported
+            */
+            var workflows = db.StateWorkflows.Where(c => c.FromStateId == viewModel.Issue.State.Id);
             viewModel.StateWorkflows = Mapper.Map<IEnumerable<StateWorkflowViewModel>>(workflows);
 
             // comments from all versions of the issue

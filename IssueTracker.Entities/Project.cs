@@ -1,18 +1,19 @@
-﻿using System;
+﻿using IssueTracker.Core;
+using IssueTracker.Core.Contracts;
+using IssueTracker.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace IssueTracker.Entities
+namespace Entities
 {
-    public class Project
+    public class Project : IIdentifiableEntity
     {
-        // Composite primary key
-        [Key, Column(Order = 0)]
         public Guid Id { get; set; }
-
-        [Key, Column(Order = 1)]
         public DateTime CreatedAt { get; set; }
 
         // Parameters
@@ -39,9 +40,15 @@ namespace IssueTracker.Entities
         [Display(Name = "Project owner")]
         public string OwnerId { get; set; }
 
-        public ApplicationUser Owner {
+        public ApplicationUser Owner
+        {
             get { return Users == null ? null : Users.FirstOrDefault(u => u.Id == OwnerId); }
         }
 
+        public Guid EntityId
+        {
+            get { return Id; }
+            set { Id = value; }
+        }
     }
 }

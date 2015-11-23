@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using IssueTracker.Entities;
 using IssueTracker.ViewModels;
+using Entities;
 
 namespace IssueTracker.Controllers
 {

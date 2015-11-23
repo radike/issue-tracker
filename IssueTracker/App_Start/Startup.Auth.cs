@@ -1,12 +1,12 @@
 ﻿using System;
-using IssueTracker.DAL;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
-using IssueTracker.Entities;
 using Microsoft.Owin.Security.Google;
+using Entities;
+using IssueTracker.Data;
 
 namespace IssueTracker
 {
@@ -16,7 +16,7 @@ namespace IssueTracker
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(IssueTrackerContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 

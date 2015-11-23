@@ -1,16 +1,20 @@
-﻿using System;
+﻿using IssueTracker.Core;
+using IssueTracker.Core.Contracts;
+using IssueTracker.Entities;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace IssueTracker.Entities
+namespace Entities
 {
-    public class Comment
+    public class Comment  : IIdentifiableEntity
     {
-        // Composite primary key
-        [Key, Column(Order = 0)]
+        // composite primary key
         public Guid Id { get; set; }
-
-        [Key, Column(Order = 1)]
         public DateTime CreatedAt { get; set; }
 
         // Foreign keys
@@ -40,6 +44,11 @@ namespace IssueTracker.Entities
         public virtual ApplicationUser User { get; set; }
 
         public virtual Issue Issue { get; set; }
-        
+
+        public Guid EntityId
+        {
+            get { return Id; }
+            set { Id = value; }
+        }
     }
 }

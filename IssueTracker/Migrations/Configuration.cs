@@ -1,6 +1,7 @@
 namespace IssueTracker.Migrations
 {
-    using DAL;
+    using Data;
+    using global::Entities;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
@@ -8,10 +9,8 @@ namespace IssueTracker.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
-    using Entities;
-    using IssueTracker.Models;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<IssueTracker.DAL.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<IssueTrackerContext>
     {
         public Configuration()
         {
@@ -20,14 +19,14 @@ namespace IssueTracker.Migrations
 
         public string PasswordHash { get; private set; }
 
-        protected override void Seed(IssueTracker.DAL.ApplicationDbContext context)
+        protected override void Seed(IssueTrackerContext context)
         {
             //  This method will be called after migrating to the latest version.
 
             SeedUsersAndRoles(context);
         }
 
-        private static void SeedUsersAndRoles(ApplicationDbContext context)
+        private static void SeedUsersAndRoles(IssueTrackerContext context)
         {
             var roleStore = new RoleStore<IdentityRole>(context);
             var roleManager = new RoleManager<IdentityRole>(roleStore);
