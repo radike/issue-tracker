@@ -9,6 +9,8 @@ using IssueTracker.ViewModels;
 using System.Collections.Generic;
 using IssueTracker.Data;
 using Entities;
+using IssueTracker.Data.Contracts.Repository_Interfaces;
+using IssueTracker.Data.Data_Repositories;
 
 namespace IssueTracker.Controllers
 {
@@ -16,11 +18,12 @@ namespace IssueTracker.Controllers
     public class StatesController : Controller
     {
         private IssueTrackerContext db = new IssueTrackerContext();
-
+        private IStateRepository stateRepo = new StateRepository();
+ 
         // GET: States
         public ActionResult Index()
         {
-            return View(Mapper.Map<IEnumerable<StateViewModel>>(db.States).ToList());
+            return View(Mapper.Map<IEnumerable<StateViewModel>>(stateRepo.Get().ToList()));
         }
 
         // GET: States/Details/5
@@ -31,7 +34,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var state = db.States.Find(id);
+            var state = stateRepo.Get((Guid)id);
 
             if (state == null)
             {
@@ -62,9 +65,8 @@ namespace IssueTracker.Controllers
                     removeInitialState(viewModel.Id);
                 }
 
-                viewModel.OrderIndex = db.States.Max(x => (int?)x.OrderIndex) + 1 ?? 1;
-                db.States.Add(Mapper.Map<State>(viewModel));
-                db.SaveChanges();
+                viewModel.OrderIndex = stateRepo.Get().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+                stateRepo.Add(Mapper.Map<State>(viewModel));
 
                 return RedirectToAction("Index");
             }
@@ -80,7 +82,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var state = db.States.Find(id);
+            var state = stateRepo.Get((Guid)id);
 
             if (state == null)
             {
@@ -97,16 +99,14 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(Mapper.Map<State>(viewModel)).State = EntityState.Modified;
+                stateRepo.Update(Mapper.Map<State>(viewModel));
 
                 // if there is already initial state, change it to this one
                 if (viewModel.IsInitial)
                 {
                     removeInitialState(viewModel.Id);
                 }
-
-                db.SaveChanges();
-
+                
                 return RedirectToAction("Index");
             }
             return View(viewModel);
@@ -120,7 +120,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var state = db.States.Find(id);
+            var state = stateRepo.Get((Guid)id);
 
             if (state == null)
             {
@@ -139,9 +139,8 @@ namespace IssueTracker.Controllers
         {
             try
             {
-                var state = db.States.Find(id);
-                db.States.Remove(state);
-                db.SaveChanges();
+                var state = stateRepo.Get(id);
+                stateRepo.Remove(state);
 
                 return RedirectToAction("Index");
             }
@@ -165,7 +164,7 @@ namespace IssueTracker.Controllers
         {
             if (direction == "back")
             {
-                var movedStates = db.States
+                var movedStates = stateRepo.Get()
                             .Where(c => (toPosition <= c.OrderIndex && c.OrderIndex <= fromPosition))
                             .ToList();
 
@@ -176,7 +175,7 @@ namespace IssueTracker.Controllers
             }
             else
             {
-                var movedStates = db.States
+                var movedStates = stateRepo.Get()
                             .Where(c => (fromPosition <= c.OrderIndex && c.OrderIndex <= toPosition))
                             .ToList();
                 foreach (var state in movedStates)
@@ -185,7 +184,7 @@ namespace IssueTracker.Controllers
                 }
             }
 
-            db.States.First(c => c.Id == id).OrderIndex = toPosition;
+            stateRepo.Get().First(c => c.Id == id).OrderIndex = toPosition;
             db.SaveChanges();
         }
 
@@ -205,7 +204,7 @@ namespace IssueTracker.Controllers
         /// <param name="id">Id of state, which flag is not removed</param>
         private void removeInitialState(Guid id)
         {
-            foreach (var s in db.States.Where(s => s.IsInitial))
+            foreach (var s in stateRepo.Get().Where(s => s.IsInitial))
             {
                 if (s.Id != id)
                 {
