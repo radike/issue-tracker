@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
@@ -13,6 +14,11 @@ namespace IssueTracker
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutoMapperConfig.RegisterMappings();
+        }
+
+        void Application_AcquireRequestState(object sender, EventArgs args)
+        {
+            App_Start.CultureConfig.Application_AcquireRequestState(sender, args);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading;
+using System.Web.Mvc;
 
 namespace IssueTracker.Controllers
 {
@@ -22,6 +23,12 @@ namespace IssueTracker.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult RedirectToIndex()
+        {
+            return RedirectToAction("Index", new { Culture = Thread.CurrentThread.CurrentUICulture.ToString() });
         }
     }
 }

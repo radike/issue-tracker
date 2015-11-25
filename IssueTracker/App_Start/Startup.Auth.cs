@@ -7,6 +7,8 @@ using Owin;
 using Microsoft.Owin.Security.Google;
 using Entities;
 using IssueTracker.Data;
+using System.Web.Mvc;
+using System.Web;
 
 namespace IssueTracker
 {
@@ -33,7 +35,8 @@ namespace IssueTracker
                     // This is a security feature which is used when you change a password or add an external login to your account.  
                     OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
                         validateInterval: TimeSpan.FromMinutes(30),
-                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
+                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager)),
+                    OnApplyRedirect = ApplyRedirect
                 }
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
@@ -65,6 +68,13 @@ namespace IssueTracker
                 
                 ClientSecret = "h_c3NGtvg4owWX5FTnNE3YOB"
             });
+        }
+
+        private static void ApplyRedirect(CookieApplyRedirectContext context)
+        {
+            UrlHelper _url = new UrlHelper(HttpContext.Current.Request.RequestContext);
+            String actionUri = _url.Action("Login", "Account", new { });
+            context.Response.Redirect(actionUri);
         }
     }
 }
