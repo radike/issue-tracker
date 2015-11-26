@@ -26,10 +26,11 @@ namespace IssueTracker.Controllers
         {
             // viewbag items are used in the header to sort the records
             ViewBag.CreatedSort = string.IsNullOrEmpty(sort) ? "created_desc" : string.Empty;
+            ViewBag.SummarySort = sort == "summary" ? "summary_desc" : "summary";
             ViewBag.ReporterSort = sort == "reporter" ? "reporter_desc" : "reporter";
             ViewBag.ProjectSort = sort == "project" ? "project_desc" : "project";
             ViewBag.AssigneeSort = sort == "assignee" ? "assignee_desc" : "assignee";
-            ViewBag.StatusSort = sort == "status" ? "status_desc" : "project";
+            ViewBag.StatusSort = sort == "status" ? "status_desc" : "status";
 
             var issuesTemp = db.Issues
                 .Where(n => n.Active)
@@ -39,44 +40,69 @@ namespace IssueTracker.Controllers
                 .OrderByDescending(x => x.Created);
 
             var issues = Mapper.Map<IEnumerable<IssueIndexViewModel>>(issuesTemp);
+            issues = GetSortedIssues(issues, sort);
+
             var pageNumber = page ?? 1;
-
-            // logic implemented to sort the records by clicking on the header
-            switch(sort)
-            {
-                case "reporter_desc":
-                    issues = issues.OrderByDescending(ii => ii.Reporter);
-                    break;
-                case "reporter":
-                    issues = issues.OrderBy(ii => ii.Reporter);
-                    break;
-                case "status_desc":
-                    issues = issues.OrderByDescending(ii => ii.State);
-                    break;
-                case "status":
-                    issues = issues.OrderBy(ii => ii.State);
-                    break;
-                case "assignee_desc":
-                    issues = issues.OrderByDescending(ii => ii.Assignee);
-                    break;
-                case "assignee":
-                    issues = issues.OrderBy(ii => ii.Assignee);
-                    break;
-                case "project_desc":
-                    issues = issues.OrderByDescending(ii => ii.Project);
-                    break;
-                case "project":
-                    issues = issues.OrderBy(ii => ii.Project);
-                    break;
-                case "created_desc":
-                    issues = issues.OrderByDescending(ii => ii.Created);
-                    break;
-                default:
-                    issues = issues.OrderBy(ii => ii.Created);
-                    break;
-            }
-
             return View(issues.ToPagedList(pageNumber, ProjectsPerPage));
+        }
+
+        private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
+        private ProjectsByTitleComparer projectsComparer = new ProjectsByTitleComparer();
+        private StatesByTitleComparer statesComparer = new StatesByTitleComparer();
+
+        private IEnumerable<IssueIndexViewModel> GetSortedIssues(IEnumerable<IssueIndexViewModel> issues, string sortKey)
+        {
+            switch (sortKey)
+            {
+                case "summary":
+                    return issues.OrderBy(ii => ii.Name);
+                case "summary_desc":
+                    return issues.OrderByDescending(ii => ii.Name);
+                case "reporter_desc":
+                    return issues.OrderByDescending(ii => ii.Reporter, usersComparer);
+                case "reporter":
+                    return issues.OrderBy(ii => ii.Reporter, usersComparer);
+                case "status_desc":
+                    return issues.OrderByDescending(ii => ii.State, statesComparer);
+                case "status":
+                    return issues.OrderBy(ii => ii.State, statesComparer);
+                case "assignee_desc":
+                    return issues.OrderByDescending(ii => ii.Assignee, usersComparer);
+                case "assignee":
+                    return issues.OrderBy(ii => ii.Assignee, usersComparer);
+                case "project_desc":
+                    return issues.OrderByDescending(ii => ii.Project, projectsComparer);
+                case "project":
+                    return issues.OrderBy(ii => ii.Project, projectsComparer);
+                case "created_desc":
+                    return issues.OrderByDescending(ii => ii.Created);
+                default:
+                    return issues.OrderBy(ii => ii.Created);
+            }
+        }
+
+        private class UsersByEmailComparer : IComparer<ApplicationUser>
+        {
+            public int Compare(ApplicationUser x, ApplicationUser y)
+            {
+                return x.Email.CompareTo(y.Email);
+            }
+        }
+
+        private class ProjectsByTitleComparer : IComparer<ProjectViewModel>
+        {
+            public int Compare(ProjectViewModel x, ProjectViewModel y)
+            {
+                return x.Title.CompareTo(y.Title);
+            }
+        }
+
+        private class StatesByTitleComparer : IComparer<StateViewModel>
+        {
+            public int Compare(StateViewModel x, StateViewModel y)
+            {
+                return x.Title.CompareTo(y.Title);
+            }
         }
 
         // GET: Issues/Details/5
@@ -100,7 +126,7 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             var issue = db.Issues
                 .Where(i => i.Project.Code == projectCode && i.CodeNumber == issueNumber)
                 .OrderByDescending(x => x.CreatedAt)
@@ -157,7 +183,6 @@ namespace IssueTracker.Controllers
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
                 .ToList();
-
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email");
             ViewBag.ProjectId = new SelectList(projectsTemp, "Id", "Title");
             ViewBag.ReporterId = getLoggedUser().Id;
@@ -278,9 +303,9 @@ namespace IssueTracker.Controllers
                 // save the entity
                 db.Issues.Add(entityNew);
                 db.SaveChanges();
-                
+
                 return RedirectToAction("Details", new { id = entityNew.Code });
-                
+
             }
 
             ViewBag.AssigneeId = new SelectList(db.Users, "Id", "Email", viewModel.AssigneeId);

@@ -34,7 +34,7 @@ else
     <table class="table">
         <tr>
             <th>
-                Summary
+                @Html.ActionLink("Summary", "Index", new { sort = ViewBag.SummarySort })
             </th>
             <th>
                 @Html.ActionLink("Assignee", "Index", new { sort = ViewBag.AssigneeSort })
