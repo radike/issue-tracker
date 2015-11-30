@@ -8,6 +8,7 @@ using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using PagedList;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using IssueTracker.Abstractions;
 using Entities;
 using IssueTracker.Data;
@@ -143,12 +144,11 @@ namespace IssueTracker.Controllers
             }
 
             // possible workflows
-            /*
-            changing this: var workflows = db.StateWorkflows.Where(c => c.FromState.Id == viewModel.Issue.State.Id);
-            to this: var workflows = db.StateWorkflows.Where(c => c.FromStateId == viewModel.Issue.State.Id); 
-            because i was getting this excpetion: The specified type member 'FromState' is not supported in LINQ to Entities. Only initializers, entity members, and entity navigation properties are supported
-            */
-            var workflows = db.StateWorkflows.Where(c => c.FromStateId == viewModel.Issue.State.Id);
+            var workflows = db.StateWorkflows.Where(c => c.FromStateId == viewModel.Issue.State.Id).ToList();
+            foreach (var stateWorkflow in workflows)
+            {
+                stateWorkflow.ToState = db.States.Find(stateWorkflow.ToStateId);
+            }
             viewModel.StateWorkflows = Mapper.Map<IEnumerable<StateWorkflowViewModel>>(workflows);
 
             // comments from all versions of the issue
@@ -321,6 +321,16 @@ namespace IssueTracker.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult RedirectToDetail(Guid id)
+        {
+            var issue = db.Issues
+                .Where(i => i.Id == id)
+                .OrderByDescending(x => x.CreatedAt)
+                .Include(i => i.Project).First();
+
+            return RedirectToAction("Details", new { id = issue.Code });
         }
 
         public ActionResult ChangeStatus(Guid issueId, Guid to)

@@ -34,6 +34,7 @@ namespace IssueTracker
                       "~/Content/font-awesome.min.css",
                       "~/Content/fa.css",
                       //"~/Content/sb-admin-2.css",
+                      "~/Content/jquery-ui.css",
                       "~/Content/app.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
@@ -46,7 +47,7 @@ namespace IssueTracker
             bundles.Add(new ScriptBundle("~/bundles/pick-colour").Include(
                         "~/Scripts/pick-colour.js"));
 
-            // reordering
+            // Reordering
             bundles.Add(new ScriptBundle("~/bundles/reordering").Include(
                         "~/Scripts/jquery.dataTables.rowReordering.js"));
 

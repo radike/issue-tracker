@@ -1,4 +1,36 @@
 ﻿@using IssueTracker.Extensions;
+
+<script>
+    $(function () {
+        $('#tags').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: '@Url.Action("AutoCompleteSearch", "Home")',
+                    dataType: "json",
+                    contentType: 'application/json, charset=utf-8',
+                    data: {
+                        query: $("#tags").val()
+                    },
+                    success: function(data) {
+                        response(data);
+                    },
+                    error: function(xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                window.location = "/en-US/Issues/RedirectToDetail/" + ui.item.Id;
+            },
+            minLength: 2
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>").data("ui-autocomplete-item", item)
+                .append("<a href='/en-US/Issues/RedirectToDetail/" + item.Id + " '>" + item.Title + "</a>")
+                .appendTo(ul);
+        };
+    });
+
+</script>
 <div>
     <ul id="gn-menu" class="gn-menu-main">
         <li class="gn-trigger">
@@ -39,7 +71,7 @@
         @*<li><a href="">Logout</a></li>*@
         <li id="search">
             <i class="fa fa-search menu-icon"></i>
-            <input placeholder="Search" type="search" class="gn-search">
+            <input placeholder="Search" type="search" class="gn-search" id="tags">
         </li>
         <!-- <li><a href="http://tympanus.net/codrops">Codrops</a></li> -->
         <!-- <li><a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Development/HeaderEffects/"><span>Previous Demo</span></a></li> -->

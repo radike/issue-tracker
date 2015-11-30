@@ -27,7 +27,7 @@
 		font-weight: 300;
 		font-family: 'Lato', Arial, sans-serif;
 		line-height: 60px;
-        z-index: 9999;
+        z-index: 99;
 }
 
 .gn-menu-main {
@@ -102,8 +102,9 @@
 
 .gn-menu-main > li:last-child {
 		/*border-right: 1px solid #c6d0da;*/
-		/*width: 175px;*/
-		text-align: left;
+		width: 400px;
+        text-align: left;
+        max-width: 70%;
 }
 
 
