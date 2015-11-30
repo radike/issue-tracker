@@ -3,6 +3,7 @@ using IssueTracker.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,9 @@ namespace IssueTracker.Core.Data
             using (U entityContext = new U())
             {
                 T addedEntity = AddEntity(entityContext, entity);
+                
                 entityContext.SaveChanges();
+                
                 return addedEntity;
             }
         }
@@ -66,7 +69,11 @@ namespace IssueTracker.Core.Data
         public IEnumerable<T> Get()
         {
             using (U entityContext = new U())
+            {
+                entityContext.Configuration.AutoDetectChangesEnabled = false;
+                entityContext.Configuration.LazyLoadingEnabled = false;
                 return (GetEntities(entityContext)).ToArray().ToList();
+            }
         }
 
         public T Get(Guid id)

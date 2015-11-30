@@ -18,15 +18,20 @@ namespace IssueTracker.Data.Data_Repositories
 
         protected override IEnumerable<Issue> GetEntities(IssueTrackerContext entityContext)
         {
-            return from e in entityContext.Issues
+            
+                
+                return from e in entityContext.Issues.AsNoTracking().Include("Comments").Include("Project").Include("Assignee").Include("Reporter").Include("State")
                    select e;
+            
         }
 
         protected override Issue GetEntity(IssueTrackerContext entityContext, Guid id)
         {
-            var query = (from e in entityContext.Issues
-                         where e.Id == id
-                         select e);
+            
+                var query = (from e in entityContext.Issues.Include("Comments").Include("Project").Include("Assignee").Include("Reporter")
+                             where e.Id == id
+                             select e);
+            
             var results = query.FirstOrDefault();
 
             return results;

@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data Repositories\ApplicationUserRepository.cs" />
     <Compile Include="Data Repositories\CommentRepository.cs" />
     <Compile Include="Data Repositories\IssueRepository.cs" />
     <Compile Include="Data Repositories\ProjectRepository.cs" />

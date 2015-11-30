@@ -17,13 +17,13 @@ namespace IssueTracker.Data.Data_Repositories
 
         protected override IEnumerable<State> GetEntities(IssueTrackerContext entityContext)
         {
-            return from e in entityContext.States
+            return from e in entityContext.States.Include("Issues")
                    select e;
         }
 
         protected override State GetEntity(IssueTrackerContext entityContext, Guid id)
         {
-            var query = (from e in entityContext.States
+            var query = (from e in entityContext.States.Include("Issues")
                          where e.Id == id
                          select e);
             var results = query.FirstOrDefault();
