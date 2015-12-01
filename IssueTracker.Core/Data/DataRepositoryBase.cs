@@ -10,23 +10,23 @@ using System.Threading.Tasks;
 
 namespace IssueTracker.Core.Data
 {
-    public abstract class DataRepositoryBase<T, U> : IDataRepository<T>
-        where T : class, IIdentifiableEntity, new()
-        where U : DbContext, new()
+    public abstract class DataRepositoryBase<TEntity, TContext> : IDataRepository<TEntity>
+        where TEntity : class, IIdentifiableEntity, new()
+        where TContext : DbContext, new()
     {
-        protected abstract T AddEntity(U entityContext, T entity);
+        protected abstract TEntity AddEntity(TContext entityContext, TEntity entity);
 
-        protected abstract T UpdateEntity(U entityContext, T entity);
+        protected abstract TEntity UpdateEntity(TContext entityContext, TEntity entity);
 
-        protected abstract IEnumerable<T> GetEntities(U entityContext);
+        protected abstract IEnumerable<TEntity> GetEntities(TContext entityContext);
 
-        protected abstract T GetEntity(U entityContext, Guid id);
+        protected abstract TEntity GetEntity(TContext entityContext, Guid id);
 
-        public T Add(T entity)
+        public TEntity Add(TEntity entity)
         {
-            using (U entityContext = new U())
+            using (TContext entityContext = new TContext())
             {
-                T addedEntity = AddEntity(entityContext, entity);
+                TEntity addedEntity = AddEntity(entityContext, entity);
                 
                 entityContext.SaveChanges();
                 
@@ -34,30 +34,30 @@ namespace IssueTracker.Core.Data
             }
         }
 
-        public void Remove(T entity)
+        public void Remove(TEntity entity)
         {
-            using (U entityContext = new U())
+            using (TContext entityContext = new TContext())
             {
-                entityContext.Entry<T>(entity).State = EntityState.Deleted;
+                entityContext.Entry<TEntity>(entity).State = EntityState.Deleted;
                 entityContext.SaveChanges();
             }
         }
 
         public void Remove(Guid id)
         {
-            using (U entityContext = new U())
+            using (TContext entityContext = new TContext())
             {
-                T entity = GetEntity(entityContext, id);
-                entityContext.Entry<T>(entity).State = EntityState.Deleted;
+                TEntity entity = GetEntity(entityContext, id);
+                entityContext.Entry<TEntity>(entity).State = EntityState.Deleted;
                 entityContext.SaveChanges();
             }
         }
 
-        public T Update(T entity)
+        public TEntity Update(TEntity entity)
         {
-            using (U entityContext = new U())
+            using (TContext entityContext = new TContext())
             {
-                T existingEntity = UpdateEntity(entityContext, entity);
+                TEntity existingEntity = UpdateEntity(entityContext, entity);
 
                 SimpleMapper.PropertyMap(entity, existingEntity);
 
@@ -66,9 +66,9 @@ namespace IssueTracker.Core.Data
             }
         }
 
-        public IEnumerable<T> Get()
+        public IEnumerable<TEntity> Get()
         {
-            using (U entityContext = new U())
+            using (TContext entityContext = new TContext())
             {
                 entityContext.Configuration.AutoDetectChangesEnabled = false;
                 entityContext.Configuration.LazyLoadingEnabled = false;
@@ -76,9 +76,9 @@ namespace IssueTracker.Core.Data
             }
         }
 
-        public T Get(Guid id)
+        public TEntity Get(Guid id)
         {
-            using (U entityContext = new U())
+            using (TContext entityContext = new TContext())
                 return GetEntity(entityContext, id);
         }
     }
