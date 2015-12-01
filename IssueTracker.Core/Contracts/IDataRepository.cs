@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace IssueTracker.Core.Contracts
 {
-    public interface IDataRepository
-    {
-
-    }
-
-    public interface IDataRepository<T> : IDataRepository
+    public interface IDataRepository<T> 
         where T : class, IIdentifiableEntity, new()
     {
         T Add(T entity);
