@@ -17,27 +17,19 @@ namespace Entities
         public DateTime CreatedAt { get; set; }
 
         // Parameters
-        [Required]
-        [Display(Name = "Project title")]
-        [MaxLength(255)]
         public string Title { get; set; }
 
-        [Required]
         public string Code { get; set; }
 
-        [Required]
         public bool Active { get; set; }
 
         // Table definitions
         public virtual ICollection<Issue> Issues { get; set; }
 
-        [NotMapped]
-        [Display(Name = "Users")]
         public ICollection<string> SelectedUsers { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
 
-        [Display(Name = "Project owner")]
         public string OwnerId { get; set; }
 
         public ApplicationUser Owner

@@ -65,6 +65,7 @@
     <Compile Include="Data Repositories\StateWorkflowRepository.cs" />
     <Compile Include="DataRepositoryBase.cs" />
     <Compile Include="IssueTrackerContext.cs" />
+    <Compile Include="Model Configuration\ApplicationUserConfiguration.cs" />
     <Compile Include="Model Configuration\CommentConfiguration.cs" />
     <Compile Include="Model Configuration\IssueConfiguration.cs" />
     <Compile Include="Model Configuration\ProjectConfiguration.cs" />

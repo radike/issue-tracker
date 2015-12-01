@@ -14,12 +14,8 @@ namespace Entities
         public Guid Id { get; set; }
 
         // Foreign keys
-        [Required]
-        [Display(Name = "From")]
         public Guid FromStateId { get; set; }
 
-        [Required]
-        [Display(Name = "To")]
         public Guid ToStateId { get; set; }
 
         // Table definitions

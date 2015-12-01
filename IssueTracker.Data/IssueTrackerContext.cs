@@ -42,8 +42,9 @@ namespace IssueTracker.Data
             modelBuilder.Entity<Comment>().HasKey(c => new { c.Id, c.CreatedAt });
             modelBuilder.Entity<Issue>().HasKey(i => new { i.Id, i.CreatedAt });
             modelBuilder.Entity<Project>().HasKey(p => new { p.Id, p.CreatedAt });
-            //modelBuilder.Entity<Issue>().HasKey<Guid>(e => e.IssueId).Ignore(e => e.EntityId);
+
             
+
         }
 
         public static IssueTrackerContext Create()

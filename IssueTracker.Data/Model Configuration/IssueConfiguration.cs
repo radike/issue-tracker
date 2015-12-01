@@ -13,14 +13,23 @@ namespace IssueTracker.Data.Model_Configuration
     {
         public IssueConfiguration()
         {
-            Property(p => p.Name).HasMaxLength(25).IsRequired();
-            //this.HasMany(a => a.Users).WithMany(b => b.Issues).Map(m =>
-            //{
-            //    m.MapLeftKey("UserId");
-            //    m.MapRightKey("IssueId");
-            //    m.ToTable("ProjectApplicationUser");
-            //});
+            Property(p => p.Name).HasMaxLength(255).IsRequired();
+            Property(p => p.ProjectId).IsRequired();
+            Property(p => p.ProjectCreatedAt).IsRequired();
+            Property(p => p.StateId).IsRequired();
+            Property(p => p.ReporterId).IsRequired();
+            Property(p => p.AssigneeId).IsRequired();
+            Property(p => p.Active).IsRequired();
+            Property(p => p.Created).IsRequired();
+            Property(p => p.CodeNumber).IsRequired();
+
+            HasRequired(p => p.Project)
+            .WithMany(c => c.Issues)
+            .HasForeignKey(p => new { p.ProjectId, p.ProjectCreatedAt });
+            HasRequired(p => p.State).WithMany(p => p.Issues).HasForeignKey(p => p.StateId);
+           
             Ignore(p => p.EntityId);
+            Ignore(p => p.Code);
         }
     }
 }

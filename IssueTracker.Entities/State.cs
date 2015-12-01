@@ -14,16 +14,9 @@ namespace Entities
     {
         // Parameters
         public Guid Id { get; set; }
-        [Required]
-        [Display(Name = "Title")]
         public string Title { get; set; }
-
-        [Required]
-        [Display(Name = "Is initial?")]
         public bool IsInitial { get; set; }
-
         public string Colour { get; set; }
-
         public int OrderIndex { get; set; }
 
         // Table definitions

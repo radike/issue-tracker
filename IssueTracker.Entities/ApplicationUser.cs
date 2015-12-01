@@ -23,7 +23,6 @@ namespace Entities
             // Add custom user claims here
             return userIdentity;
         }
-        [NotMapped]
         public Guid EntityId
         {
             get { return new Guid(this.Id); }

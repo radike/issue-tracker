@@ -13,7 +13,10 @@ namespace IssueTracker.Data.Model_Configuration
         public ProjectConfiguration()
         {
             Property(p => p.Title).HasMaxLength(255).IsRequired();
+            Property(p => p.Code).IsRequired();
+            Property(p => p.Active).IsRequired();
             Ignore(p => p.EntityId);
+            Ignore(p => p.SelectedUsers);
             this.HasMany(a => a.Users).WithMany(b => b.Projects).Map(m =>
             {
                 m.MapLeftKey("Project_Id","Project_CreatedAt");
