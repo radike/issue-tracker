@@ -24,7 +24,11 @@ namespace IssueTracker.Controllers
         public ActionResult Index()
         {
             var stateWorkflows = stateWorkflowRepo.Get().AsQueryable().Include(s => s.FromState).Include(s => s.ToState);
-
+            foreach (var stateWorkflow in stateWorkflows)
+            {
+                stateWorkflow.FromState = stateRepo.Get(stateWorkflow.FromStateId);
+                stateWorkflow.ToState = stateRepo.Get(stateWorkflow.ToStateId);
+            }
             return View(Mapper.Map<IEnumerable<StateWorkflowViewModel>>(stateWorkflows).ToList());
         }
 
