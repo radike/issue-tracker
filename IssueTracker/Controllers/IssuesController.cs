@@ -350,6 +350,11 @@ namespace IssueTracker.Controllers
                 // change CreatedAt
                 entityNew.CreatedAt = DateTime.Now;
                 // save the entity
+                entityNew.Reporter = null;
+                entityNew.Assignee = null;
+                entityNew.State = null;
+                entityNew.Comments = null;
+                entityNew.Project = null;
                 issueRepo.Add(entityNew);
             }
 
