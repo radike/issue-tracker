@@ -12,6 +12,8 @@ using IssueTracker.Abstractions;
 using Microsoft.AspNet.Identity;
 using IssueTracker.Data;
 using Entities;
+using IssueTracker.Data.Contracts.Repository_Interfaces;
+using IssueTracker.Data.Data_Repositories;
 
 namespace IssueTracker.Controllers
 {
@@ -19,6 +21,8 @@ namespace IssueTracker.Controllers
     public class ProjectsController : Controller
     {
         private IssueTrackerContext db = new IssueTrackerContext();
+        private IProjectRepository projectRepo = new ProjectRepository();
+        private IIssueRepository issueRepo = new IssueRepository();
 
         private const int ProjectsPerPage = 20;
         private const int IssuesPerProjectPage = 10;
@@ -26,7 +30,7 @@ namespace IssueTracker.Controllers
         // GET: Projects
         public ActionResult Index(int? page)
         {
-            var projectsTemp = db.Projects
+            var projectsTemp = projectRepo.Get().AsQueryable()
                 .Where(n => n.Active)
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
@@ -49,18 +53,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var project = db.Projects
-                .Where(x => x.Code == id)
-                .OrderByDescending(x => x.CreatedAt)
-                .Include(p => p.Issues.Select(i => i.State)).First();
-
+            var project = projectRepo.Get().AsQueryable().Where(p => p.Code == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+            
             if (project == null)
             {
                 return HttpNotFound();
             }
 
-            project.Issues = db.Issues
+            project.Issues = issueRepo.Get()
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
                 .Where(n => n.ProjectId == project.Id)
@@ -90,7 +90,7 @@ namespace IssueTracker.Controllers
             if (ModelState.IsValid)
             {
                 // if the code already exists
-                if (Enumerable.Any(db.Projects, p => p.Code.Equals(project.Code.ToUpper())))
+                if (Enumerable.Any(projectRepo.Get(), p => p.Code.Equals(project.Code.ToUpper())))
                 {
                     ViewBag.ErrorUniqueCode = "Entered code is already associated with another project.";
                     ViewBag.UsersList = new MultiSelectList(db.Users, "Id", "Email");
@@ -128,7 +128,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var project = db.Projects.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
+            var project = projectRepo.Get().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
 
             if (project == null)
             {
@@ -159,7 +159,7 @@ namespace IssueTracker.Controllers
                 addOwnerToUsers(viewModel);
 
                 // create a new entity
-                var entityNew = db.Projects.AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
+                var entityNew = projectRepo.Get().AsQueryable().AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
                 // map viewModel to the entity
                 entityNew = Mapper.Map(viewModel, entityNew);
                 // change CreatedAt
@@ -185,7 +185,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var project = db.Projects.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
+            var project = projectRepo.Get().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
 
             if (project == null)
             {
