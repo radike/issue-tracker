@@ -35,6 +35,7 @@ namespace IssueTracker.Data
             modelBuilder.Configurations.Add(new StateConfiguration());
             modelBuilder.Configurations.Add(new StateWorkflowConfiguration());
             modelBuilder.Configurations.Add(new CommentConfiguration());
+            modelBuilder.Configurations.Add(new ApplicationUserConfiguration());
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
