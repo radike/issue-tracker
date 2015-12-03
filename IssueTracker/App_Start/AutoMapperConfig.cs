@@ -13,21 +13,21 @@ namespace IssueTracker
     {
         public static void RegisterMappings()
         {
-            //ApplicationUserMapping();
-            CommentMapping();
-            IssueMapping();
-            ProjectMapping();
-            StateMapping();
-            StateWorkflowMapping();
+            commentMapping();
+            issueMapping();
+            projectMapping();
+            stateMapping();
+            stateWorkflowMapping();
+            userMappging();
         }
         
-        private static void CommentMapping()
+        private static void commentMapping()
         {
             Mapper.CreateMap<Comment, CommentViewModel>();
             Mapper.CreateMap<CommentViewModel, Comment>();
         }
 
-        private static void IssueMapping()
+        private static void issueMapping()
         {
             Mapper.CreateMap<Issue, IssueIndexViewModel>();
             Mapper.CreateMap<IssueIndexViewModel, Issue>();
@@ -36,22 +36,28 @@ namespace IssueTracker
             Mapper.CreateMap<Issue, IssueEditViewModel>();
         }
 
-        private static void ProjectMapping()
+        private static void projectMapping()
         {
             Mapper.CreateMap<Project, ProjectViewModel>();
             Mapper.CreateMap<ProjectViewModel, Project>();
         }
 
-        private static void StateMapping()
+        private static void stateMapping()
         {
             Mapper.CreateMap<State, StateViewModel>();
             Mapper.CreateMap<StateViewModel, State>();
         }
 
-        private static void StateWorkflowMapping()
+        private static void stateWorkflowMapping()
         {
             Mapper.CreateMap<StateWorkflow, StateWorkflowViewModel>();
             Mapper.CreateMap<StateWorkflowViewModel, StateWorkflow>();
+        }
+
+        private static void userMappging()
+        {
+            Mapper.CreateMap<ApplicationUser, UserEditViewModel>();
+            Mapper.CreateMap<UserEditViewModel, ApplicationUser>();
         }
     }
 }

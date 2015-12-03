@@ -6,9 +6,11 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
 using IssueTracker.Entities;
 using IssueTracker.Data;
 using Entities;
+using IssueTracker.ViewModels;
 
 namespace IssueTracker.Controllers
 {
@@ -85,15 +87,19 @@ namespace IssueTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AuthorizeOrErrorPage(Roles = "Administrators")]
-        public ActionResult Edit([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] ApplicationUser applicationUser)
+        public ActionResult Edit([Bind(Include = "Id,Email,PhoneNumber,UserName")] UserEditViewModel viewModel)
         {
+            var entityNew = db.Users.Find(viewModel.Id);
+
             if (ModelState.IsValid)
             {
-                db.Entry(applicationUser).State = EntityState.Modified;
+                entityNew = Mapper.Map(viewModel, entityNew);
+
+                db.Entry(entityNew).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(applicationUser);
+            return View(entityNew);
         }
 
         // GET: Users/Delete/5

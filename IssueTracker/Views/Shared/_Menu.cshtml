@@ -70,7 +70,7 @@
         @Html.Partial("_CustomLoginPartial")
         @*<li><a href="">Logout</a></li>*@
         <li id="search">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("Index", "Issues"))
         {
             <i class="fa fa-search menu-icon"></i>
             <input id="SearchTitle" name="SearchTitle" placeholder="Search" type="search" class="gn-search">
