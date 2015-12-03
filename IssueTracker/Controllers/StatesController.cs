@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using IssueTracker.ViewModels;
 using System.Collections.Generic;
+using System.Threading;
 using IssueTracker.Data;
 using Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
@@ -23,6 +24,8 @@ namespace IssueTracker.Controllers
         // GET: States
         public ActionResult Index()
         {
+            ViewBag.DefaultCulture = Thread.CurrentThread.CurrentCulture.Name;
+
             return View(Mapper.Map<IEnumerable<StateViewModel>>(stateRepo.Get().ToList()));
         }
 
