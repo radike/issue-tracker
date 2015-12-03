@@ -25,6 +25,7 @@ namespace IssueTracker.Controllers
         public ActionResult Index()
         {
             ViewBag.DefaultCulture = Thread.CurrentThread.CurrentCulture.Name;
+            ViewBag.FinalStates = stateRepo.GetFinalStateIds();
 
             return View(Mapper.Map<IEnumerable<StateViewModel>>(stateRepo.Get().ToList()));
         }
@@ -207,12 +208,10 @@ namespace IssueTracker.Controllers
         /// <param name="id">Id of state, which flag is not removed</param>
         private void removeInitialState(Guid id)
         {
-            foreach (var s in stateRepo.Get().Where(s => s.IsInitial))
+            foreach (var s in stateRepo.Get().Where(s => s.IsInitial && s.Id != id))
             {
-                if (s.Id != id)
-                {
-                   s.IsInitial = false;
-                }
+                s.IsInitial = false;
+                stateRepo.Update(s);
             }
         }
     }

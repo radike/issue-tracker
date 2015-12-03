@@ -59,6 +59,13 @@ else
                             <span class="label initial">INITIAL</span>
                             hasInitialState = true;
                         }
+                        @foreach (var finalState in ViewBag.FinalStates)
+                        {
+                            if (finalState == item.Id)
+                            {
+                                <span class="label final">FINAL</span>
+                            }
+                        }
                     </td>
                     <td class="align-right">
                         @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |

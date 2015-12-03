@@ -1,11 +1,7 @@
 ﻿using Entities;
-using IssueTracker.Core;
 using IssueTracker.Core.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IssueTracker.Data.Contracts.Repository_Interfaces
 {
@@ -13,5 +9,6 @@ namespace IssueTracker.Data.Contracts.Repository_Interfaces
     {
         IEnumerable<State> GetStatesOrderedByIndex();
         State GetInitialState();
+        IEnumerable<Guid> GetFinalStateIds();
     }
 }

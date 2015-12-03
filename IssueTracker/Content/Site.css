@@ -45,6 +45,12 @@ textarea {
     border: 1px solid limegreen;
 }
 
+.final {
+    color: firebrick;
+    font-size: 70%;
+    border: 1px solid firebrick;
+}
+
 td.align-right {
     text-align: right;
 }
