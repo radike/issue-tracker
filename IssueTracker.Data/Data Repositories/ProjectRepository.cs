@@ -3,8 +3,6 @@ using IssueTracker.Data.Contracts.Repository_Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IssueTracker.Data.Data_Repositories
 {
@@ -36,6 +34,17 @@ namespace IssueTracker.Data.Data_Repositories
             return (from e in entityContext.Projects
                     where e.Id == entity.Id
                     select e).FirstOrDefault();
+        }
+
+        public IEnumerable<Project> GetActiveProjects()
+        {
+            using (var entityContext = new IssueTrackerContext())
+            {
+                return entityContext.Projects
+                    .Where(n => n.Active)
+                    .GroupBy(n => n.Id)
+                    .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault()).ToList();
+            }
         }
     }
 }

@@ -36,7 +36,6 @@ namespace IssueTracker.Controllers
             return RedirectToAction("Index", new { Culture = Thread.CurrentThread.CurrentUICulture.ToString() });
         }
 
-
         public JsonResult AutoCompleteSearch(string query)
         {
             var allIssues = db.Issues
@@ -46,7 +45,6 @@ namespace IssueTracker.Controllers
                 .Include(n => n.Project)
                 .OrderByDescending(x => x.Created);
 
-            //var result = allIssues.Where(x => x.Name.ToLower().StartsWith(query.ToLower())).Select(x => new { x.Id, x.Name }).ToList();
             var result = allIssues.Where(x => (x.Project.Code + x.CodeNumber + ": " + x.Name).ToLower().Contains(query.ToLower())).Select(x => new { x.Id, Title = x.Project.Code + x.CodeNumber + ": " + x.Name }).ToList();
 
             return Json(result, JsonRequestBehavior.AllowGet);

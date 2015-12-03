@@ -11,6 +11,7 @@ namespace IssueTracker.Data.Contracts.Repository_Interfaces
 {
     public interface IStateRepository : IDataRepository<State>
     {
-      
+        IEnumerable<State> GetStatesOrderedByIndex();
+        State GetInitialState();
     }
 }

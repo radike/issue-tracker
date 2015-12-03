@@ -2,14 +2,14 @@
 
 <script>
     $(function () {
-        $('#tags').autocomplete({
+        $('#SearchTitle').autocomplete({
             source: function(request, response) {
                 $.ajax({
                     url: '@Url.Action("AutoCompleteSearch", "Home")',
                     dataType: "json",
                     contentType: 'application/json, charset=utf-8',
                     data: {
-                        query: $("#tags").val()
+                        query: $("#SearchTitle").val()
                     },
                     success: function(data) {
                         response(data);
@@ -70,9 +70,12 @@
         @Html.Partial("_CustomLoginPartial")
         @*<li><a href="">Logout</a></li>*@
         <li id="search">
+        @using (Html.BeginForm())
+        {
             <i class="fa fa-search menu-icon"></i>
-            <input placeholder="Search" type="search" class="gn-search" id="tags">
-        </li>
+            <input id="SearchTitle" name="SearchTitle" placeholder="Search" type="search" class="gn-search">
+        }
+            </li>
         <!-- <li><a href="http://tympanus.net/codrops">Codrops</a></li> -->
         <!-- <li><a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Development/HeaderEffects/"><span>Previous Demo</span></a></li> -->
         <!-- <li><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=16030"><span>Back to the Codrops Article</span></a></li> -->

@@ -52,3 +52,19 @@ td.align-right {
 .table .one-line {
     white-space: nowrap;
 }
+
+.search-table {
+    width: 90%;
+}
+
+.search-table td {
+    padding: 0.5em;
+}
+
+.search-table .right-align {
+    text-align: right;
+}
+
+.search-table input[type="text"] {
+    max-width: 100%;
+}

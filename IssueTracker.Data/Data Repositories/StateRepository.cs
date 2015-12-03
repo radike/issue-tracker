@@ -37,5 +37,21 @@ namespace IssueTracker.Data.Data_Repositories
                     where e.Id == entity.Id
                     select e).FirstOrDefault();
         }
+
+        public IEnumerable<State> GetStatesOrderedByIndex()
+        {
+            using (var entityContext = new IssueTrackerContext())
+            {
+                return entityContext.States.OrderBy(x => x.OrderIndex).ToList();
+            }
+        }
+
+        public State GetInitialState()
+        {
+            using (var entityContext = new IssueTrackerContext())
+            {
+                return entityContext.States.FirstOrDefault(x => x.IsInitial);
+            }
+        }
     }
 }

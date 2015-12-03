@@ -15,6 +15,7 @@ using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using System.Data.Entity.Validation;
+using static System.String;
 
 namespace IssueTracker.Controllers
 {
@@ -32,22 +33,34 @@ namespace IssueTracker.Controllers
         private const int ProjectsPerPage = 20;
 
         // GET: Issues
-        public ActionResult Index(int? page, string sort)
+        public ActionResult Index(int? page, string sort, string searchName, string searchTitle, 
+            string searchAssignee, string searchReporter, Guid? searchProject, Guid? searchState)
         {
             // viewbag items are used in the header to sort the records
-            ViewBag.CreatedSort = string.IsNullOrEmpty(sort) ? "created_desc" : string.Empty;
+            ViewBag.CreatedSort = IsNullOrEmpty(sort) ? "created_desc" : Empty;
             ViewBag.SummarySort = sort == "summary" ? "summary_desc" : "summary";
             ViewBag.ReporterSort = sort == "reporter" ? "reporter_desc" : "reporter";
             ViewBag.ProjectSort = sort == "project" ? "project_desc" : "project";
             ViewBag.AssigneeSort = sort == "assignee" ? "assignee_desc" : "assignee";
             ViewBag.StatusSort = sort == "status" ? "status_desc" : "status";
 
+            ViewBag.SearchProject = new SelectList(projectRepo.GetActiveProjects(), "Id", "Title");
+            ViewBag.SearchAssignee = new SelectList(applicationUserRepo.Get(), "Id", "Email");
+            ViewBag.SearchReporter = new SelectList(applicationUserRepo.Get(), "Id", "Email");
+            ViewBag.SearchState = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title");
+
             var issuesTemp = issueRepo.Get().AsQueryable()
                 .Where(n => n.Active)
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
-                .Include(p => p.State).ToList()
-                .OrderByDescending(x => x.Created);
+                .Include(p => p.State)
+                .Include(p => p.Project)
+                .ToList();
+
+            // search
+            issuesTemp = searchIssues(issuesTemp, searchName, searchTitle, searchAssignee, searchReporter, searchProject, searchState);
+
+            issuesTemp = issuesTemp.OrderByDescending(x => x.Created).ToList();
 
             var issues = Mapper.Map<IEnumerable<IssueIndexViewModel>>(issuesTemp);
             issues = GetSortedIssues(issues, sort);
@@ -56,7 +69,43 @@ namespace IssueTracker.Controllers
             return View(issues.ToPagedList(pageNumber, ProjectsPerPage));
         }
 
-        private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
+        private static List<Issue> searchIssues (List<Issue> issues, string searchName, string searchTitle, 
+            string searchAssignee, string searchReporter, Guid? searchProject, Guid? searchState)
+        {
+            if (!IsNullOrEmpty(searchName))
+            {
+                issues = issues.Where(s => s.Name.ToLower().Contains(searchName.ToLower())).ToList();
+            }
+
+            if (!IsNullOrEmpty(searchTitle))
+            {
+                issues = issues.Where(s => (s.Project.Code + s.CodeNumber + ": " + s.Name).ToLower().Contains(searchTitle.ToLower())).ToList();
+            }
+
+            if (!IsNullOrEmpty(searchAssignee))
+            {
+                issues = issues.Where(s => s.AssigneeId == searchAssignee).ToList();
+            }
+
+            if (!IsNullOrEmpty(searchReporter))
+            {
+                issues = issues.Where(s => s.ReporterId == searchReporter).ToList();
+            }
+
+            if (searchProject != null)
+            {
+                issues = issues.Where(s => s.ProjectId == searchProject).ToList();
+            }
+
+            if (searchState != null)
+            {
+                issues = issues.Where(s => s.StateId == searchState).ToList();
+            }
+
+            return issues;
+        }
+
+private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
         private ProjectsByTitleComparer projectsComparer = new ProjectsByTitleComparer();
         private StatesByTitleComparer statesComparer = new StatesByTitleComparer();
 
@@ -186,14 +235,9 @@ namespace IssueTracker.Controllers
         public ActionResult Create()
         {
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
-
-            var projectsTemp = projectRepo.Get()
-                .Where(n => n.Active)
-                .GroupBy(n => n.Id)
-                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
-                .ToList();
+            
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.Get(), "Id", "Email");
-            ViewBag.ProjectId = new SelectList(projectsTemp, "Id", "Title");
+            ViewBag.ProjectId = new SelectList(projectRepo.GetActiveProjects(), "Id", "Title");
             ViewBag.ReporterId = getLoggedUser().Id;
 
             return View();
@@ -241,7 +285,7 @@ namespace IssueTracker.Controllers
         {
             try
             {
-                return stateRepo.Get().First(s => s.IsInitial);
+                return stateRepo.GetInitialState();
             }
             catch (InvalidOperationException)
             {
@@ -274,17 +318,13 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
-            var projectsTemp = projectRepo.Get()
-                .Where(n => n.Active)
-                .GroupBy(n => n.Id)
-                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
-                .ToList();
+            var projectsTemp = projectRepo.GetActiveProjects();
 
             var viewModel = Mapper.Map<IssueEditViewModel>(issue);
 
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.Get(), "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(projectsTemp, "Id", "Title", issue.ProjectId);
-            ViewBag.StateId = new SelectList(stateRepo.Get(), "Id", "Title", issue.StateId);
+            ViewBag.StateId = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title", issue.StateId);
 
             return View(viewModel);
         }
@@ -340,7 +380,6 @@ namespace IssueTracker.Controllers
 
         public ActionResult ChangeStatus(Guid issueId, Guid to)
         {
-
             // create a new entity
             var entityNew = issueRepo.Get().AsQueryable().AsNoTracking().Where(x => x.Id == issueId).OrderByDescending(x => x.CreatedAt).First();
             if (entityNew != null)

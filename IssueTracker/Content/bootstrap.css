@@ -4038,6 +4038,11 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   text-decoration: none;
   background-color: #eee;
 }
+.nav > li > a.action:hover,
+.nav > li > a.action:focus {
+  text-decoration: none;
+  background-color: #286090;
+}
 .nav > li.disabled > a {
   color: #777;
 }
