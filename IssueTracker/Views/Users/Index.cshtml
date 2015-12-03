@@ -8,7 +8,7 @@
 <h2>Index</h2>
 
 <p>
-    @if (User.IsInRole("Administrators"))
+    @if (User.IsInRole(Entities.UserRoles.Administrators.ToString()))
     {
         @Html.ActionLink("Create New", "Create")
     }

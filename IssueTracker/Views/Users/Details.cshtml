@@ -102,7 +102,7 @@
     </dl>
 </div>
 <p>
-    @if (User.IsInRole("Administrators"))
+    @if (User.IsInRole(Entities.UserRoles.Administrators.ToString()))
     {
         @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) @:|
     }
