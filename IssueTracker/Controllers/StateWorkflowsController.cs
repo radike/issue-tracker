@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using IssueTracker.ViewModels;
 using System.Collections.Generic;
-using Entities;
+using IssueTracker.Data.Entities;
 using IssueTracker.Data;
 using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
@@ -16,14 +16,14 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage(Roles = "Administrators")]
     public class StateWorkflowsController : Controller
     {
-        private IssueTrackerContext db = new IssueTrackerContext();
-        private IStateWorkflowRepository stateWorkflowRepo = new StateWorkflowRepository();
-        private IStateRepository stateRepo = new StateRepository();
+        private static IssueTrackerContext db = new IssueTrackerContext();
+        private IStateWorkflowRepository stateWorkflowRepo = new StateWorkflowRepository(db);
+        private IStateRepository stateRepo = new StateRepository(db);
 
         // GET: StateWorkflows
         public ActionResult Index()
         {
-            var stateWorkflows = stateWorkflowRepo.Get().AsQueryable().Include(s => s.FromState).Include(s => s.ToState);
+            var stateWorkflows = stateWorkflowRepo.GetAll().AsQueryable().Include(s => s.FromState).Include(s => s.ToState);
             foreach (var stateWorkflow in stateWorkflows)
             {
                 stateWorkflow.FromState = stateRepo.Get(stateWorkflow.FromStateId);
@@ -53,8 +53,8 @@ namespace IssueTracker.Controllers
         // GET: StateWorkflows/Create
         public ActionResult Create()
         {
-            ViewBag.FromStateId = new SelectList(stateRepo.Get(), "Id", "Title");
-            ViewBag.ToStateId = new SelectList(stateRepo.Get(), "Id", "Title");
+            ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title");
+            ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title");
 
             return View();
         }
@@ -69,8 +69,8 @@ namespace IssueTracker.Controllers
                 if (viewModel.FromStateId == viewModel.ToStateId)
                 {
                     ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
-                    ViewBag.FromStateId = new SelectList(stateRepo.Get(), "Id", "Title", viewModel.FromStateId);
-                    ViewBag.ToStateId = new SelectList(stateRepo.Get(), "Id", "Title", viewModel.ToStateId);
+                    ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
+                    ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
                     return View(viewModel);
                 }
@@ -82,8 +82,8 @@ namespace IssueTracker.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.FromStateId = new SelectList(stateRepo.Get(), "Id", "Title", viewModel.FromStateId);
-            ViewBag.ToStateId = new SelectList(stateRepo.Get(), "Id", "Title", viewModel.ToStateId);
+            ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
+            ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
             return View(viewModel);
         }
@@ -103,8 +103,8 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.FromStateId = new SelectList(stateRepo.Get(), "Id", "Title", stateWorkflow.FromStateId);
-            ViewBag.ToStateId = new SelectList(stateRepo.Get(), "Id", "Title", stateWorkflow.ToStateId);
+            ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", stateWorkflow.FromStateId);
+            ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", stateWorkflow.ToStateId);
 
             return View(Mapper.Map<StateWorkflowViewModel>(stateWorkflow));
         }
@@ -119,8 +119,8 @@ namespace IssueTracker.Controllers
                 if (viewModel.FromStateId == viewModel.ToStateId)
                 {
                     ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
-                    ViewBag.FromStateId = new SelectList(stateRepo.Get(), "Id", "Title", viewModel.FromStateId);
-                    ViewBag.ToStateId = new SelectList(stateRepo.Get(), "Id", "Title", viewModel.ToStateId);
+                    ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
+                    ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
                     return View(viewModel);
                 }
@@ -130,8 +130,8 @@ namespace IssueTracker.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.FromStateId = new SelectList(stateRepo.Get(), "Id", "Title", viewModel.FromStateId);
-            ViewBag.ToStateId = new SelectList(stateRepo.Get(), "Id", "Title", viewModel.ToStateId);
+            ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
+            ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
             return View(viewModel);
         }

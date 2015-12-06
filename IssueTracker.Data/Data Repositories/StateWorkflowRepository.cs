@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿using Common.Data.Core;
+using Common.Data.Core.Contracts;
+using IssueTracker.Data.Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,32 +12,37 @@ namespace IssueTracker.Data.Data_Repositories
 {
     public class StateWorkflowRepository : DataRepositoryBase<StateWorkflow>, IStateWorkflowRepository
     {
-        protected override StateWorkflow AddEntity(IssueTrackerContext entityContext, StateWorkflow entity)
+        public StateWorkflowRepository(IDbContext context)
+            :base(context)
         {
-            return entityContext.StateWorkflows.Add(entity);
-        }
 
-        protected override IEnumerable<StateWorkflow> GetEntities(IssueTrackerContext entityContext)
-        {
-            return from e in entityContext.StateWorkflows
-                   select e;
         }
+        //protected override StateWorkflow AddEntity(IssueTrackerContext entityContext, StateWorkflow entity)
+        //{
+        //    return entityContext.StateWorkflows.Add(entity);
+        //}
 
-        protected override StateWorkflow GetEntity(IssueTrackerContext entityContext, Guid id)
-        {
-            var query = (from e in entityContext.StateWorkflows
-                         where e.Id == id
-                         select e);
-            var results = query.FirstOrDefault();
+        //protected override IEnumerable<StateWorkflow> GetEntities(IssueTrackerContext entityContext)
+        //{
+        //    return from e in entityContext.StateWorkflows
+        //           select e;
+        //}
 
-            return results;
-        }
+        //protected override StateWorkflow GetEntity(IssueTrackerContext entityContext, Guid id)
+        //{
+        //    var query = (from e in entityContext.StateWorkflows
+        //                 where e.Id == id
+        //                 select e);
+        //    var results = query.FirstOrDefault();
 
-        protected override StateWorkflow UpdateEntity(IssueTrackerContext entityContext, StateWorkflow entity)
-        {
-            return (from e in entityContext.StateWorkflows
-                    where e.Id == entity.Id
-                    select e).FirstOrDefault();
-        }
+        //    return results;
+        //}
+
+        //protected override StateWorkflow UpdateEntity(IssueTrackerContext entityContext, StateWorkflow entity)
+        //{
+        //    return (from e in entityContext.StateWorkflows
+        //            where e.Id == entity.Id
+        //            select e).FirstOrDefault();
+        //}
     }
 }

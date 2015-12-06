@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using IssueTracker.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,7 +15,6 @@ namespace IssueTracker.Data.Model_Configuration
         {
             Property(p => p.IsInitial).IsRequired();
             Property(p => p.Title).IsRequired();
-            Ignore(p => p.EntityId);
         }
     }
 }

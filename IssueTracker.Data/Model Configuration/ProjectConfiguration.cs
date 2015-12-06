@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using IssueTracker.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
@@ -15,7 +15,6 @@ namespace IssueTracker.Data.Model_Configuration
             Property(p => p.Title).HasMaxLength(255).IsRequired();
             Property(p => p.Code).IsRequired();
             Property(p => p.Active).IsRequired();
-            Ignore(p => p.EntityId);
             Ignore(p => p.SelectedUsers);
             this.HasMany(a => a.Users).WithMany(b => b.Projects).Map(m =>
             {

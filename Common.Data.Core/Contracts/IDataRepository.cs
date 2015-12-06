@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IssueTracker.Core.Contracts
+namespace Common.Data.Core.Contracts
 {
     public interface IDataRepository<T> 
         where T : class, IIdentifiableEntity, new()
@@ -13,7 +13,7 @@ namespace IssueTracker.Core.Contracts
         void Remove(T entity);
         void Remove(Guid id);
         T Update(T entity);
-        IEnumerable<T> Get();
+        ICollection<T> GetAll();
         T Get(Guid id);
     }
 }

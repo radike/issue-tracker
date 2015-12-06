@@ -7,9 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
-using IssueTracker.Entities;
+using IssueTracker.Data.Entities;
 using IssueTracker.Data;
-using Entities;
 using IssueTracker.ViewModels;
 
 namespace IssueTracker.Controllers

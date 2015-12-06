@@ -1,5 +1,4 @@
-﻿
-using IssueTracker.Entities;
+﻿using IssueTracker.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
@@ -28,7 +27,6 @@ namespace IssueTracker.Data.Model_Configuration
             .HasForeignKey(p => new { p.ProjectId, p.ProjectCreatedAt });
             HasRequired(p => p.State).WithMany(p => p.Issues).HasForeignKey(p => p.StateId);
            
-            Ignore(p => p.EntityId);
             Ignore(p => p.Code);
         }
     }

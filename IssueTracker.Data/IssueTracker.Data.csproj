@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.4.0\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -63,7 +67,7 @@
     <Compile Include="Data Repositories\ProjectRepository.cs" />
     <Compile Include="Data Repositories\StateRepository.cs" />
     <Compile Include="Data Repositories\StateWorkflowRepository.cs" />
-    <Compile Include="DataRepositoryBase.cs" />
+    <Compile Include="DataModule.cs" />
     <Compile Include="IssueTrackerContext.cs" />
     <Compile Include="Model Configuration\ApplicationUserConfiguration.cs" />
     <Compile Include="Model Configuration\CommentConfiguration.cs" />
@@ -78,17 +82,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IssueTracker.Core\IssueTracker.Core.csproj">
+    <ProjectReference Include="..\Common.Data.Core\Common.Data.Core.csproj">
       <Project>{0cbfee98-7111-496b-88bd-3f4206fc10f9}</Project>
-      <Name>IssueTracker.Core</Name>
+      <Name>Common.Data.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\IssueTracker.Data.Contracts\IssueTracker.Data.Contracts.csproj">
       <Project>{5aec97d4-f022-488f-a1b5-230e7b94cf51}</Project>
       <Name>IssueTracker.Data.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IssueTracker.Entities\IssueTracker.Entities.csproj">
+    <ProjectReference Include="..\IssueTracker.Entities\IssueTracker.Data.Entities.csproj">
       <Project>{92e2b591-c2bc-4a0a-be81-ed4fbc29aea1}</Project>
-      <Name>IssueTracker.Entities</Name>
+      <Name>IssueTracker.Data.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

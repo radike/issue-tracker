@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Entities;
-using IssueTracker.Entities;
+using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using System;
 using System.Collections.Generic;

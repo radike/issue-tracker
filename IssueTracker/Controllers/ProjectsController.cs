@@ -5,24 +5,24 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using PagedList;
-using IssueTracker.Entities;
+using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
 using IssueTracker.Abstractions;
 using Microsoft.AspNet.Identity;
 using IssueTracker.Data;
-using Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
+using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class ProjectsController : Controller
     {
-        private IssueTrackerContext db = new IssueTrackerContext();
-        private IProjectRepository projectRepo = new ProjectRepository();
-        private IIssueRepository issueRepo = new IssueRepository();
+        private static IssueTrackerContext db = new IssueTrackerContext();
+        private IProjectRepository projectRepo = new ProjectRepository(db);
+        private IIssueRepository issueRepo = new IssueRepository(db);
 
         private const int ProjectsPerPage = 20;
         private const int IssuesPerProjectPage = 10;
@@ -30,7 +30,7 @@ namespace IssueTracker.Controllers
         // GET: Projects
         public ActionResult Index(int? page)
         {
-            var projectsTemp = projectRepo.Get().AsQueryable()
+            var projectsTemp = projectRepo.GetAll().AsQueryable()
                 .Where(n => n.Active)
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
@@ -53,14 +53,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = projectRepo.Get().AsQueryable().Where(p => p.Code == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+            var project = projectRepo.GetAll().AsQueryable().Where(p => p.Code == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
             
             if (project == null)
             {
                 return HttpNotFound();
             }
 
-            project.Issues = issueRepo.Get()
+            project.Issues = issueRepo.GetAll()
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
                 .Where(n => n.ProjectId == project.Id)
@@ -90,7 +90,7 @@ namespace IssueTracker.Controllers
             if (ModelState.IsValid)
             {
                 // if the code already exists
-                if (Enumerable.Any(projectRepo.Get(), p => p.Code.Equals(project.Code.ToUpper())))
+                if (Enumerable.Any(projectRepo.GetAll(), p => p.Code.Equals(project.Code.ToUpper())))
                 {
                     ViewBag.ErrorUniqueCode = "Entered code is already associated with another project.";
                     ViewBag.UsersList = new MultiSelectList(db.Users, "Id", "Email");
@@ -128,7 +128,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var project = projectRepo.Get().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+            var project = projectRepo.GetAll().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
 
             if (project == null)
             {
@@ -159,7 +159,7 @@ namespace IssueTracker.Controllers
                 addOwnerToUsers(viewModel);
 
                 // create a new entity
-                var entityNew = projectRepo.Get().AsQueryable().AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
+                var entityNew = projectRepo.GetAll().AsQueryable().AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
                 // map viewModel to the entity
                 entityNew = Mapper.Map(viewModel, entityNew);
                 // change CreatedAt
@@ -185,7 +185,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var project = projectRepo.Get().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+            var project = projectRepo.GetAll().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
 
             if (project == null)
             {

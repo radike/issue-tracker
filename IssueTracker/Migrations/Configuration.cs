@@ -1,7 +1,7 @@
 namespace IssueTracker.Migrations
 {
     using Data;
-    using global::Entities;
+    using IssueTracker.Data.Entities;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
@@ -44,8 +44,8 @@ namespace IssueTracker.Migrations
                 }
             });
 
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
+            var userStore = new ApplicatonUserStore(context);
+            var userManager = new ApplicationUserManager(userStore);
             var users = new List<User>();
 
             users.Add(new User("admin@admin.com", "Password@123", UserRoles.Administrators));
@@ -73,6 +73,24 @@ namespace IssueTracker.Migrations
                 UserName = userName;
                 Password = password;
                 Role = role;
+            }
+        }
+
+        private class UserRoles
+        {
+            public static UserRoles Administrators = new UserRoles("Administrators");
+            public static UserRoles Users = new UserRoles("Users");
+
+            private string name;
+
+            private UserRoles(string name)
+            {
+                this.name = name;
+            }
+
+            public override string ToString()
+            {
+                return name;
             }
         }
     }

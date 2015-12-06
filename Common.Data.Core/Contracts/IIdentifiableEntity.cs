@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IssueTracker.Core.Contracts
+namespace Common.Data.Core.Contracts
 {
     public interface IIdentifiableEntity
     {
-        Guid EntityId { get; set; }
+        Guid Id { get; set; }
     }
 }

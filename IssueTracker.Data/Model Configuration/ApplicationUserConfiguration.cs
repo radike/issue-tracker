@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using IssueTracker.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
@@ -12,7 +12,6 @@ namespace IssueTracker.Data.Model_Configuration
     {
         public ApplicationUserConfiguration()
         {
-            Ignore(p => p.EntityId);
             ToTable("AspNetUsers");
         }
     }

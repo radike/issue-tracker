@@ -1,8 +1,5 @@
-﻿
-
-using Entities;
+﻿using Common.Data.Core.Contracts;
 using IssueTracker.Core;
-using IssueTracker.Core.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IssueTracker.Entities
+namespace IssueTracker.Data.Entities
 {
     public class Issue : IIdentifiableEntity
     {
@@ -28,10 +25,10 @@ namespace IssueTracker.Entities
         public Guid StateId { get; set; }
 
         
-        public string ReporterId { get; set; }
+        public Guid ReporterId { get; set; }
 
       
-        public string AssigneeId { get; set; }
+        public Guid AssigneeId { get; set; }
         
         public bool Active { get; set; }
 
@@ -57,12 +54,6 @@ namespace IssueTracker.Entities
         public string Code
         {
             get { return Project.Code + "-" + CodeNumber; }
-        }
-        
-        public Guid EntityId
-        {
-            get { return Id; }
-            set { Id = value; }
         }
     }
 }

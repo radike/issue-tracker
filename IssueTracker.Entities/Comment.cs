@@ -1,6 +1,4 @@
-﻿using IssueTracker.Core;
-using IssueTracker.Core.Contracts;
-using IssueTracker.Entities;
+﻿using Common.Data.Core.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities
+namespace IssueTracker.Data.Entities
 {
-    public class Comment  : IIdentifiableEntity
+    public class Comment : IIdentifiableEntity
     {
         // composite primary key
         public Guid Id { get; set; }
@@ -29,17 +27,11 @@ namespace Entities
 
         public DateTime? Posted { get; set; }
 
-        public string AuthorId { get; set; }
+        public Guid? AuthorId { get; set; }
 
         // Table definitions
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser Author { get; set; }
 
         public virtual Issue Issue { get; set; }
-
-        public Guid EntityId
-        {
-            get { return Id; }
-            set { Id = value; }
-        }
     }
 }

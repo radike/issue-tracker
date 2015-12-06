@@ -1,6 +1,5 @@
-﻿using IssueTracker.Core;
-using IssueTracker.Core.Contracts;
-using IssueTracker.Entities;
+﻿using Common.Data.Core.Contracts;
+using IssueTracker.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities
+namespace IssueTracker.Data.Entities
 {
-    public class State  : IIdentifiableEntity
+    public class State : IIdentifiableEntity
     {
         // Parameters
         public Guid Id { get; set; }
@@ -21,11 +20,5 @@ namespace Entities
 
         // Table definitions
         public virtual ICollection<Issue> Issues { get; set; }
-
-        public Guid EntityId
-        {
-            get { return Id; }
-            set { Id = value; }
-        }
     }
 }

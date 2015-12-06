@@ -4,11 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.WebPages;
-using IssueTracker.Entities;
+using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
 using IssueTracker.Data;
-using Entities;
+using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
@@ -62,7 +62,7 @@ namespace IssueTracker.Controllers
 
                 comment.Id = Guid.NewGuid();
                 comment.Posted = DateTime.Now;
-                comment.AuthorId = getLoggedUser().Id;
+                comment.AuthorId = getLoggedUser().Id.ToString();
                 comment.IssueCreatedAt = comment.Issue.CreatedAt;
 
                 db.Comments.Add(Mapper.Map<Comment>(comment));

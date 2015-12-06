@@ -1,32 +1,73 @@
-﻿using IssueTracker.Core.Contracts;
-using IssueTracker.Entities;
+﻿using Common.Data.Core.Contracts;
+using IssueTracker.Data.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
+using System;
+using System.Data.Entity;
 
-namespace Entities
+namespace IssueTracker.Data.Entities
 {
-    public class ApplicationUser : IdentityUser, IIdentifiableEntity
+    public class ApplicationUser : IdentityUser<Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IUser<Guid>, IIdentifiableEntity
     {
-        public ICollection<Project> Projects { get; set; }
-        public virtual ICollection<Issue> Issues { get; set; }
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        public ApplicationUser()
         {
-            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
-            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            // Add custom user claims here
-            return userIdentity;
+
         }
-        public Guid EntityId
+
+        public ApplicationUser(string userName)
+            : base()
         {
-            get { return new Guid(this.Id); }
-            set { Id = value.ToString(); }
+            UserName = userName;
+        }
+
+        public ICollection<Project> Projects { get; set; }
+
+        //string IUser<string>.Id
+        //{
+        //    get
+        //    {
+        //        return Id.ToString();
+        //    }
+        //}
+
+        
+    }
+
+
+    public class ApplicationUserRole : IdentityUserRole<Guid>
+    {
+    }
+
+    public class ApplicationUserLogin : IdentityUserLogin<Guid>
+    {
+    }
+
+    public class ApplicationUserClaim : IdentityUserClaim<Guid>
+    {
+    }
+
+    public class ApplicationRole : IdentityRole<Guid, ApplicationUserRole>
+    {
+    }
+
+    public class ApplicatonUserStore :
+        UserStore<ApplicationUser, ApplicationRole, Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
+    {
+        public ApplicatonUserStore(DbContext context)
+            : base(context)
+        {
+        }
+    }
+
+    public class ApplicationDbContext
+        : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IDbContext
+    {
+        public ApplicationDbContext()
+            : base("DefaultConnection")
+        {
         }
     }
 }

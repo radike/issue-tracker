@@ -4,37 +4,37 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
-using IssueTracker.Entities;
+using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using PagedList;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using IssueTracker.Abstractions;
-using Entities;
 using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using System.Data.Entity.Validation;
 using static System.String;
+using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class IssuesController : Controller
     {
-        private IssueTrackerContext db = new IssueTrackerContext();
-        private IProjectRepository projectRepo = new ProjectRepository();
-        private IIssueRepository issueRepo = new IssueRepository();
-        private IStateWorkflowRepository stateWorkflowRepo = new StateWorkflowRepository();
-        private ICommentRepository commentRepo = new CommentRepository();
-        private IApplicationUserRepository applicationUserRepo = new ApplicationUserRepository();
-        private IStateRepository stateRepo = new StateRepository();
+        private static IssueTrackerContext db = new IssueTrackerContext();
+        private IProjectRepository projectRepo = new ProjectRepository(db);
+        private IIssueRepository issueRepo = new IssueRepository(db);
+        private IStateWorkflowRepository stateWorkflowRepo = new StateWorkflowRepository(db);
+        private ICommentRepository commentRepo = new CommentRepository(db);
+        private IApplicationUserRepository applicationUserRepo = new ApplicationUserRepository(db);
+        private IStateRepository stateRepo = new StateRepository(db);
 
         private const int ProjectsPerPage = 20;
 
         // GET: Issues
         public ActionResult Index(int? page, string sort, string searchName, string searchTitle, 
-            string searchAssignee, string searchReporter, Guid? searchProject, Guid? searchState)
+            Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState)
         {
             // viewbag items are used in the header to sort the records
             ViewBag.CreatedSort = IsNullOrEmpty(sort) ? "created_desc" : Empty;
@@ -45,11 +45,11 @@ namespace IssueTracker.Controllers
             ViewBag.StatusSort = sort == "status" ? "status_desc" : "status";
 
             ViewBag.SearchProject = new SelectList(projectRepo.GetActiveProjects(), "Id", "Title");
-            ViewBag.SearchAssignee = new SelectList(applicationUserRepo.Get(), "Id", "Email");
-            ViewBag.SearchReporter = new SelectList(applicationUserRepo.Get(), "Id", "Email");
+            ViewBag.SearchAssignee = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
+            ViewBag.SearchReporter = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
             ViewBag.SearchState = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title");
 
-            var issuesTemp = issueRepo.Get().AsQueryable()
+            var issuesTemp = issueRepo.GetAll().AsQueryable()
                 .Where(n => n.Active)
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
@@ -70,7 +70,7 @@ namespace IssueTracker.Controllers
         }
 
         private static List<Issue> searchIssues (List<Issue> issues, string searchName, string searchTitle, 
-            string searchAssignee, string searchReporter, Guid? searchProject, Guid? searchState)
+            Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState)
         {
             if (!IsNullOrEmpty(searchName))
             {
@@ -82,12 +82,12 @@ namespace IssueTracker.Controllers
                 issues = issues.Where(s => (s.Project.Code + s.CodeNumber + ": " + s.Name).ToLower().Contains(searchTitle.ToLower())).ToList();
             }
 
-            if (!IsNullOrEmpty(searchAssignee))
+            if (searchAssignee != null)
             {
                 issues = issues.Where(s => s.AssigneeId == searchAssignee).ToList();
             }
 
-            if (!IsNullOrEmpty(searchReporter))
+            if (searchReporter != null)
             {
                 issues = issues.Where(s => s.ReporterId == searchReporter).ToList();
             }
@@ -186,7 +186,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var issue = issueRepo.Get().AsQueryable()
+            var issue = issueRepo.GetAll().AsQueryable()
                 .Where(i => i.Project.Code == projectCode && i.CodeNumber == issueNumber)
                 .OrderByDescending(x => x.CreatedAt)
                 .Include(i => i.State).First();
@@ -202,7 +202,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
             }
 
             // possible workflows
-            var workflows = stateWorkflowRepo.Get().Where(c => c.FromStateId == viewModel.Issue.State.Id).ToList();
+            var workflows = stateWorkflowRepo.GetAll().Where(c => c.FromStateId == viewModel.Issue.State.Id).ToList();
             foreach (var stateWorkflow in workflows)
             {
                 stateWorkflow.ToState = stateRepo.Get(stateWorkflow.ToStateId);
@@ -210,13 +210,13 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
             viewModel.StateWorkflows = Mapper.Map<IEnumerable<StateWorkflowViewModel>>(workflows);
 
             // comments from all versions of the issue
-            var comments = commentRepo.Get().AsQueryable()
+            var comments = commentRepo.GetAll().AsQueryable()
                 .Where(n => n.Active)
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
                 .Where(n => n.IssueId == issue.Id)
                 .OrderBy(n => n.Posted)
-                .Include(n => n.User)
+                .Include(n => n.Author)
                 .ToList();
 
             viewModel.Comments = Mapper.Map<IEnumerable<CommentViewModel>>(comments);
@@ -236,7 +236,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
         {
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
             
-            ViewBag.AssigneeId = new SelectList(applicationUserRepo.Get(), "Id", "Email");
+            ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
             ViewBag.ProjectId = new SelectList(projectRepo.GetActiveProjects(), "Id", "Title");
             ViewBag.ReporterId = getLoggedUser().Id;
 
@@ -258,7 +258,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
                     return RedirectToAction("Create");
                 }
 
-                var projectTemp = projectRepo.Get()
+                var projectTemp = projectRepo.GetAll()
                     .Where(x => x.Id == viewModel.ProjectId)
                     .OrderByDescending(x => x.CreatedAt).First();
 
@@ -268,15 +268,15 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
                 issue.Created = DateTime.Now;
                 issue.ProjectCreatedAt = projectTemp.CreatedAt;
                 issue.Id = Guid.NewGuid();
-                issue.CodeNumber = issueRepo.Get().Max(x => (int?)x.CodeNumber) + 1 ?? 1;
+                issue.CodeNumber = issueRepo.GetAll().Max(x => (int?)x.CodeNumber) + 1 ?? 1;
 
                 issueRepo.Add(issue);
 
                 return RedirectToAction("Index");
             }
 
-            ViewBag.AssigneeId = new SelectList(applicationUserRepo.Get(), "Id", "Email", viewModel.AssigneeId);
-            ViewBag.ProjectId = new SelectList(projectRepo.Get(), "Id", "Title", viewModel.ProjectId);
+            ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email", viewModel.AssigneeId);
+            ViewBag.ProjectId = new SelectList(projectRepo.GetAll(), "Id", "Title", viewModel.ProjectId);
 
             return View(viewModel);
         }
@@ -297,7 +297,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
         {
             if (User.Identity.IsAuthenticated)
             {
-                ApplicationUser user = applicationUserRepo.Get().First(dbUser => dbUser.Email == User.Identity.Name);
+                ApplicationUser user = applicationUserRepo.GetAll().First(dbUser => dbUser.Email == User.Identity.Name);
                 return user;
             }
             return null;
@@ -311,7 +311,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var issue = issueRepo.Get().AsQueryable().Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).Include(x => x.Project).First();
+            var issue = issueRepo.GetAll().AsQueryable().Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).Include(x => x.Project).First();
 
             if (issue == null)
             {
@@ -322,7 +322,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
 
             var viewModel = Mapper.Map<IssueEditViewModel>(issue);
 
-            ViewBag.AssigneeId = new SelectList(applicationUserRepo.Get(), "Id", "Email", issue.AssigneeId);
+            ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(projectsTemp, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title", issue.StateId);
 
@@ -337,7 +337,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
             if (ModelState.IsValid)
             {
                 // create a new entity
-                var entityNew = issueRepo.Get().AsQueryable().AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
+                var entityNew = issueRepo.GetAll().AsQueryable().AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
                 entityNew.Reporter = null;
                 entityNew.Assignee = null;
                 entityNew.State = null;
@@ -362,15 +362,15 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
 
             }
 
-            ViewBag.AssigneeId = new SelectList(applicationUserRepo.Get(), "Id", "Email", viewModel.AssigneeId);
-            ViewBag.ProjectId = new SelectList(projectRepo.Get(), "Id", "Title", viewModel.ProjectId);
+            ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email", viewModel.AssigneeId);
+            ViewBag.ProjectId = new SelectList(projectRepo.GetAll(), "Id", "Title", viewModel.ProjectId);
 
             return View(viewModel);
         }
 
         public ActionResult RedirectToDetail(Guid id)
         {
-            var issue = issueRepo.Get().AsQueryable()
+            var issue = issueRepo.GetAll().AsQueryable()
                 .Where(i => i.Id == id)
                 .OrderByDescending(x => x.CreatedAt)
                 .Include(i => i.Project).First();
@@ -381,7 +381,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
         public ActionResult ChangeStatus(Guid issueId, Guid to)
         {
             // create a new entity
-            var entityNew = issueRepo.Get().AsQueryable().AsNoTracking().Where(x => x.Id == issueId).OrderByDescending(x => x.CreatedAt).First();
+            var entityNew = issueRepo.GetAll().AsQueryable().AsNoTracking().Where(x => x.Id == issueId).OrderByDescending(x => x.CreatedAt).First();
             if (entityNew != null)
             {
                 // change status

@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿using Common.Data.Core;
+using Common.Data.Core.Contracts;
+using IssueTracker.Data.Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,33 +10,38 @@ namespace IssueTracker.Data.Data_Repositories
 {
     public class ProjectRepository : DataRepositoryBase<Project>, IProjectRepository
     {
-        protected override Project AddEntity(IssueTrackerContext entityContext, Project entity)
+        public ProjectRepository(IDbContext context)
+            :base(context)
         {
-            return entityContext.Projects.Add(entity);
-        }
 
-        protected override IEnumerable<Project> GetEntities(IssueTrackerContext entityContext)
-        {
-            return from e in entityContext.Projects.Include("Issues").Include("Users")
-                   select e;
         }
+        //protected override Project AddEntity(IssueTrackerContext entityContext, Project entity)
+        //{
+        //    return entityContext.Projects.Add(entity);
+        //}
 
-        protected override Project GetEntity(IssueTrackerContext entityContext, Guid id)
-        {
-            var query = (from e in entityContext.Projects.Include("Issues").Include("Users").Include("Comments")
-                         where e.Id == id
-                         select e);
-            var results = query.FirstOrDefault();
+        //protected override IEnumerable<Project> GetEntities(IssueTrackerContext entityContext)
+        //{
+        //    return from e in entityContext.Projects.Include("Issues").Include("Users")
+        //           select e;
+        //}
 
-            return results;
-        }
+        //protected override Project GetEntity(IssueTrackerContext entityContext, Guid id)
+        //{
+        //    var query = (from e in entityContext.Projects.Include("Issues").Include("Users").Include("Comments")
+        //                 where e.Id == id
+        //                 select e);
+        //    var results = query.FirstOrDefault();
 
-        protected override Project UpdateEntity(IssueTrackerContext entityContext, Project entity)
-        {
-            return (from e in entityContext.Projects
-                    where e.Id == entity.Id
-                    select e).FirstOrDefault();
-        }
+        //    return results;
+        //}
+
+        //protected override Project UpdateEntity(IssueTrackerContext entityContext, Project entity)
+        //{
+        //    return (from e in entityContext.Projects
+        //            where e.Id == entity.Id
+        //            select e).FirstOrDefault();
+        //}
 
         public IEnumerable<Project> GetActiveProjects()
         {

@@ -5,9 +5,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using IssueTracker.Entities;
 using IssueTracker.ViewModels;
-using Entities;
+using System;
+using IssueTracker.Data.Entities;
 
 namespace IssueTracker.Controllers
 {
@@ -178,7 +178,7 @@ namespace IssueTracker.Controllers
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> ConfirmEmail(Guid userId, string code)
         {
             if (userId == null || code == null)
             {

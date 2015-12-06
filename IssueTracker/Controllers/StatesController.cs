@@ -9,7 +9,7 @@ using IssueTracker.ViewModels;
 using System.Collections.Generic;
 using System.Threading;
 using IssueTracker.Data;
-using Entities;
+using IssueTracker.Data.Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 
@@ -19,7 +19,12 @@ namespace IssueTracker.Controllers
     public class StatesController : Controller
     {
         private IssueTrackerContext db = new IssueTrackerContext();
-        private IStateRepository stateRepo = new StateRepository();
+        private IStateRepository stateRepo;
+
+        public StatesController(IStateRepository stateRepository)
+        {
+            stateRepo = stateRepository;
+        }
  
         // GET: States
         public ActionResult Index()
@@ -27,7 +32,7 @@ namespace IssueTracker.Controllers
             ViewBag.DefaultCulture = Thread.CurrentThread.CurrentCulture.Name;
             ViewBag.FinalStates = stateRepo.GetFinalStateIds();
 
-            return View(Mapper.Map<IEnumerable<StateViewModel>>(stateRepo.Get().ToList()));
+            return View(Mapper.Map<IEnumerable<StateViewModel>>(stateRepo.GetAll().ToList()));
         }
 
         // GET: States/Details/5
@@ -69,7 +74,7 @@ namespace IssueTracker.Controllers
                     removeInitialState(viewModel.Id);
                 }
 
-                viewModel.OrderIndex = stateRepo.Get().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+                viewModel.OrderIndex = stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
                 stateRepo.Add(Mapper.Map<State>(viewModel));
 
                 return RedirectToAction("Index");
@@ -168,7 +173,7 @@ namespace IssueTracker.Controllers
         {
             if (direction == "back")
             {
-                var movedStates = stateRepo.Get()
+                var movedStates = stateRepo.GetAll()
                             .Where(c => (toPosition <= c.OrderIndex && c.OrderIndex <= fromPosition))
                             .ToList();
 
@@ -179,7 +184,7 @@ namespace IssueTracker.Controllers
             }
             else
             {
-                var movedStates = stateRepo.Get()
+                var movedStates = stateRepo.GetAll()
                             .Where(c => (fromPosition <= c.OrderIndex && c.OrderIndex <= toPosition))
                             .ToList();
                 foreach (var state in movedStates)
@@ -188,7 +193,7 @@ namespace IssueTracker.Controllers
                 }
             }
 
-            stateRepo.Get().First(c => c.Id == id).OrderIndex = toPosition;
+            stateRepo.GetAll().First(c => c.Id == id).OrderIndex = toPosition;
             db.SaveChanges();
         }
 
@@ -208,7 +213,7 @@ namespace IssueTracker.Controllers
         /// <param name="id">Id of state, which flag is not removed</param>
         private void removeInitialState(Guid id)
         {
-            foreach (var s in stateRepo.Get().Where(s => s.IsInitial && s.Id != id))
+            foreach (var s in stateRepo.GetAll().Where(s => s.IsInitial && s.Id != id))
             {
                 s.IsInitial = false;
                 stateRepo.Update(s);

@@ -1,9 +1,6 @@
-﻿
-
-
+﻿using Common.Data.Core.Contracts;
 using IssueTracker.Core;
-using IssueTracker.Core.Contracts;
-using IssueTracker.Entities;
+using IssueTracker.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

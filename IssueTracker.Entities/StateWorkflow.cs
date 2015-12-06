@@ -1,5 +1,5 @@
-﻿using IssueTracker.Core;
-using IssueTracker.Core.Contracts;
+﻿using Common.Data.Core.Contracts;
+using IssueTracker.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities
+namespace IssueTracker.Data.Entities
 {
     public class StateWorkflow : IIdentifiableEntity
     {
@@ -21,11 +21,5 @@ namespace Entities
         // Table definitions
         public virtual State FromState { get; set; }
         public virtual State ToState { get; set; }
-
-        public Guid EntityId
-        {
-            get { return Id; }
-            set { Id = value; }
-        }
     }
 }

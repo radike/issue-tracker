@@ -1,7 +1,7 @@
-﻿using Entities;
-using IssueTracker.Core.Contracts;
+﻿using Common.Data.Core.Contracts;
+using IssueTracker.Data.Entities;
+using IssueTracker.Data.Contracts;
 using IssueTracker.Data.Model_Configuration;
-using IssueTracker.Entities;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace IssueTracker.Data
 {
-    public class IssueTrackerContext : IdentityDbContext<ApplicationUser>
+    public class IssueTrackerContext : ApplicationDbContext
     {
-        public IssueTrackerContext() : base("DefaultConnection", false)
+        public IssueTrackerContext() : base()
         {
             //  Database.SetInitializer<IssueTrackerContext>(null);
-
+            //DbContext
         }
 
         public DbSet<Issue> Issues { get; set; }
