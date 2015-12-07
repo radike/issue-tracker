@@ -24,50 +24,5 @@ namespace IssueTracker.Data.Entities
         }
 
         public ICollection<Project> Projects { get; set; }
-
-        //string IUser<string>.Id
-        //{
-        //    get
-        //    {
-        //        return Id.ToString();
-        //    }
-        //}
-
-        
-    }
-
-
-    public class ApplicationUserRole : IdentityUserRole<Guid>
-    {
-    }
-
-    public class ApplicationUserLogin : IdentityUserLogin<Guid>
-    {
-    }
-
-    public class ApplicationUserClaim : IdentityUserClaim<Guid>
-    {
-    }
-
-    public class ApplicationRole : IdentityRole<Guid, ApplicationUserRole>
-    {
-    }
-
-    public class ApplicatonUserStore :
-        UserStore<ApplicationUser, ApplicationRole, Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>
-    {
-        public ApplicatonUserStore(DbContext context)
-            : base(context)
-        {
-        }
-    }
-
-    public class ApplicationDbContext
-        : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IDbContext
-    {
-        public ApplicationDbContext()
-            : base("DefaultConnection")
-        {
-        }
     }
 }

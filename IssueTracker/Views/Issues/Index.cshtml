@@ -29,8 +29,10 @@
         <li role="presentation"><a href="?SearchAssignee=@User.Identity.GetUserId()">Assigned to me</a></li>
         <li role="presentation"><a href="?SearchReporter=@User.Identity.GetUserId()">Reported by me</a></li>
     }
-    <li style="float: right; padding-right: 10px;">
-        @Html.ActionLink("+ Add", "Create", null, new {@class = "btn btn-primary action"})
+    <li id="create-button">
+        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Issues")'">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+        </button>
     </li>
 </ul>
 

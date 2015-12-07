@@ -22,6 +22,11 @@ namespace IssueTracker.Data
         {
             builder.Register(c => new IssueTrackerContext()).As<IDbContext>().InstancePerRequest();
             builder.RegisterType<StateRepository>().As<IStateRepository>().InstancePerRequest();
+            builder.RegisterType<StateWorkflowRepository>().As<IStateWorkflowRepository>().InstancePerRequest();
+            builder.RegisterType<ProjectRepository>().As<IProjectRepository>().InstancePerRequest();
+            builder.RegisterType<IssueRepository>().As<IIssueRepository>().InstancePerRequest();
+            builder.RegisterType<CommentRepository>().As<ICommentRepository>().InstancePerRequest();
+            builder.RegisterType<ApplicationUserRepository>().As<IApplicationUserRepository>().InstancePerRequest();
 
             base.Load(builder);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +15,10 @@ namespace Common.Data.Core.Contracts
         void Remove(Guid id);
         T Update(T entity);
         ICollection<T> GetAll();
+        IQueryable<T> Fetch();
         T Get(Guid id);
+        void Save();
+        IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
+        T FindSingleBy(Expression<Func<T, bool>> predicate);
     }
 }

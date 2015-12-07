@@ -187,3 +187,8 @@ body {
   -moz-border-radius: 50%;
   border-radius: 50%;
  }
+
+li#create-button {
+    float: right;
+    padding-right: 10px;
+}

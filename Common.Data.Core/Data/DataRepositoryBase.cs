@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Common.Data.Core
 {
@@ -54,6 +55,26 @@ namespace Common.Data.Core
         public TEntity Get(Guid id)
         {
             return _context.Set<TEntity>().Find(id);
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
+        public IQueryable<TEntity> Fetch()
+        {
+            return _context.Set<TEntity>();
+        }
+
+        public IQueryable<TEntity> FindBy(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _context.Set<TEntity>().Where(predicate);
+        }
+
+        public TEntity FindSingleBy(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _context.Set<TEntity>().Where(predicate).SingleOrDefault();
         }
     }
 }

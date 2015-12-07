@@ -18,21 +18,20 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage(Roles = "Administrators")]
     public class StatesController : Controller
     {
-        private IssueTrackerContext db = new IssueTrackerContext();
-        private IStateRepository stateRepo;
+        private IStateRepository _stateRepo;
 
         public StatesController(IStateRepository stateRepository)
         {
-            stateRepo = stateRepository;
+            _stateRepo = stateRepository;
         }
  
         // GET: States
         public ActionResult Index()
         {
             ViewBag.DefaultCulture = Thread.CurrentThread.CurrentCulture.Name;
-            ViewBag.FinalStates = stateRepo.GetFinalStateIds();
+            ViewBag.FinalStates = _stateRepo.GetFinalStateIds();
 
-            return View(Mapper.Map<IEnumerable<StateViewModel>>(stateRepo.GetAll().ToList()));
+            return View(Mapper.Map<IEnumerable<StateViewModel>>(_stateRepo.GetAll().ToList()));
         }
 
         // GET: States/Details/5
@@ -43,7 +42,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var state = stateRepo.Get((Guid)id);
+            var state = _stateRepo.Get((Guid)id);
 
             if (state == null)
             {
@@ -74,8 +73,8 @@ namespace IssueTracker.Controllers
                     removeInitialState(viewModel.Id);
                 }
 
-                viewModel.OrderIndex = stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
-                stateRepo.Add(Mapper.Map<State>(viewModel));
+                viewModel.OrderIndex = _stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+                _stateRepo.Add(Mapper.Map<State>(viewModel));
 
                 return RedirectToAction("Index");
             }
@@ -91,7 +90,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var state = stateRepo.Get((Guid)id);
+            var state = _stateRepo.Get((Guid)id);
 
             if (state == null)
             {
@@ -108,7 +107,7 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                stateRepo.Update(Mapper.Map<State>(viewModel));
+                _stateRepo.Update(Mapper.Map<State>(viewModel));
 
                 // if there is already initial state, change it to this one
                 if (viewModel.IsInitial)
@@ -129,7 +128,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var state = stateRepo.Get((Guid)id);
+            var state = _stateRepo.Get((Guid)id);
 
             if (state == null)
             {
@@ -148,8 +147,8 @@ namespace IssueTracker.Controllers
         {
             try
             {
-                var state = stateRepo.Get(id);
-                stateRepo.Remove(state);
+                var state = _stateRepo.Get(id);
+                _stateRepo.Remove(state);
 
                 return RedirectToAction("Index");
             }
@@ -173,7 +172,7 @@ namespace IssueTracker.Controllers
         {
             if (direction == "back")
             {
-                var movedStates = stateRepo.GetAll()
+                var movedStates = _stateRepo.GetAll()
                             .Where(c => (toPosition <= c.OrderIndex && c.OrderIndex <= fromPosition))
                             .ToList();
 
@@ -184,7 +183,7 @@ namespace IssueTracker.Controllers
             }
             else
             {
-                var movedStates = stateRepo.GetAll()
+                var movedStates = _stateRepo.GetAll()
                             .Where(c => (fromPosition <= c.OrderIndex && c.OrderIndex <= toPosition))
                             .ToList();
                 foreach (var state in movedStates)
@@ -193,17 +192,13 @@ namespace IssueTracker.Controllers
                 }
             }
 
-            stateRepo.GetAll().First(c => c.Id == id).OrderIndex = toPosition;
-            db.SaveChanges();
+            _stateRepo.GetAll().First(c => c.Id == id).OrderIndex = toPosition;
+            _stateRepo.Save();
         }
 
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -213,10 +208,10 @@ namespace IssueTracker.Controllers
         /// <param name="id">Id of state, which flag is not removed</param>
         private void removeInitialState(Guid id)
         {
-            foreach (var s in stateRepo.GetAll().Where(s => s.IsInitial && s.Id != id))
+            foreach (var s in _stateRepo.GetAll().Where(s => s.IsInitial && s.Id != id))
             {
                 s.IsInitial = false;
-                stateRepo.Update(s);
+                _stateRepo.Update(s);
             }
         }
     }

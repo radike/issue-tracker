@@ -22,15 +22,25 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage]
     public class IssuesController : Controller
     {
-        private static IssueTrackerContext db = new IssueTrackerContext();
-        private IProjectRepository projectRepo = new ProjectRepository(db);
-        private IIssueRepository issueRepo = new IssueRepository(db);
-        private IStateWorkflowRepository stateWorkflowRepo = new StateWorkflowRepository(db);
-        private ICommentRepository commentRepo = new CommentRepository(db);
-        private IApplicationUserRepository applicationUserRepo = new ApplicationUserRepository(db);
-        private IStateRepository stateRepo = new StateRepository(db);
+        private IProjectRepository projectRepo;
+        private IIssueRepository issueRepo;
+        private IStateWorkflowRepository stateWorkflowRepo;
+        private ICommentRepository commentRepo;
+        private IApplicationUserRepository applicationUserRepo;
+        private IStateRepository stateRepo;
 
         private const int ProjectsPerPage = 20;
+
+        public IssuesController(IProjectRepository projectRepository, IIssueRepository issueRepository, IStateWorkflowRepository stateWorkflowRepository,
+            ICommentRepository commentRepository, IApplicationUserRepository applicationUserRepository, IStateRepository stateRepository)
+        {
+            projectRepo = projectRepository;
+            issueRepo = issueRepository;
+            stateWorkflowRepo = stateWorkflowRepository;
+            commentRepo = commentRepository;
+            applicationUserRepo = applicationUserRepository;
+            stateRepo = stateRepository;
+        }
 
         // GET: Issues
         public ActionResult Index(int? page, string sort, string searchName, string searchTitle, 
@@ -348,7 +358,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
                 // in case the project was changed
                 if (viewModel.ProjectId != entityNew.ProjectId)
                 {
-                    var projectTemp = db.Projects.Where(x => x.Id == viewModel.ProjectId).OrderByDescending(x => x.CreatedAt).First();
+                    var projectTemp = projectRepo.GetAll().Where(x => x.Id == viewModel.ProjectId).OrderByDescending(x => x.CreatedAt).First();
                     entityNew.ProjectCreatedAt = projectTemp.CreatedAt;
                 }
                 // map viewModel to the entity

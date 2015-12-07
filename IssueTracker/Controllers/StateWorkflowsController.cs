@@ -16,18 +16,22 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage(Roles = "Administrators")]
     public class StateWorkflowsController : Controller
     {
-        private static IssueTrackerContext db = new IssueTrackerContext();
-        private IStateWorkflowRepository stateWorkflowRepo = new StateWorkflowRepository(db);
-        private IStateRepository stateRepo = new StateRepository(db);
-
+        private IStateWorkflowRepository _stateWorkflowRepo;
+        private IStateRepository _stateRepo;
+        
+        public StateWorkflowsController(IStateWorkflowRepository stateWorkflowRepository, IStateRepository stateRepository)
+        {
+            _stateWorkflowRepo = stateWorkflowRepository;
+            _stateRepo = stateRepository;
+        }
         // GET: StateWorkflows
         public ActionResult Index()
         {
-            var stateWorkflows = stateWorkflowRepo.GetAll().AsQueryable().Include(s => s.FromState).Include(s => s.ToState);
+            var stateWorkflows = _stateWorkflowRepo.GetAll().AsQueryable().Include(s => s.FromState).Include(s => s.ToState);
             foreach (var stateWorkflow in stateWorkflows)
             {
-                stateWorkflow.FromState = stateRepo.Get(stateWorkflow.FromStateId);
-                stateWorkflow.ToState = stateRepo.Get(stateWorkflow.ToStateId);
+                stateWorkflow.FromState = _stateRepo.Get(stateWorkflow.FromStateId);
+                stateWorkflow.ToState = _stateRepo.Get(stateWorkflow.ToStateId);
             }
             return View(Mapper.Map<IEnumerable<StateWorkflowViewModel>>(stateWorkflows).ToList());
         }
@@ -40,7 +44,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var stateWorkflow = stateWorkflowRepo.Get((Guid)id);
+            var stateWorkflow = _stateWorkflowRepo.Get((Guid)id);
 
             if (stateWorkflow == null)
             {
@@ -53,8 +57,8 @@ namespace IssueTracker.Controllers
         // GET: StateWorkflows/Create
         public ActionResult Create()
         {
-            ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title");
-            ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title");
+            ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title");
+            ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title");
 
             return View();
         }
@@ -69,21 +73,21 @@ namespace IssueTracker.Controllers
                 if (viewModel.FromStateId == viewModel.ToStateId)
                 {
                     ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
-                    ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
-                    ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
+                    ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
+                    ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
                     return View(viewModel);
                 }
 
                 viewModel.Id = Guid.NewGuid();
 
-                stateWorkflowRepo.Add(Mapper.Map<StateWorkflow>(viewModel));
+                _stateWorkflowRepo.Add(Mapper.Map<StateWorkflow>(viewModel));
 
                 return RedirectToAction("Index");
             }
 
-            ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
-            ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
+            ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
+            ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
             return View(viewModel);
         }
@@ -96,15 +100,15 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var stateWorkflow = stateWorkflowRepo.Get((Guid)id);
+            var stateWorkflow = _stateWorkflowRepo.Get((Guid)id);
 
             if (stateWorkflow == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", stateWorkflow.FromStateId);
-            ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", stateWorkflow.ToStateId);
+            ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", stateWorkflow.FromStateId);
+            ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", stateWorkflow.ToStateId);
 
             return View(Mapper.Map<StateWorkflowViewModel>(stateWorkflow));
         }
@@ -119,19 +123,19 @@ namespace IssueTracker.Controllers
                 if (viewModel.FromStateId == viewModel.ToStateId)
                 {
                     ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
-                    ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
-                    ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
+                    ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
+                    ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
                     return View(viewModel);
                 }
 
-                stateWorkflowRepo.Update(Mapper.Map<StateWorkflow>(viewModel));
+                _stateWorkflowRepo.Update(Mapper.Map<StateWorkflow>(viewModel));
                 
                 return RedirectToAction("Index");
             }
 
-            ViewBag.FromStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
-            ViewBag.ToStateId = new SelectList(stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
+            ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
+            ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
             return View(viewModel);
         }
@@ -144,7 +148,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var stateWorkflow = stateWorkflowRepo.Get((Guid)id);
+            var stateWorkflow = _stateWorkflowRepo.Get((Guid)id);
 
             if (stateWorkflow == null)
             {
@@ -159,19 +163,15 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            var stateWorkflow = stateWorkflowRepo.Get((Guid)id);
+            var stateWorkflow = _stateWorkflowRepo.Get((Guid)id);
 
-            stateWorkflowRepo.Remove(stateWorkflow);
+            _stateWorkflowRepo.Remove(stateWorkflow);
 
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

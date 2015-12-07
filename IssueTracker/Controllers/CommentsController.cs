@@ -9,13 +9,23 @@ using IssueTracker.ViewModels;
 using AutoMapper;
 using IssueTracker.Data;
 using IssueTracker.Models;
+using IssueTracker.Data.Contracts.Repository_Interfaces;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class CommentsController : Controller
     {
-        private IssueTrackerContext db = new IssueTrackerContext();
+        private ICommentRepository _commentRepo;
+        private IIssueRepository _issueRepo;
+        private IApplicationUserRepository _userRepo;
+
+        public CommentsController(ICommentRepository commentRepository, IIssueRepository issueRepository, IApplicationUserRepository applicationUserRepository)
+        {
+            _commentRepo = commentRepository;
+            _issueRepo = issueRepository;
+            _userRepo = applicationUserRepository;
+        }
         /*
         // GET: Comments
         public ActionResult Index()
@@ -58,26 +68,25 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                comment.Issue = db.Issues.Where(x => x.Id == comment.IssueId).OrderByDescending(x => x.Created).First();
+                comment.Issue = _issueRepo.FindBy(x => x.Id == comment.IssueId).OrderByDescending(x => x.Created).First();
 
                 comment.Id = Guid.NewGuid();
                 comment.Posted = DateTime.Now;
                 comment.AuthorId = getLoggedUser().Id.ToString();
                 comment.IssueCreatedAt = comment.Issue.CreatedAt;
 
-                db.Comments.Add(Mapper.Map<Comment>(comment));
-                db.SaveChanges();
+                _commentRepo.Add(Mapper.Map<Comment>(comment));
                 return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
 
             if (comment.Text.IsEmpty())
             {
-                comment.Issue = db.Issues.Where(x => x.Id == comment.IssueId).OrderByDescending(x => x.Created).First();
+                comment.Issue = _issueRepo.FindBy(x => x.Id == comment.IssueId).OrderByDescending(x => x.Created).First();
 
                 return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
 
-            ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
+            ViewBag.IssueId = new SelectList(_issueRepo.GetAll(), "Id", "Name", comment.IssueId);
             return View(comment);
         }
 
@@ -89,7 +98,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var comment = db.Comments.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
+            var comment = _commentRepo.FindBy(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
 
             if (comment == null)
             {
@@ -102,7 +111,7 @@ namespace IssueTracker.Controllers
                 return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
 
-            ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", comment.IssueId);
+            ViewBag.IssueId = new SelectList(_issueRepo.GetAll(), "Id", "Name", comment.IssueId);
 
             return View(Mapper.Map<CommentViewModel>(comment));
         }
@@ -114,10 +123,10 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                viewModel.Issue = db.Issues.Where(x => x.Id == viewModel.IssueId).OrderByDescending(x => x.Created).First();
+                viewModel.Issue = _issueRepo.FindBy(x => x.Id == viewModel.IssueId).OrderByDescending(x => x.Created).First();
 
                 // create a new entity
-                var entityNew = db.Comments.AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
+                var entityNew = _commentRepo.FindBy(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
                 if (entityNew != null)
                 {
                     // edit comment text
@@ -125,8 +134,7 @@ namespace IssueTracker.Controllers
                     // change CreatedAt
                     entityNew.CreatedAt = DateTime.Now;
                     // save the entity
-                    db.Comments.Add(entityNew);
-                    db.SaveChanges();
+                    _commentRepo.Add(entityNew);
                 }
 
                 return RedirectToAction("Details", "Issues", new {id = viewModel.Issue.Code});
@@ -147,7 +155,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var comment = db.Comments.Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).Include(x => x.Issue).First();
+            var comment = _commentRepo.FindBy(x => x.Id == id).OrderByDescending(x => x.CreatedAt).Include(x => x.Issue).First();
 
             if (comment == null)
             {
@@ -172,28 +180,23 @@ namespace IssueTracker.Controllers
         {
             var commentIssueIdTemp = new Guid();
 
-            var comments = db.Comments.Where(x => x.Id == id);
+            var comments = _commentRepo.FindBy(x => x.Id == id);
             foreach (var comment in comments)
             {
                 commentIssueIdTemp = comment.IssueId;
 
                 comment.Active = false;
-                db.Entry(comment).State = EntityState.Modified;
             }
 
-            db.SaveChanges();
+            _commentRepo.Save();
 
-            var commentIssueCodeTemp = db.Issues.Where(x => x.Id == commentIssueIdTemp).OrderByDescending(x => x.CreatedAt).First();
+            var commentIssueCodeTemp = _issueRepo.FindBy(x => x.Id == commentIssueIdTemp).OrderByDescending(x => x.CreatedAt).First();
 
             return RedirectToAction("Details", "Issues", new { id = commentIssueCodeTemp.Code });
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -201,7 +204,7 @@ namespace IssueTracker.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var user = db.Users.First(dbUser => dbUser.Email == User.Identity.Name);
+                var user = _userRepo.FindSingleBy(dbUser => dbUser.Email == User.Identity.Name);
                 return user;
             }
             return null;

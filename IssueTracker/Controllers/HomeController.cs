@@ -3,13 +3,19 @@ using System.Linq;
 using System.Threading;
 using System.Web.Mvc;
 using IssueTracker.Data;
+using IssueTracker.Data.Contracts.Repository_Interfaces;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class HomeController : Controller
     {
-        private IssueTrackerContext db = new IssueTrackerContext();
+        private IIssueRepository _issueRepo;
+
+        public HomeController(IIssueRepository issueRepository)
+        {
+            _issueRepo = issueRepository;
+        }
 
         public ActionResult Index()
         {
@@ -38,7 +44,7 @@ namespace IssueTracker.Controllers
 
         public JsonResult AutoCompleteSearch(string query)
         {
-            var allIssues = db.Issues
+            var allIssues = _issueRepo.Fetch()
                 .Where(n => n.Active)
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())

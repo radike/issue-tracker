@@ -20,17 +20,24 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage]
     public class ProjectsController : Controller
     {
-        private static IssueTrackerContext db = new IssueTrackerContext();
-        private IProjectRepository projectRepo = new ProjectRepository(db);
-        private IIssueRepository issueRepo = new IssueRepository(db);
+        private IProjectRepository _projectRepo;
+        private IIssueRepository _issueRepo;
+        private IApplicationUserRepository _userRepo;
 
         private const int ProjectsPerPage = 20;
         private const int IssuesPerProjectPage = 10;
 
+        public ProjectsController(IProjectRepository projectRepository, IIssueRepository issueRepository, IApplicationUserRepository applicationUserRepository)
+        {
+            _projectRepo = projectRepository;
+            _issueRepo = issueRepository;
+            _userRepo = applicationUserRepository;
+        }
+
         // GET: Projects
         public ActionResult Index(int? page)
         {
-            var projectsTemp = projectRepo.GetAll().AsQueryable()
+            var projectsTemp = _projectRepo.GetAll().AsQueryable()
                 .Where(n => n.Active)
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
@@ -53,14 +60,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = projectRepo.GetAll().AsQueryable().Where(p => p.Code == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+            var project = _projectRepo.GetAll().AsQueryable().Where(p => p.Code == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
             
             if (project == null)
             {
                 return HttpNotFound();
             }
 
-            project.Issues = issueRepo.GetAll()
+            project.Issues = _issueRepo.GetAll()
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
                 .Where(n => n.ProjectId == project.Id)
@@ -78,7 +85,7 @@ namespace IssueTracker.Controllers
         // GET: Projects/Create
         public ActionResult Create()
         {
-            ViewBag.UsersList = new MultiSelectList(db.Users, "Id", "Email");
+            ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
             return View();
         }
 
@@ -90,10 +97,10 @@ namespace IssueTracker.Controllers
             if (ModelState.IsValid)
             {
                 // if the code already exists
-                if (Enumerable.Any(projectRepo.GetAll(), p => p.Code.Equals(project.Code.ToUpper())))
+                if (Enumerable.Any(_projectRepo.GetAll(), p => p.Code.Equals(project.Code.ToUpper())))
                 {
                     ViewBag.ErrorUniqueCode = "Entered code is already associated with another project.";
-                    ViewBag.UsersList = new MultiSelectList(db.Users, "Id", "Email");
+                    ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
                     return View(project);
                 }
                 
@@ -101,7 +108,7 @@ namespace IssueTracker.Controllers
                 if (!Helper.CheckProjectCodePattern(project.Code))
                 {
                     ViewBag.ErrorInvalidFormatCode = "Entered code has invalid format. Only characters are allowed.";
-                    ViewBag.UsersList = new MultiSelectList(db.Users, "Id", "Email");
+                    ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
                     return View(project);
                 }
 
@@ -110,10 +117,9 @@ namespace IssueTracker.Controllers
 
                 addOwnerToUsers(project);
                 
-                project.Users = db.Users.Where(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
+                project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
 
-                db.Projects.Add(Mapper.Map<Project>(project));
-                db.SaveChanges();
+                _projectRepo.Add(Mapper.Map<Project>(project));
                 return RedirectToAction("Index");
             }
 
@@ -128,7 +134,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var project = projectRepo.GetAll().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+            var project = _projectRepo.GetAll().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
 
             if (project == null)
             {
@@ -144,7 +150,7 @@ namespace IssueTracker.Controllers
             }
 
             viewModel.SelectedUsers = viewModel.Users.Select(u => u.Id.ToString()).ToList();
-            ViewBag.UsersList = db.Users;
+            ViewBag.UsersList = _userRepo.GetAll();
 
             return View(viewModel);
         }
@@ -156,21 +162,22 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                addOwnerToUsers(viewModel);
+                throw new NotImplementedException();
+                //addOwnerToUsers(viewModel);
 
                 // create a new entity
-                var entityNew = projectRepo.GetAll().AsQueryable().AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
-                // map viewModel to the entity
-                entityNew = Mapper.Map(viewModel, entityNew);
-                // change CreatedAt
-                entityNew.CreatedAt = DateTime.Now;
-                // attach the entity in order to load the selected users
-                db.Projects.Attach(entityNew);
-                db.Entry(entityNew).Collection(p => p.Users).Load();
-                entityNew.Users = db.Users.Where(u => viewModel.SelectedUsers.Contains(u.Id.ToString())).ToList();
-                // save the entity
-                db.Projects.Add(entityNew);
-                db.SaveChanges();
+                //var entityNew = _projectRepo.GetAll().AsQueryable().AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
+                //// map viewModel to the entity
+                //entityNew = Mapper.Map(viewModel, entityNew);
+                //// change CreatedAt
+                //entityNew.CreatedAt = DateTime.Now;
+                //// attach the entity in order to load the selected users
+                //db.Projects.Attach(entityNew);
+                //db.Entry(entityNew).Collection(p => p.Users).Load();
+                //entityNew.Users = db.Users.Where(u => viewModel.SelectedUsers.Contains(u.Id.ToString())).ToList();
+                //// save the entity
+                //db.Projects.Add(entityNew);
+                //db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
@@ -185,7 +192,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var project = projectRepo.GetAll().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+            var project = _projectRepo.GetAll().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
 
             if (project == null)
             {
@@ -208,26 +215,22 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            var projects = db.Projects.Where(x => x.Id == id);
+            var projects = _projectRepo.FindBy(x => x.Id == id);
 
             foreach (var project in projects)
             {
                 project.Active = false;
-                db.Entry(project).State = EntityState.Modified;
+                //db.Entry(project).State = EntityState.Modified;
 
             }
 
-            db.SaveChanges();
+            _projectRepo.Save();
 
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
 
