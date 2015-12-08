@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace IssueTracker.Data.Data_Repositories
 {
-    public class CommentRepository : DataRepositoryBase<Comment>, ICommentRepository
+    public class CommentRepository : VersionedDataRepository<Comment>, ICommentRepository
     {
         public CommentRepository(IDbContext context)
             :base(context)

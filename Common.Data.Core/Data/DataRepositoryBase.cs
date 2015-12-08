@@ -28,7 +28,7 @@ namespace Common.Data.Core
             _context.SaveChanges();
         }
 
-        public void Remove(Guid id)
+        public virtual void Remove(Guid id)
         {
             TEntity entity = new TEntity() { Id = id };
             _context.Set<TEntity>().Attach(entity);
@@ -47,12 +47,12 @@ namespace Common.Data.Core
             return existingEntity;
         }
 
-        public ICollection<TEntity> GetAll()
+        public virtual ICollection<TEntity> GetAll()
         {
             return _context.Set<TEntity>().ToList();
         }
 
-        public TEntity Get(Guid id)
+        public virtual TEntity Get(Guid id)
         {
             return _context.Set<TEntity>().Find(id);
         }
@@ -67,12 +67,12 @@ namespace Common.Data.Core
             return _context.Set<TEntity>();
         }
 
-        public IQueryable<TEntity> FindBy(Expression<Func<TEntity, bool>> predicate)
+        public virtual IQueryable<TEntity> FindBy(Expression<Func<TEntity, bool>> predicate)
         {
             return _context.Set<TEntity>().Where(predicate);
         }
 
-        public TEntity FindSingleBy(Expression<Func<TEntity, bool>> predicate)
+        public virtual TEntity FindSingleBy(Expression<Func<TEntity, bool>> predicate)
         {
             return _context.Set<TEntity>().Where(predicate).SingleOrDefault();
         }

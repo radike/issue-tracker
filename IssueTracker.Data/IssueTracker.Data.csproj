@@ -67,6 +67,7 @@
     <Compile Include="Data Repositories\ProjectRepository.cs" />
     <Compile Include="Data Repositories\StateRepository.cs" />
     <Compile Include="Data Repositories\StateWorkflowRepository.cs" />
+    <Compile Include="Data Repositories\VersionedDataRepository.cs" />
     <Compile Include="DataModule.cs" />
     <Compile Include="IssueTrackerContext.cs" />
     <Compile Include="Model Configuration\ApplicationUserConfiguration.cs" />

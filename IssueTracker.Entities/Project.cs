@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace IssueTracker.Data.Entities
 {
-    public class Project : IIdentifiableEntity
+    public class Project : IIdentifiableEntity, IVersionableEntity
     {
         public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; }

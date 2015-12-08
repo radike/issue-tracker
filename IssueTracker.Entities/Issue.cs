@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace IssueTracker.Data.Entities
 {
-    public class Issue : IIdentifiableEntity
+    public class Issue : IIdentifiableEntity, IVersionableEntity
     {
         // composite primary key
         public Guid Id { get; set; }
@@ -35,7 +35,7 @@ namespace IssueTracker.Data.Entities
         // Parameters
         public string Name { get; set; }
 
-        public State State { get; set; }
+        public virtual State State { get; set; }
         
         public DateTime Created { get; set; }
 

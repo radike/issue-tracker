@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IssueTracker.Data.Entities
 {
-    public class Comment : IIdentifiableEntity
+    public class Comment : IIdentifiableEntity, IVersionableEntity
     {
         // composite primary key
         public Guid Id { get; set; }
