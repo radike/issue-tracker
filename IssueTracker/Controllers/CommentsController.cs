@@ -68,11 +68,11 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                comment.Issue = _issueRepo.FindBy(x => x.Id == comment.IssueId).OrderByDescending(x => x.Created).First();
+                comment.Issue = _issueRepo.FindSingleBy(x => x.Id == comment.IssueId);
 
                 comment.Id = Guid.NewGuid();
                 comment.Posted = DateTime.Now;
-                comment.AuthorId = getLoggedUser().Id.ToString();
+                comment.AuthorId = getLoggedUser().Id;
                 comment.IssueCreatedAt = comment.Issue.CreatedAt;
 
                 _commentRepo.Add(Mapper.Map<Comment>(comment));

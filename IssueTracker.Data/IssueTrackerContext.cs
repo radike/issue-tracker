@@ -21,11 +21,11 @@ namespace IssueTracker.Data
             //DbContext
         }
 
-        public DbSet<Issue> Issues { get; set; }
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<State> States { get; set; }
-        public DbSet<StateWorkflow> StateWorkflows { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Issue> Issues { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<State> States { get; set; }
+        public virtual DbSet<StateWorkflow> StateWorkflows { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

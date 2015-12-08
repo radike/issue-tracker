@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace IssueTracker.Data.Data_Repositories
 {
@@ -16,17 +17,16 @@ namespace IssueTracker.Data.Data_Repositories
         public IssueRepository(IDbContext context)
             :base(context)
         {
-
         }
 
         public Issue GetByName(string name)
         {
-            using (IssueTrackerContext entityContext = new IssueTrackerContext())
-            {
-                return (from e in entityContext.Issues
-                        where e.Name == name
-                        select e).FirstOrDefault();
-            }
+            return FindBy(i => i.Name.Equals(name)).FirstOrDefault();
+        }
+
+        public override Issue FindSingleBy(Expression<Func<Issue, bool>> predicate)
+        {
+            return base.FindBy(predicate).OrderByDescending(x => x.Created).First();
         }
     }
 }
