@@ -20,17 +20,17 @@ namespace IssueTracker.Data.Data_Repositories
 
         public override TEntity Get(Guid id)
         {
-            return base.FindSingleBy(i => i.Id == id && i.Active);
+            return base.FindSingleBy(i => i.Id == id);
         }
 
         public override ICollection<TEntity> GetAll()
         {
-            return base.FindBy(i => i.Active).ToList();
+            return base.FindBy(i => i.Active).GroupBy(i => i.Id).Select(g => g.FirstOrDefault()).ToList();
         }
 
         public override TEntity FindSingleBy(Expression<Func<TEntity, bool>> predicate)
         {
-            return base.FindBy(predicate).Where(i => i.Active).SingleOrDefault();
+            return base.FindBy(predicate).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
         }
     }
 }
