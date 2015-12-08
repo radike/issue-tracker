@@ -72,7 +72,7 @@ namespace Common.Data.Core
             return _context.Set<TEntity>().Where(predicate);
         }
 
-        public TEntity FindSingleBy(Expression<Func<TEntity, bool>> predicate)
+        public virtual TEntity FindSingleBy(Expression<Func<TEntity, bool>> predicate)
         {
             return _context.Set<TEntity>().Where(predicate).SingleOrDefault();
         }

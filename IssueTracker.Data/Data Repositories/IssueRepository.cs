@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace IssueTracker.Data.Data_Repositories
 {
@@ -59,6 +60,11 @@ namespace IssueTracker.Data.Data_Repositories
                         where e.Name == name
                         select e).FirstOrDefault();
             }
+        }
+
+        public override Issue FindSingleBy(Expression<Func<Issue, bool>> predicate)
+        {
+            return base.FindBy(predicate).OrderByDescending(x => x.Created).First();
         }
     }
 }
