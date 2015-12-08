@@ -25,7 +25,7 @@ namespace IssueTracker.Data.Data_Repositories
 
         public override ICollection<TEntity> GetAll()
         {
-            return base.FindBy(i => i.Active).GroupBy(i => i.Id).Select(g => g.FirstOrDefault()).ToList();
+            return base.FindBy(i => i.Active).GroupBy(i => i.Id).Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault()).ToList();
         }
 
         public override TEntity FindSingleBy(Expression<Func<TEntity, bool>> predicate)
