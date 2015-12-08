@@ -17,32 +17,5 @@ namespace IssueTracker.Data.Data_Repositories
         {
 
         }
-        //protected override StateWorkflow AddEntity(IssueTrackerContext entityContext, StateWorkflow entity)
-        //{
-        //    return entityContext.StateWorkflows.Add(entity);
-        //}
-
-        //protected override IEnumerable<StateWorkflow> GetEntities(IssueTrackerContext entityContext)
-        //{
-        //    return from e in entityContext.StateWorkflows
-        //           select e;
-        //}
-
-        //protected override StateWorkflow GetEntity(IssueTrackerContext entityContext, Guid id)
-        //{
-        //    var query = (from e in entityContext.StateWorkflows
-        //                 where e.Id == id
-        //                 select e);
-        //    var results = query.FirstOrDefault();
-
-        //    return results;
-        //}
-
-        //protected override StateWorkflow UpdateEntity(IssueTrackerContext entityContext, StateWorkflow entity)
-        //{
-        //    return (from e in entityContext.StateWorkflows
-        //            where e.Id == entity.Id
-        //            select e).FirstOrDefault();
-        //}
     }
 }
