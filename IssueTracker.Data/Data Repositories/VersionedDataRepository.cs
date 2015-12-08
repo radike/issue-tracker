@@ -20,7 +20,7 @@ namespace IssueTracker.Data.Data_Repositories
 
         public override TEntity Get(Guid id)
         {
-            return base.FindSingleBy(i => i.Id == id);
+            return FindSingleBy(i => i.Id == id);
         }
 
         public override ICollection<TEntity> GetAll()
