@@ -68,7 +68,7 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                comment.Issue = _issueRepo.FindSingleBy(x => x.Id == comment.IssueId);
+                comment.Issue = _issueRepo.Get(comment.IssueId);
 
                 comment.Id = Guid.NewGuid();
                 comment.Posted = DateTime.Now;
@@ -81,7 +81,7 @@ namespace IssueTracker.Controllers
 
             if (comment.Text.IsEmpty())
             {
-                comment.Issue = _issueRepo.FindBy(x => x.Id == comment.IssueId).OrderByDescending(x => x.Created).First();
+                comment.Issue = _issueRepo.Get(comment.IssueId);
 
                 return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
@@ -91,14 +91,9 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Comments/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Edit(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var comment = _commentRepo.FindBy(x => x.Id == id).OrderByDescending(x => x.CreatedAt).First();
+            var comment = _commentRepo.Get(id);
 
             if (comment == null)
             {
@@ -123,22 +118,16 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                viewModel.Issue = _issueRepo.FindBy(x => x.Id == viewModel.IssueId).OrderByDescending(x => x.Created).First();
+                var oldEntity = _commentRepo.Get(viewModel.Id);
+                if(oldEntity == null) return HttpNotFound();
 
-                // create a new entity
-                var entityNew = _commentRepo.FindBy(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
-                if (entityNew != null)
-                {
-                    // edit comment text
-                    entityNew.Text = viewModel.Text;
-                    // change CreatedAt
-                    entityNew.CreatedAt = DateTime.Now;
-                    // save the entity
-                    _commentRepo.Add(entityNew);
-                }
+                viewModel.Issue = _issueRepo.Get(viewModel.IssueId);
+                viewModel.Posted = oldEntity.Posted;
+                viewModel.AuthorId = oldEntity.Author.Id;
+                viewModel.IssueCreatedAt = viewModel.Issue.CreatedAt;
+                _commentRepo.Add(Mapper.Map<Comment>(viewModel));
 
                 return RedirectToAction("Details", "Issues", new {id = viewModel.Issue.Code});
-                
             }
             // todo: otestovat
             //viewModel.Issue = db.Issues.Find(viewModel.IssueId);
@@ -148,14 +137,9 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Comments/Delete/5
-        public ActionResult Delete(Guid? id)
+        public ActionResult Delete(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var comment = _commentRepo.FindBy(x => x.Id == id).OrderByDescending(x => x.CreatedAt).Include(x => x.Issue).First();
+            var comment = _commentRepo.Get(id);
 
             if (comment == null)
             {
@@ -181,16 +165,16 @@ namespace IssueTracker.Controllers
             var commentIssueIdTemp = new Guid();
 
             var comments = _commentRepo.FindBy(x => x.Id == id);
+            commentIssueIdTemp = comments.First().IssueId;
+
             foreach (var comment in comments)
             {
-                commentIssueIdTemp = comment.IssueId;
-
                 comment.Active = false;
             }
 
             _commentRepo.Save();
 
-            var commentIssueCodeTemp = _issueRepo.FindBy(x => x.Id == commentIssueIdTemp).OrderByDescending(x => x.CreatedAt).First();
+            var commentIssueCodeTemp = _issueRepo.Get(commentIssueIdTemp);
 
             return RedirectToAction("Details", "Issues", new { id = commentIssueCodeTemp.Code });
         }
