@@ -232,7 +232,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
             viewModel.Comments = Mapper.Map<IEnumerable<CommentViewModel>>(comments);
             foreach (var comment in viewModel.Comments)
             {
-                comment.User = applicationUserRepo.Get(new Guid(comment.AuthorId));
+                comment.User = applicationUserRepo.Get(comment.AuthorId);
             }
 
             ViewBag.LoggedUser = getLoggedUser();
