@@ -32,5 +32,10 @@ namespace IssueTracker.Data.Data_Repositories
         {
             return base.FindBy(predicate).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
         }
+
+        public override IQueryable<TEntity> Fetch()
+        {
+            return base.FindBy(i => i.Active).GroupBy(i => i.Id).Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault());
+        }
     }
 }

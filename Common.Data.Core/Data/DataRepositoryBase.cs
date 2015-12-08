@@ -62,7 +62,7 @@ namespace Common.Data.Core
             _context.SaveChanges();
         }
 
-        public IQueryable<TEntity> Fetch()
+        public virtual IQueryable<TEntity> Fetch()
         {
             return _context.Set<TEntity>();
         }
