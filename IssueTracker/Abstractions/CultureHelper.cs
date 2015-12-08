@@ -13,6 +13,7 @@ namespace IssueTracker.Abstractions
 
         public static IReadOnlyCollection<CultureInfo> SupportedCultures = new List<CultureInfo>() {
             DEFAULT_CULTURE,
+            new CultureInfo("cs-cz", false),
             new CultureInfo("sk-sk", false)
         };
 
@@ -32,9 +33,7 @@ namespace IssueTracker.Abstractions
                     continue;
                 }
 
-                // Try to find exact match
                 var match = SupportedCultures.SingleOrDefault(c => c.Equals(requestedCulture));
-                // If not found try to get language match
                 match = match ?? SupportedCultures.SingleOrDefault(c => c.TwoLetterISOLanguageName == requestedCulture.TwoLetterISOLanguageName);
 
                 if (match != null)
@@ -46,6 +45,17 @@ namespace IssueTracker.Abstractions
             return DEFAULT_CULTURE;
         }
 
+        public static CultureInfo CurrentCulture
+        {
+            get {
+                return System.Threading.Thread.CurrentThread.CurrentUICulture;
+            }
+        }
+
+        public static bool IsSupportedCulture(string cultureCode)
+        {
+            return SupportedCultures.Contains(ParseCulture(cultureCode));
+        }
 
         private static CultureInfo ParseCulture(string cultureCode)
         {

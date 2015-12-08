@@ -12,13 +12,20 @@ namespace IssueTracker.App_Start
     {
         public static void Application_AcquireRequestState(object sender, EventArgs args)
         {
-            var app = (HttpApplication)sender;
+            var app = (HttpApplication) sender;
+            var routeData = app.Context.Request.RequestContext.RouteData;
 
             CultureInfo culture = null;
 
-            var cultureCode = app.Context.Request.RequestContext.RouteData.Values["culture"] as string;
+            var cultureCode = routeData.Values["culture"] as string;
             if (cultureCode != null)
             {
+                if(!CultureHelper.IsSupportedCulture(cultureCode))
+                {
+                    routeData.Values["culture"] = CultureHelper.GetSupportedCulture(app.Context.Request.UserLanguages);
+                    app.Response.RedirectToRoute(routeData.Values);
+                }
+
                 culture = CultureHelper.GetSupportedCulture(cultureCode);
             }
             else

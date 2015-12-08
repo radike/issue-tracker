@@ -1,6 +1,4 @@
-﻿using IssueTracker.Abstractions;
-using System.Threading;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace IssueTracker
@@ -20,7 +18,7 @@ namespace IssueTracker
             routes.MapRoute(
                 name: "Default",
                 url: "{culture}/{controller}/{action}/{id}",
-                defaults: new { culture = CultureHelper.GetSupportedCulture(null), controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { culture = Abstractions.CultureHelper.CurrentCulture, controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

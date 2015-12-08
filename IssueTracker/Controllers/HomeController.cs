@@ -39,7 +39,7 @@ namespace IssueTracker.Controllers
         [HttpGet]
         public ActionResult RedirectToIndex()
         {
-            return RedirectToAction("Index", new { Culture = Thread.CurrentThread.CurrentUICulture.ToString() });
+            return RedirectToAction("Index", new { Culture = Abstractions.CultureHelper.CurrentCulture.ToString() });
         }
 
         public JsonResult AutoCompleteSearch(string query)
