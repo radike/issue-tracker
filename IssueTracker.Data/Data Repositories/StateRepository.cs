@@ -61,15 +61,14 @@ namespace IssueTracker.Data.Data_Repositories
             }
         }
 
-        public IEnumerable<Guid> GetFinalStateIds()
+        public int GetStatesOrderIndex()
         {
-            using (var entityContext = new IssueTrackerContext())
-            {
-                var statesWithTransition = entityContext.StateWorkflows.GroupBy(x => x.FromStateId).Select(g => g.FirstOrDefault()).Select(x => x.FromStateId);
-                var allStates = entityContext.States.Select(x => x.Id);
+            return GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+        }
 
-                return allStates.Except(statesWithTransition).ToList();
-            }
+        public List<State> GetMovedStates(int toPosition, int fromPosition)
+        {
+            return GetAll().Where(c => (toPosition <= c.OrderIndex && c.OrderIndex <= fromPosition)).ToList();
         }
     }
 }

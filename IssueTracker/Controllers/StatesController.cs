@@ -12,6 +12,7 @@ using IssueTracker.Data;
 using IssueTracker.Data.Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
+using IssueTracker.Services;
 
 namespace IssueTracker.Controllers
 {
@@ -19,17 +20,19 @@ namespace IssueTracker.Controllers
     public class StatesController : Controller
     {
         private IStateRepository _stateRepo;
+        private IStateService _stateService;
 
-        public StatesController(IStateRepository stateRepository)
+        public StatesController(IStateRepository stateRepository, IStateService stateService)
         {
             _stateRepo = stateRepository;
+            _stateService = stateService;
         }
- 
+
         // GET: States
         public ActionResult Index()
         {
             ViewBag.DefaultCulture = Thread.CurrentThread.CurrentCulture.Name;
-            ViewBag.FinalStates = _stateRepo.GetFinalStateIds();
+            ViewBag.FinalStates = _stateService.GetFinalStateIds();
 
             return View(Mapper.Map<IEnumerable<StateViewModel>>(_stateRepo.GetAll().ToList()));
         }
@@ -72,8 +75,9 @@ namespace IssueTracker.Controllers
                 {
                     removeInitialState(viewModel.Id);
                 }
-
-                viewModel.OrderIndex = _stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+                //  var test = _stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+                //    viewModel.OrderIndex = _stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+                viewModel.OrderIndex = _stateRepo.GetStatesOrderIndex();
                 _stateRepo.Add(Mapper.Map<State>(viewModel));
 
                 return RedirectToAction("Index");
@@ -114,7 +118,7 @@ namespace IssueTracker.Controllers
                 {
                     removeInitialState(viewModel.Id);
                 }
-                
+
                 return RedirectToAction("Index");
             }
             return View(viewModel);
@@ -172,9 +176,10 @@ namespace IssueTracker.Controllers
         {
             if (direction == "back")
             {
-                var movedStates = _stateRepo.GetAll()
-                            .Where(c => (toPosition <= c.OrderIndex && c.OrderIndex <= fromPosition))
-                            .ToList();
+                //var movedStates = _stateRepo.GetAll()
+                //            .Where(c => (toPosition <= c.OrderIndex && c.OrderIndex <= fromPosition))
+                //            .ToList();
+                var movedStates = _stateRepo.GetMovedStates(toPosition, fromPosition);
 
                 foreach (var state in movedStates)
                 {
@@ -183,9 +188,10 @@ namespace IssueTracker.Controllers
             }
             else
             {
-                var movedStates = _stateRepo.GetAll()
-                            .Where(c => (fromPosition <= c.OrderIndex && c.OrderIndex <= toPosition))
-                            .ToList();
+                //var movedStates = _stateRepo.GetAll()
+                //            .Where(c => (fromPosition <= c.OrderIndex && c.OrderIndex <= toPosition))
+                //            .ToList();
+                var movedStates = _stateRepo.GetMovedStates(fromPosition, toPosition);
                 foreach (var state in movedStates)
                 {
                     state.OrderIndex--;

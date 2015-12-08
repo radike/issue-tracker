@@ -9,6 +9,9 @@ namespace IssueTracker.Data.Contracts.Repository_Interfaces
     {
         IEnumerable<State> GetStatesOrderedByIndex();
         State GetInitialState();
-        IEnumerable<Guid> GetFinalStateIds();
+
+        int GetStatesOrderIndex();
+
+        List<State> GetMovedStates(int toPosition, int fromPosition);
     }
 }

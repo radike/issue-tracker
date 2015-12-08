@@ -2,6 +2,7 @@
 using Common.Data.Core.Contracts;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
+using IssueTracker.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace IssueTracker.Data
             builder.RegisterType<IssueRepository>().As<IIssueRepository>().InstancePerRequest();
             builder.RegisterType<CommentRepository>().As<ICommentRepository>().InstancePerRequest();
             builder.RegisterType<ApplicationUserRepository>().As<IApplicationUserRepository>().InstancePerRequest();
+            builder.RegisterType<StateService>().As<IStateService>().InstancePerRequest();
 
             base.Load(builder);
         }

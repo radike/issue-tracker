@@ -77,6 +77,8 @@
     <Compile Include="Model Configuration\StateConfiguration.cs" />
     <Compile Include="Model Configuration\StateWorkflowConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IStateService.cs" />
+    <Compile Include="Services\StateService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
