@@ -25,7 +25,7 @@ namespace IssueTracker.ViewModels
         public DateTime? Posted { get; set; }
 
         [Display(Name = "Author")]
-        public string AuthorId { get; set; }
+        public Guid AuthorId { get; set; }
 
         // Table definitions
         public virtual ApplicationUser User { get; set; }
