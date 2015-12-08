@@ -6,7 +6,7 @@ namespace IssueTracker.ViewModels
     public class UserEditViewModel
     {
         [Required]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [EmailAddress]

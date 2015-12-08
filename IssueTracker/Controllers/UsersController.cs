@@ -25,7 +25,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Users/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
@@ -66,7 +66,7 @@ namespace IssueTracker.Controllers
 
         // GET: Users/Edit/5
         [AuthorizeOrErrorPage(Roles = "Administrators")]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(Guid? id)
         {
             if (id == null)
             {
@@ -103,7 +103,7 @@ namespace IssueTracker.Controllers
 
         // GET: Users/Delete/5
         [AuthorizeOrErrorPage(Roles = "Administrators")]
-        public ActionResult Delete(string id)
+        public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {
@@ -121,7 +121,7 @@ namespace IssueTracker.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [AuthorizeOrErrorPage(Roles = "Administrators")]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(Guid? id)
         {
             ApplicationUser applicationUser = db.Users.Find(id);
             db.Users.Remove(applicationUser);
