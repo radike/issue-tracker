@@ -183,6 +183,7 @@
     <Compile Include="Abstractions\CultureHelper.cs" />
     <Compile Include="Abstractions\Helper.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CultureFilter.cs" />
     <Compile Include="App_Start\CultureConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -285,6 +286,8 @@
     <Content Include="Content\Images\jquery-ui\ui-icons_454545_256x240.png" />
     <Content Include="Content\Images\jquery-ui\ui-icons_888888_256x240.png" />
     <Content Include="Content\Images\jquery-ui\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\Images\lang_cs.gif" />
+    <Content Include="Content\Images\lang_en.gif" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\mobile.css" />
     <Content Include="Content\normalize.css" />
@@ -385,6 +388,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\language-menu.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr.custom.js" />
     <Content Include="Scripts\pick-colour.js" />

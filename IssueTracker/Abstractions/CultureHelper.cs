@@ -13,8 +13,7 @@ namespace IssueTracker.Abstractions
 
         public static IReadOnlyCollection<CultureInfo> SupportedCultures = new List<CultureInfo>() {
             DEFAULT_CULTURE,
-            new CultureInfo("cs-cz", false),
-            new CultureInfo("sk-sk", false)
+            new CultureInfo("cs-cz", false)
         };
 
         public static CultureInfo GetSupportedCulture(params string[] cultureCodes)

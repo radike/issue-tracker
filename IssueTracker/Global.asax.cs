@@ -15,6 +15,7 @@ namespace IssueTracker
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutoMapperConfig.RegisterMappings();
+            GlobalFilters.Filters.Add(new CultureFilter(), 0);
         }
 
         void Application_AcquireRequestState(object sender, EventArgs args)

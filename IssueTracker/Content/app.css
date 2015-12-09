@@ -192,3 +192,32 @@ li#create-button {
     float: right;
     padding-right: 10px;
 }
+
+/* Language selection menu */
+#lang-select div {
+    display: none;
+}
+
+#lang-select div a {
+    padding-left: 4.0em;
+    color: #333333;
+    text-align: left;
+    background: #bbbbbb 0.7em 50% no-repeat;
+    border-bottom: 1px solid #999999;
+    border-top: 1px solid #cccccc;
+}
+
+#lang-select div a:hover {
+    color: #ffffff;    
+    background-color:  #999999;
+    border-bottom: 1px solid #777777;
+    border-top: 1px solid #aaaaaa;
+}
+
+#lang-select div a.lang-select-en {
+    background-image: url('Images/lang_en.gif');
+}
+
+#lang-select div a.lang-select-cs {
+    background-image: url('Images/lang_cs.gif');
+}
