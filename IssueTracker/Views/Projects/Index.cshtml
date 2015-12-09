@@ -1,11 +1,24 @@
-@using PagedList.Mvc
 @model PagedList.IPagedList<IssueTracker.ViewModels.ProjectViewModel>
+@using PagedList.Mvc
+@using IssueTracker.Extensions;
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Browse Projects";
 }
+
+<ul class="nav nav-tabs">
+    <li role="presentation" class="@Html.ActivePage("Projects")"><a href="@Url.Action("Index", "Projects")">All</a></li>
+    @if (ViewContext.RouteData.Values["action"].ToString() == "Index")
+    {
+        <li id="create-button">
+            <button type="button" class="btn btn-primary" onclick="location.href=location.href +'/Create'">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+            </button>
+        </li>
+    }
+</ul>
 
 <h2>Browse Projects</h2>
 
@@ -17,9 +30,6 @@
 }
 else
 {
-    <p>
-        @Html.ActionLink("Create New Project", "Create")
-    </p>
     <table class="table">
         <tr>
             <th>
