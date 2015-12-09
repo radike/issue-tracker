@@ -75,7 +75,7 @@ namespace IssueTracker
         private static void ApplyRedirect(CookieApplyRedirectContext context)
         {
             UrlHelper _url = new UrlHelper(HttpContext.Current.Request.RequestContext);
-            String actionUri = _url.Action("Login", "Account", new { });
+            String actionUri = _url.Action("Login", "Account", new { Culture = Abstractions.CultureHelper.CurrentCulture.Name });
             context.Response.Redirect(actionUri);
         }
     }

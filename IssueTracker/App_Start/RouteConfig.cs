@@ -12,7 +12,7 @@ namespace IssueTracker
             routes.MapRoute(
                 name: "Root",
                 url: "",
-                defaults: new { controller = "Home", action = "RedirectToIndex" }
+                defaults: new { culture = Abstractions.CultureHelper.CurrentCulture, controller = "Home", action = "RedirectToIndex" }
             );
 
             routes.MapRoute(

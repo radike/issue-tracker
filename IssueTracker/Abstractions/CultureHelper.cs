@@ -8,7 +8,7 @@ namespace IssueTracker.Abstractions
 {
     public class CultureHelper
     {
-        public static string PREFFERED_CULTURE_COOKIE = "PrefferedCulture";
+        public static string PREFFERED_CULTURE_COOKIE = "locale";
         public static CultureInfo DEFAULT_CULTURE = new CultureInfo("en-us", false);
 
         public static IReadOnlyCollection<CultureInfo> SupportedCultures = new List<CultureInfo>() {
@@ -55,6 +55,11 @@ namespace IssueTracker.Abstractions
         public static bool IsSupportedCulture(string cultureCode)
         {
             return SupportedCultures.Contains(ParseCulture(cultureCode));
+        }
+
+        public static string[] GetCultureForCookie(HttpCookie cultureCookie)
+        {
+            return cultureCookie != null && IsSupportedCulture(cultureCookie.Value) ? new[] { cultureCookie.Value } : null;
         }
 
         private static CultureInfo ParseCulture(string cultureCode)
