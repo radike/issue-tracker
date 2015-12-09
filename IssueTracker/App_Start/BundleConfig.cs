@@ -41,7 +41,8 @@ namespace IssueTracker
                         "~/Scripts/classie.js",
                         "~/Scripts/gnmenu.js",
                         "~/Scripts/bootstrap-toolkit.js",
-                        "~/Scripts/js/hammer.min.js"));
+                        "~/Scripts/js/hammer.min.js",
+                        "~/Scripts/language-menu.js"));
 
             // Pick colour
             bundles.Add(new ScriptBundle("~/bundles/pick-colour").Include(

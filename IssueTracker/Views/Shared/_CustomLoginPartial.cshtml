@@ -7,6 +7,13 @@
     {
         @Html.AntiForgeryToken()
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
+        <li id="lang-select">
+            <a href="#" id="languageToggle">@ViewBag.LanguageNativeName</a>
+            <div>
+                @Html.ActionLink("English", null, new { culture = "en-US", id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "lang-select-en" })
+                @Html.ActionLink("čeština", null, new { culture = "cs-CZ", id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "lang-select-cs" })
+            </div>
+        </li>
         <li>
             <a href="@Url.Action("Index", "Manage")" class="@Html.ActivePage("Manage", "gn-selected")">
                 <div class="avatarBox">
