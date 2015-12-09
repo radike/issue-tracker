@@ -337,7 +337,7 @@ namespace IssueTracker.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
                 // create a new entity
-                var entityNew = issueRepo.GetAll().AsQueryable()
+                var entityNew = issueRepo.Fetch()
                     .AsNoTracking()
                     .Where(i => i.Project.Code == code.ProjectCode && i.CodeNumber == code.IssueNumber)
                     .OrderByDescending(x => x.CreatedAt)
@@ -374,7 +374,7 @@ namespace IssueTracker.Controllers
         public ActionResult ChangeStatus(Guid issueId, Guid to)
         {
             // create a new entity
-            var entityNew = issueRepo.GetAll().AsQueryable().AsNoTracking().Where(x => x.Id == issueId).OrderByDescending(x => x.CreatedAt).First();
+            var entityNew = issueRepo.Fetch().AsNoTracking().Where(x => x.Id == issueId).OrderByDescending(x => x.CreatedAt).First();
             if (entityNew != null)
             {
                 // change status
