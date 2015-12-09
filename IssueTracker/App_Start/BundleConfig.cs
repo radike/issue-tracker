@@ -33,7 +33,7 @@ namespace IssueTracker
                       "~/Content/component.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/fa.css",
-                      //"~/Content/sb-admin-2.css",
+                      "~/Content/sb-admin-2.css",
                       "~/Content/jquery-ui.css",
                       "~/Content/app.css"));
 

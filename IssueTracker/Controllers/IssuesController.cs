@@ -8,7 +8,6 @@ using AutoMapper;
 using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using PagedList;
-using System.Collections.Generic;
 using IssueTracker.Abstractions;
 using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;

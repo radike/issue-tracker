@@ -10,9 +10,27 @@ using Common.Data.Core.Contracts;
 
 namespace IssueTracker.Data.Entities
 {
+
     public class ApplicationUserRole : IdentityUserRole<Guid> {}
     public class ApplicationUserLogin : IdentityUserLogin<Guid> {}
     public class ApplicationUserClaim : IdentityUserClaim<Guid> {}
+    public class ApplicationRoleStore : RoleStore<ApplicationRole, Guid, ApplicationUserRole>
+    {
+        public ApplicationRoleStore(DbContext context)
+            : base(context)
+        {
+
+        }
+    }
+
+    public class ApplicationRoleManager : RoleManager<ApplicationRole, Guid>
+    {
+        public ApplicationRoleManager(ApplicationRoleStore store) : base(store)
+        {
+
+        }
+    }
+
     public class ApplicationRole : IdentityRole<Guid, ApplicationUserRole>
     {
         public string Description { get; set; }
