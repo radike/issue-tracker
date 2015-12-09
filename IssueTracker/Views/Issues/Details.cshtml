@@ -1,7 +1,7 @@
 ﻿@model IssueTracker.ViewModels.IssueDetailViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Issue " + Model.Issue.Code;
 }
 <div>
     <br/>
@@ -12,14 +12,13 @@
     <hr />
     <h2>@Html.DisplayFor(model => model.Issue.Name)</h2>
     <div class="text-danger">@ViewBag.ErrorMessage</div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Issue.Id })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Issue.Code })
     @foreach (var item in Model.StateWorkflows)
     {
         <strong>
             | @Html.ActionLink(@Html.DisplayFor(modelItem => item.ToState.Title).ToString(), "ChangeStatus", new { issueId = Model.Issue.Id, to = item.ToStateId })
         </strong>
     }
-    <h4>Details</h4>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Issue.Created):

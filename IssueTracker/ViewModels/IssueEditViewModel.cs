@@ -4,7 +4,7 @@ using System.Web.Mvc;
 
 namespace IssueTracker.ViewModels
 {
-    public class IssueEditViewModel : BaseViewModel
+    public class IssueEditViewModel
     {
         // Issue editable fields
         [Required]

@@ -1,10 +1,10 @@
 ﻿@model IssueTracker.ViewModels.IssueEditViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Issue " + Model.Code;
 }
 
-<h2>Edit</h2>
+<h2>Edit Issue @Html.DisplayFor(model => model.Code)</h2>
 
 
 @using (Html.BeginForm())
@@ -12,11 +12,10 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Issue</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-
+        @Html.HiddenFor(model => model.Code)
+        
         <div class="form-group">
             @Html.LabelFor(model => model.ProjectId, "ProjectId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

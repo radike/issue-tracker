@@ -20,12 +20,12 @@
                 });
             },
             select: function (event, ui) {
-                window.location = "/en-US/Issues/RedirectToDetail/" + ui.item.Id;
+                window.location = "/en-US/Issues/Details/" + ui.item.Code;
             },
             minLength: 2
     }).data("ui-autocomplete")._renderItem = function (ul, item) {
             return $("<li></li>").data("ui-autocomplete-item", item)
-                .append("<a href='/en-US/Issues/RedirectToDetail/" + item.Id + " '>" + item.Title + "</a>")
+                .append("<a href='/en-US/Issues/Details/" + item.Code+ "'>" + item.Code + ":" + item.Title + "</a>")
                 .appendTo(ul);
         };
     });

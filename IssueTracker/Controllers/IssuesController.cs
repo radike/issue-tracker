@@ -3,19 +3,21 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Collections.Generic;
 using AutoMapper;
 using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using PagedList;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using IssueTracker.Abstractions;
 using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using System.Data.Entity.Validation;
 using static System.String;
+using System.Text.RegularExpressions;
 using IssueTracker.Models;
+
 
 namespace IssueTracker.Controllers
 {
@@ -115,7 +117,7 @@ namespace IssueTracker.Controllers
             return issues;
         }
 
-private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
+        private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
         private ProjectsByTitleComparer projectsComparer = new ProjectsByTitleComparer();
         private StatesByTitleComparer statesComparer = new StatesByTitleComparer();
 
@@ -177,27 +179,12 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
         // GET: Issues/Details/5
         public ActionResult Details(string id)
         {
-            if (!Helper.CheckIssueCodePattern(id))
-            {
-                return new HttpStatusCodeResult((HttpStatusCode.BadRequest));
-            }
-
-            if (id == null)
-            {
+            IssueCode code = IssueCode.Parse(id);
+            if (code == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var codeSplitted = Helper.SplitIssueCode(id);
-            var projectCode = codeSplitted[0];
-            var issueNumber = int.Parse(codeSplitted[1]);
-
-            if (projectCode == null || issueNumber == 0)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
             var issue = issueRepo.GetAll().AsQueryable()
-                .Where(i => i.Project.Code == projectCode && i.CodeNumber == issueNumber)
+                .Where(i => i.Project.Code == code.ProjectCode && i.CodeNumber == code.IssueNumber)
                 .OrderByDescending(x => x.CreatedAt)
                 .Include(i => i.State).First();
 
@@ -312,28 +299,28 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
             }
             return null;
         }
-
+        
         // GET: Issues/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Edit(String id)
         {
-            if (id == null)
-            {
+            IssueCode code = IssueCode.Parse(id);
+            if (code == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
-            var issue = issueRepo.GetAll().AsQueryable().Where(x => x.Id == id).OrderByDescending(x => x.CreatedAt).Include(x => x.Project).First();
+            var issue = issueRepo.GetAll().AsQueryable()
+                .Where(i => i.Project.Code == code.ProjectCode && i.CodeNumber == code.IssueNumber)
+                .OrderByDescending(x => x.CreatedAt)
+                .Include(i => i.State).First();
 
             if (issue == null)
-            {
                 return HttpNotFound();
-            }
 
-            var projectsTemp = projectRepo.GetActiveProjects();
+            var activeProjects = projectRepo.GetActiveProjects();
 
             var viewModel = Mapper.Map<IssueEditViewModel>(issue);
 
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email", issue.AssigneeId);
-            ViewBag.ProjectId = new SelectList(projectsTemp, "Id", "Title", issue.ProjectId);
+            ViewBag.ProjectId = new SelectList(activeProjects, "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title", issue.StateId);
 
             return View(viewModel);
@@ -342,17 +329,24 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
         // POST: Issues/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,AssigneeId,ProjectId")] IssueEditViewModel viewModel)
+        public ActionResult Edit([Bind(Include = "Code,Name,Description,AssigneeId,ProjectId")] IssueEditViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                IssueCode code = IssueCode.Parse(viewModel.Code);
+                if (code == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
                 // create a new entity
-                var entityNew = issueRepo.GetAll().AsQueryable().AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
+                var entityNew = issueRepo.GetAll().AsQueryable()
+                    .AsNoTracking()
+                    .Where(i => i.Project.Code == code.ProjectCode && i.CodeNumber == code.IssueNumber)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .First();
                 entityNew.Reporter = null;
                 entityNew.Assignee = null;
                 entityNew.State = null;
                 entityNew.Comments = null;
-                var code = entityNew.Code;
                 entityNew.Project = null;
 
                 // in case the project was changed
@@ -368,7 +362,7 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
                 // save the entity
                 issueRepo.Add(entityNew);
 
-                return RedirectToAction("Details", new { id = code });
+                return RedirectToAction("Details", new { id = viewModel.Code });
 
             }
 
@@ -376,16 +370,6 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
             ViewBag.ProjectId = new SelectList(projectRepo.GetAll(), "Id", "Title", viewModel.ProjectId);
 
             return View(viewModel);
-        }
-
-        public ActionResult RedirectToDetail(Guid id)
-        {
-            var issue = issueRepo.GetAll().AsQueryable()
-                .Where(i => i.Id == id)
-                .OrderByDescending(x => x.CreatedAt)
-                .Include(i => i.Project).First();
-
-            return RedirectToAction("Details", new { id = issue.Code });
         }
 
         public ActionResult ChangeStatus(Guid issueId, Guid to)
@@ -413,6 +397,37 @@ private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
             }
 
             return RedirectToAction("Index");
+        }
+
+        private class IssueCode {
+
+            public string ProjectCode;
+            public int IssueNumber;
+
+            public static IssueCode Parse(String code)
+            {
+                if (code == null || !MatchIssueCodePattern(code))
+                    return null;
+
+                var splittedCode = code.Split('-');
+                var projectCode = splittedCode[0];
+                var issueNumber = int.Parse(splittedCode[1]);
+
+                if (projectCode == null || issueNumber == 0)
+                    return null;
+                return new IssueCode{ProjectCode = projectCode, IssueNumber = issueNumber};
+            }
+
+            private static bool MatchIssueCodePattern(string s)
+            {
+                var rgx = new Regex(@"^[A-Z]+[-][0-9]+$"); // E.g.: CODE-19
+                return rgx.IsMatch(s);
+            }
+
+            private IssueCode()
+            {
+                ;
+            }
         }
     }
 }

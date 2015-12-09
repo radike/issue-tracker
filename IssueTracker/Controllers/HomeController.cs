@@ -51,7 +51,7 @@ namespace IssueTracker.Controllers
                 .Include(n => n.Project)
                 .OrderByDescending(x => x.Created);
 
-            var result = allIssues.Where(x => (x.Project.Code + x.CodeNumber + ": " + x.Name).ToLower().Contains(query.ToLower())).Select(x => new { x.Id, Title = x.Project.Code + x.CodeNumber + ": " + x.Name }).ToList();
+            var result = allIssues.Where(x => (x.Project.Code + x.CodeNumber + ": " + x.Name).ToLower().Contains(query.ToLower())).Select(x => new { x.Id, Code = x.Project.Code + "-" + x.CodeNumber, Title = x.Name }).ToList();
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
