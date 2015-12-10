@@ -1,5 +1,4 @@
 ﻿using Common.Data.Core.Contracts;
-using IssueTracker.Core;
 using IssueTracker.Data.Entities;
 using System;
 using System.Collections.Generic;
