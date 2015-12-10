@@ -115,7 +115,7 @@ namespace IssueTracker.Controllers
             project.Id = Guid.NewGuid();
             project.Code = project.Code.ToUpper();
 
-            addOwnerToUsers(project);
+            AddProjectOwnerToProjectUsers(project);
 
             project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
 
@@ -163,28 +163,17 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Code,SelectedUsers,OwnerId")] ProjectViewModel viewModel)
         {
-            if (ModelState.IsValid)
-            {
-                throw new NotImplementedException();
-                //addOwnerToUsers(viewModel);
+            if (!ModelState.IsValid)
+                return View(viewModel);
 
-                // create a new entity
-                //var entityNew = _projectRepo.GetAll().AsQueryable().AsNoTracking().Where(x => x.Id == viewModel.Id).OrderByDescending(x => x.CreatedAt).First();
-                //// map viewModel to the entity
-                //entityNew = Mapper.Map(viewModel, entityNew);
-                //// change CreatedAt
-                //entityNew.CreatedAt = DateTime.Now;
-                //// attach the entity in order to load the selected users
-                //db.Projects.Attach(entityNew);
-                //db.Entry(entityNew).Collection(p => p.Users).Load();
-                //entityNew.Users = db.Users.Where(u => viewModel.SelectedUsers.Contains(u.Id.ToString())).ToList();
-                //// save the entity
-                //db.Projects.Add(entityNew);
-                //db.SaveChanges();
+            AddProjectOwnerToProjectUsers(viewModel);
 
-                return RedirectToAction("Index");
-            }
-            return View(viewModel);
+            Project entity = Mapper.Map<Project>(viewModel);
+            entity.CreatedAt = DateTime.Now;
+            entity.Users = _userRepo.FindBy(u => entity.SelectedUsers.Contains(u.Id)).ToList();
+            _projectRepo.Add(entity);
+
+            return RedirectToAction("Index");
         }
 
         // GET: Projects/Delete/5
@@ -243,7 +232,7 @@ namespace IssueTracker.Controllers
                 || (project.OwnerId != null && project.OwnerId.Equals(User.Identity.GetUserId()));
         }
 
-        private static void addOwnerToUsers(ProjectViewModel project)
+        private static void AddProjectOwnerToProjectUsers(ProjectViewModel project)
         {
             project.SelectedUsers = project.SelectedUsers?.Union(new[] { project.OwnerId }) ?? new[] { project.OwnerId };
         }
