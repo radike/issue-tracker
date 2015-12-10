@@ -13,7 +13,7 @@
     @if (ViewContext.RouteData.Values["action"].ToString() == "Index")
     {
         <li id="create-button">
-            <button type="button" class="btn btn-primary" onclick="location.href=location.href +'/Create'">
+            <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Projects")'">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> @SharedStrings.ButtonAdd
             </button>
         </li>
