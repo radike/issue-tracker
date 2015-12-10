@@ -1,12 +1,11 @@
 namespace IssueTracker.Migrations
 {
     using Data;
-    using IssueTracker.Data.Entities;
+    using Data.Entities;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
@@ -23,10 +22,10 @@ namespace IssueTracker.Migrations
         {
             //  This method will be called after migrating to the latest version.
 
-            SeedUsersAndRoles(context);
+            seedUsersAndRoles(context);
         }
 
-        private static void SeedUsersAndRoles(IssueTrackerContext context)
+        private static void seedUsersAndRoles(IssueTrackerContext context)
         {
             var roleStore = new RoleStore<IdentityRole>(context);
             var roleManager = new RoleManager<IdentityRole>(roleStore);
@@ -46,16 +45,17 @@ namespace IssueTracker.Migrations
 
             var userStore = new ApplicatonUserStore(context);
             var userManager = new ApplicationUserManager(userStore);
-            var users = new List<User>();
-
-            users.Add(new User("admin@admin.com", "Password@123", UserRoles.Administrators));
-            users.Add(new User("user@user.com", "Password@123", UserRoles.Users));
+            var users = new List<User>
+            {
+                new User(Guid.NewGuid(), "admin@admin.com", "Password@123", UserRoles.Administrators),
+                new User(Guid.NewGuid(), "user@user.com", "Password@123", UserRoles.Users)
+            };
 
             users.ForEach(user =>
             {
                 if (!context.Users.Any(u => u.UserName == user.UserName))
                 {
-                    var newUser = new ApplicationUser { UserName = user.UserName, Email = user.UserName };
+                    var newUser = new ApplicationUser { Id = user.Id, UserName = user.UserName, Email = user.UserName };
                     userManager.Create(newUser, user.Password);
                     userManager.AddToRole(newUser.Id, user.Role.ToString());
                 }
@@ -64,12 +64,14 @@ namespace IssueTracker.Migrations
 
         private class User
         {
-            public string UserName { get; private set; }
-            public string Password { get; private set; }
-            public UserRoles Role { get; private set; }
+            public Guid Id { get; }
+            public string UserName { get; }
+            public string Password { get; }
+            public UserRoles Role { get; }
 
-            public User(string userName, string password, UserRoles role)
+            public User(Guid id, string userName, string password, UserRoles role)
             {
+                Id = id;
                 UserName = userName;
                 Password = password;
                 Role = role;
