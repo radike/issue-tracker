@@ -61,6 +61,60 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project.
+        /// </summary>
+        public static string EntityName {
+            get {
+                return ResourceManager.GetString("EntityName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only project administrators can delete projects..
+        /// </summary>
+        public static string ErrorMessageDeleteNonadmin {
+            get {
+                return ResourceManager.GetString("ErrorMessageDeleteNonadmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only project owners and administrators can edit projects..
+        /// </summary>
+        public static string ErrorMessageEditNonadmin {
+            get {
+                return ResourceManager.GetString("ErrorMessageEditNonadmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entered code has invalid format. Only characters are allowed..
+        /// </summary>
+        public static string ErrorMessageInvalidCode {
+            get {
+                return ResourceManager.GetString("ErrorMessageInvalidCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entered code is already associated with another project..
+        /// </summary>
+        public static string ErrorMessageNotUniqueCode {
+            get {
+                return ResourceManager.GetString("ErrorMessageNotUniqueCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project has no issues..
+        /// </summary>
+        public static string HasNoIssues {
+            get {
+                return ResourceManager.GetString("HasNoIssues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No projects found. Create a {0}..
         /// </summary>
         public static string ListNoResult {
@@ -84,6 +138,24 @@ namespace IssueTracker.Locale {
         public static string TabMyProjects {
             get {
                 return ResourceManager.GetString("TabMyProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project details.
+        /// </summary>
+        public static string TitleDetails {
+            get {
+                return ResourceManager.GetString("TitleDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project &apos;{0}&apos; details.
+        /// </summary>
+        public static string TitleDetailsIncludeName {
+            get {
+                return ResourceManager.GetString("TitleDetailsIncludeName", resourceCulture);
             }
         }
         

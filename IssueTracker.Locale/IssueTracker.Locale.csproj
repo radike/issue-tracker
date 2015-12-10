@@ -68,7 +68,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SharedStrings.cs.resx" />
     <EmbeddedResource Include="SharedStrings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SharedStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

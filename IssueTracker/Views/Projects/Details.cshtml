@@ -2,11 +2,11 @@
 @model IssueTracker.ViewModels.ProjectViewModel
 
 @{
-    ViewBag.Title = "Project '" + Model.Title + "' details";
+    ViewBag.Title = string.Format(ProjectStrings.TitleDetailsIncludeName, Model.Title);
 }
 
 <div>
-    <h4>Project Details</h4>
+    <h4>@ProjectStrings.TitleDetails</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -46,9 +46,9 @@
 <p>
     @if (ViewBag.CanEdit)
     {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) @:|
+        @Html.ActionLink(SharedStrings.FormEdit, "Edit", new { id = Model.Id }) @:|
     }
-    @Html.ActionLink("Browse Projects", "Index")
+    @Html.ActionLink(ProjectStrings.TitleIndex, "Index")
 </p>
 
 @if (Model.IssuesPage.TotalItemCount > 0)
@@ -84,18 +84,18 @@
                     @Html.DisplayFor(modelItem => item.Assignee.Email)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", "Issues", new { id = item.Code }, null)
+                    @Html.ActionLink(SharedStrings.ButtonDetails, "Details", "Issues", new { id = item.Code }, null)
                 </td>
             </tr>
         }
 
     </table>
 
-    <Text>Page @(Model.IssuesPage.PageCount < Model.IssuesPage.PageNumber ? 0 : Model.IssuesPage.PageNumber) of @Model.IssuesPage.PageCount</Text>
+    <Text>@string.Format(@SharedStrings.Paging, Model.IssuesPage.PageCount < Model.IssuesPage.PageNumber ? 0 : Model.IssuesPage.PageNumber, Model.IssuesPage.PageCount)</Text>
     @Html.PagedListPager(Model.IssuesPage, page => Url.Action("Details",
     new { id = Model.Code, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 }
 else
 {
-    <i>The project has no issues.</i>
+    <i>@ProjectStrings.HasNoIssues</i>
 }

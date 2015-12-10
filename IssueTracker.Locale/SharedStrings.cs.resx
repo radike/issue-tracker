@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BackToList" xml:space="preserve">
+    <value>Zpět na seznam</value>
+  </data>
   <data name="ButtonAdd" xml:space="preserve">
     <value>Přidat</value>
   </data>
@@ -128,6 +131,21 @@
   </data>
   <data name="ButtonEdit" xml:space="preserve">
     <value>Upravit</value>
+  </data>
+  <data name="DeleteMessageGeneric" xml:space="preserve">
+    <value>Opravdu chcete tuto položku odstranit?</value>
+  </data>
+  <data name="FormCreate" xml:space="preserve">
+    <value>Přidat</value>
+  </data>
+  <data name="FormDelete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="FormEdit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="FormSave" xml:space="preserve">
+    <value>Uložit</value>
   </data>
   <data name="Paging" xml:space="preserve">
     <value>Strana {0} z {1}</value>

@@ -15,6 +15,7 @@ using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Models;
 using System.Text.RegularExpressions;
+using IssueTracker.Locale;
 
 namespace IssueTracker.Controllers
 {
@@ -111,14 +112,14 @@ namespace IssueTracker.Controllers
             // if the code already exists
             if (Enumerable.Any(_projectRepo.GetAll(), p => p.Code.Equals(project.Code.ToUpper())))
             {
-                ViewBag.ErrorUniqueCode = "Entered code is already associated with another project.";
+                ViewBag.ErrorUniqueCode = ProjectStrings.ErrorMessageNotUniqueCode;
                 ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
                 return View(project);
             }
 
             if (ProjectCodeHasInvalidFormat(project.Code))
             {
-                ViewBag.ErrorInvalidFormatCode = "Entered code has invalid format. Only characters are allowed.";
+                ViewBag.ErrorInvalidFormatCode = ProjectStrings.ErrorMessageInvalidCode;
                 ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
                 return View(project);
             }
@@ -159,7 +160,7 @@ namespace IssueTracker.Controllers
 
             if (!UserIsProjectOwnerOrHasAdminRights(viewModel))
             {
-                TempData["ErrorMessageNotOwner"] = "Only project owners and administrators can edit projects.";
+                TempData["ErrorMessageNotOwner"] = ProjectStrings.ErrorMessageEditNonadmin;
                 return RedirectToAction("Index");
             }
 
@@ -206,7 +207,7 @@ namespace IssueTracker.Controllers
 
             if (!User.IsInRole(UserRoles.Administrators.ToString()))
             {
-                TempData["ErrorMessageNotOwner"] = "Only project administrators can delete projects.";
+                TempData["ErrorMessageNotOwner"] = ProjectStrings.ErrorMessageDeleteNonadmin;
                 return RedirectToAction("Index");
             }
 

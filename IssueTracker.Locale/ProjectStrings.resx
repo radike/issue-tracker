@@ -117,6 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EntityName" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="ErrorMessageDeleteNonadmin" xml:space="preserve">
+    <value>Only project administrators can delete projects.</value>
+  </data>
+  <data name="ErrorMessageEditNonadmin" xml:space="preserve">
+    <value>Only project owners and administrators can edit projects.</value>
+  </data>
+  <data name="ErrorMessageInvalidCode" xml:space="preserve">
+    <value>Entered code has invalid format. Only characters are allowed.</value>
+  </data>
+  <data name="ErrorMessageNotUniqueCode" xml:space="preserve">
+    <value>Entered code is already associated with another project.</value>
+  </data>
+  <data name="HasNoIssues" xml:space="preserve">
+    <value>The project has no issues.</value>
+  </data>
   <data name="ListNoResult" xml:space="preserve">
     <value>No projects found. Create a {0}.</value>
   </data>
@@ -125,6 +143,12 @@
   </data>
   <data name="TabMyProjects" xml:space="preserve">
     <value>My projects</value>
+  </data>
+  <data name="TitleDetails" xml:space="preserve">
+    <value>Project details</value>
+  </data>
+  <data name="TitleDetailsIncludeName" xml:space="preserve">
+    <value>Project '{0}' details</value>
   </data>
   <data name="TitleIndex" xml:space="preserve">
     <value>Browse projects</value>

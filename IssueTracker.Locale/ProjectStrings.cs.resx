@@ -117,6 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EntityName" xml:space="preserve">
+    <value>Projekt</value>
+  </data>
+  <data name="ErrorMessageDeleteNonadmin" xml:space="preserve">
+    <value>Odstraňovat projekty mohou pouze administrátoři.</value>
+  </data>
+  <data name="ErrorMessageEditNonadmin" xml:space="preserve">
+    <value>Upravovat projekty mohou pouze jejich vlastníci a administrátoři.</value>
+  </data>
+  <data name="ErrorMessageInvalidCode" xml:space="preserve">
+    <value>Zadaný kód je v nesprávném formátu. Povoleny jsou pouze písmena.</value>
+  </data>
+  <data name="ErrorMessageNotUniqueCode" xml:space="preserve">
+    <value>Zadaný kód je již použit u jiného projektu.</value>
+  </data>
+  <data name="HasNoIssues" xml:space="preserve">
+    <value>Projekt nemá žádné problémy.</value>
+  </data>
   <data name="ListNoResult" xml:space="preserve">
     <value>Nebyly nalezeny žádné projekty. Můžete vytvořit {0}.</value>
   </data>
@@ -125,6 +143,12 @@
   </data>
   <data name="TabMyProjects" xml:space="preserve">
     <value>Moje projekty</value>
+  </data>
+  <data name="TitleDetails" xml:space="preserve">
+    <value>Podrobnosti projektu</value>
+  </data>
+  <data name="TitleDetailsIncludeName" xml:space="preserve">
+    <value>Podrobnosti projektu '{0}'</value>
   </data>
   <data name="TitleIndex" xml:space="preserve">
     <value>Seznam projektů</value>
