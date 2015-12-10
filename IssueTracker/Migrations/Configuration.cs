@@ -14,6 +14,7 @@ namespace IssueTracker.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         public string PasswordHash { get; private set; }
