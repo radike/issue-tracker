@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Data.Contracts
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Data.Entities", "IssueTracker.Entities\IssueTracker.Data.Entities.csproj", "{92E2B591-C2BC-4A0A-BE81-ED4FBC29AEA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Locale", "IssueTracker.Locale\IssueTracker.Locale.csproj", "{11898D27-3ED6-420C-9044-84A387962BC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{92E2B591-C2BC-4A0A-BE81-ED4FBC29AEA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92E2B591-C2BC-4A0A-BE81-ED4FBC29AEA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92E2B591-C2BC-4A0A-BE81-ED4FBC29AEA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11898D27-3ED6-420C-9044-84A387962BC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11898D27-3ED6-420C-9044-84A387962BC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11898D27-3ED6-420C-9044-84A387962BC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11898D27-3ED6-420C-9044-84A387962BC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,5 +68,6 @@ Global
 		{B14A4987-9C13-4A5A-A46D-603A16A94433} = {EC9E9E0E-99CA-41A2-9566-D54F534B66A7}
 		{5AEC97D4-F022-488F-A1B5-230E7B94CF51} = {EC9E9E0E-99CA-41A2-9566-D54F534B66A7}
 		{92E2B591-C2BC-4A0A-BE81-ED4FBC29AEA1} = {EC9E9E0E-99CA-41A2-9566-D54F534B66A7}
+		{11898D27-3ED6-420C-9044-84A387962BC7} = {EC9E9E0E-99CA-41A2-9566-D54F534B66A7}
 	EndGlobalSection
 EndGlobal

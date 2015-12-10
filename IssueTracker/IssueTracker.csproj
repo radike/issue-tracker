@@ -515,6 +515,10 @@
       <Project>{92e2b591-c2bc-4a0a-be81-ed4fbc29aea1}</Project>
       <Name>IssueTracker.Data.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IssueTracker.Locale\IssueTracker.Locale.csproj">
+      <Project>{11898d27-3ed6-420c-9044-84a387962bc7}</Project>
+      <Name>IssueTracker.Locale</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
