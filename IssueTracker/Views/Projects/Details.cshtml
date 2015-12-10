@@ -2,11 +2,11 @@
 @model IssueTracker.ViewModels.ProjectViewModel
 
 @{
-    ViewBag.Title = "Project Details";
+    ViewBag.Title = "Project '" + model.Title + "' details";
 }
 
 <div>
-    <h4>Project</h4>
+    <h4>Project Details</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -41,54 +41,61 @@
                 }
             </ul>
         </dd>
-</dl>
+    </dl>
 </div>
 <p>
     @if (ViewBag.CanEdit)
     {
         @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) @:|
-    }    
+    }
     @Html.ActionLink("Browse Projects", "Index")
 </p>
 
-<table class="table">
-    <tr>
-        <th>
-            State
-        </th>
-        <th>
-            Name
-        </th>
-        <th>
-            Assignee
-        </th>
-        <th>
-
-        </th>
-    </tr>
-
-    @foreach (var item in Model.IssuesPage)
-    {
+@if (Model.IssuesPage.TotalItemCount > 0)
+{
+    <table class="table">
         <tr>
-            <td>
-                <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-                <br/>
-                <i><small>reported by @Html.DisplayFor(modelItem => item.Reporter.Email)</small></i>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Assignee.Email)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "Details", "Issues", new {id = item.Code}, null)
-            </td>
+            <th>
+                State
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Assignee
+            </th>
+            <th>
+
+            </th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model.IssuesPage)
+        {
+            <tr>
+                <td>
+                    <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                    <br />
+                    <i><small>reported by @Html.DisplayFor(modelItem => item.Reporter.Email)</small></i>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assignee.Email)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", "Issues", new { id = item.Code }, null)
+                </td>
+            </tr>
+        }
 
-<Text>Page @(Model.IssuesPage.PageCount < Model.IssuesPage.PageNumber ? 0 : Model.IssuesPage.PageNumber) of @Model.IssuesPage.PageCount</Text>
-@Html.PagedListPager(Model.IssuesPage, page => Url.Action("Details",
+    </table>
+
+    <Text>Page @(Model.IssuesPage.PageCount < Model.IssuesPage.PageNumber ? 0 : Model.IssuesPage.PageNumber) of @Model.IssuesPage.PageCount</Text>
+    @Html.PagedListPager(Model.IssuesPage, page => Url.Action("Details",
     new { id = Model.Code, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+}
+else
+{
+    <i>The project has no issues.</i>
+}
