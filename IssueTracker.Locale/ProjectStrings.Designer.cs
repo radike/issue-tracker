@@ -133,6 +133,42 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string ProjectCode {
+            get {
+                return ResourceManager.GetString("ProjectCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project owner.
+        /// </summary>
+        public static string ProjectOwner {
+            get {
+                return ResourceManager.GetString("ProjectOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string ProjectTitle {
+            get {
+                return ResourceManager.GetString("ProjectTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Users.
+        /// </summary>
+        public static string ProjectUsers {
+            get {
+                return ResourceManager.GetString("ProjectUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My projects.
         /// </summary>
         public static string TabMyProjects {

@@ -51,6 +51,11 @@
       <DependentUpon>ProjectStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SharedStrings.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SharedStrings.cs.resx</DependentUpon>
+    </Compile>
     <Compile Include="SharedStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -66,7 +71,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ProjectStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SharedStrings.cs.resx" />
+    <EmbeddedResource Include="SharedStrings.cs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SharedStrings.cs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="SharedStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SharedStrings.Designer.cs</LastGenOutput>

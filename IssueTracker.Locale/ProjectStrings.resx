@@ -141,6 +141,18 @@
   <data name="ListNoResultNew" xml:space="preserve">
     <value>new project</value>
   </data>
+  <data name="ProjectCode" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="ProjectOwner" xml:space="preserve">
+    <value>Project owner</value>
+  </data>
+  <data name="ProjectTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ProjectUsers" xml:space="preserve">
+    <value>Project Users</value>
+  </data>
   <data name="TabMyProjects" xml:space="preserve">
     <value>My projects</value>
   </data>

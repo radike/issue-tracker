@@ -141,6 +141,18 @@
   <data name="ListNoResultNew" xml:space="preserve">
     <value>nový projekt</value>
   </data>
+  <data name="ProjectCode" xml:space="preserve">
+    <value>Kód</value>
+  </data>
+  <data name="ProjectOwner" xml:space="preserve">
+    <value>Vlastník projektu</value>
+  </data>
+  <data name="ProjectTitle" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="ProjectUsers" xml:space="preserve">
+    <value>Uživatelé</value>
+  </data>
   <data name="TabMyProjects" xml:space="preserve">
     <value>Moje projekty</value>
   </data>
