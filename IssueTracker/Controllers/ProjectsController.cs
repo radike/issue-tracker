@@ -115,9 +115,9 @@ namespace IssueTracker.Controllers
             project.Id = Guid.NewGuid();
             project.Code = project.Code.ToUpper();
 
-            AddProjectOwnerToProjectUsers(project);
+            addProjectOwnerToProjectUsers(project);
 
-            project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
+            project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id)).ToList();
 
             _projectRepo.Add(Mapper.Map<Project>(project));
             return RedirectToAction("Index");
@@ -152,7 +152,7 @@ namespace IssueTracker.Controllers
                 return RedirectToAction("Index");
             }
 
-            viewModel.SelectedUsers = viewModel.Users.Select(u => u.Id.ToString()).ToList();
+            viewModel.SelectedUsers = viewModel.Users.Select(u => u.Id).ToList();
             ViewBag.UsersList = _userRepo.GetAll();
 
             return View(viewModel);
@@ -166,9 +166,9 @@ namespace IssueTracker.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            AddProjectOwnerToProjectUsers(viewModel);
+            addProjectOwnerToProjectUsers(viewModel);
 
-            Project entity = Mapper.Map<Project>(viewModel);
+            var entity = Mapper.Map<Project>(viewModel);
             entity.CreatedAt = DateTime.Now;
             entity.Users = _userRepo.FindBy(u => entity.SelectedUsers.Contains(u.Id)).ToList();
             _projectRepo.Add(entity);
@@ -229,10 +229,10 @@ namespace IssueTracker.Controllers
         public bool UserIsProjectOwnerOrHasAdminRights(ProjectViewModel project)
         {
             return User.IsInRole(UserRoles.Administrators.ToString())
-                || (project.OwnerId != null && project.OwnerId.Equals(User.Identity.GetUserId()));
+                || (project.OwnerId == Guid.Parse(User.Identity.GetUserId()));
         }
 
-        private static void AddProjectOwnerToProjectUsers(ProjectViewModel project)
+        private static void addProjectOwnerToProjectUsers(ProjectViewModel project)
         {
             project.SelectedUsers = project.SelectedUsers?.Union(new[] { project.OwnerId }) ?? new[] { project.OwnerId };
         }

@@ -23,12 +23,12 @@ namespace IssueTracker.ViewModels
         public IPagedList<IssueIndexViewModel> IssuesPage { get; set; }
 
         [Display(Name = "Users")]
-        public IEnumerable<string> SelectedUsers { get; set; }
+        public IEnumerable<Guid> SelectedUsers { get; set; }
 
         public virtual IEnumerable<ApplicationUser> Users { get; set; }
 
         [Display(Name = "Project owner")]
-        public string OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
 
         public ApplicationUser Owner { get; set; }
         

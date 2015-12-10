@@ -45,7 +45,7 @@ else
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @if (item.OwnerId == ViewBag.LoggedUserId || ViewBag.IsUserAdmin)
+                    @if (item.OwnerId.ToString() == ViewBag.LoggedUserId || ViewBag.IsUserAdmin)
                     {
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @:|
                     }                    
