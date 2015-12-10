@@ -5,28 +5,28 @@
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Browse Projects";
+    ViewBag.Title = ProjectStrings.TitleIndex;
 }
 
 <ul class="nav nav-tabs">
-    <li role="presentation" class="@Html.ActivePage("Projects")"><a href="@Url.Action("Index", "Projects")">All</a></li>
+    <li role="presentation" class="@Html.ActivePage("Projects")"><a href="@Url.Action("Index", "Projects")">@SharedStrings.TabAll</a></li>
     @if (ViewContext.RouteData.Values["action"].ToString() == "Index")
     {
         <li id="create-button">
             <button type="button" class="btn btn-primary" onclick="location.href=location.href +'/Create'">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> @SharedStrings.ButtonAdd
             </button>
         </li>
     }
 </ul>
 
-<h2>Browse Projects</h2>
+<h2>@ProjectStrings.TitleIndex</h2>
 
 <div class="text-danger">@ViewBag.ErrorMessageNotOwner</div>
 
 @if (Model.Count == 0)
 {
-    <i>No project found. Create @Html.ActionLink("a new project", "Create").</i>
+    <i>@Html.Raw(string.Format(ProjectStrings.ListNoResult, Html.ActionLink(ProjectStrings.ListNoResultNew, "Create")))</i>
 }
 else
 {
@@ -47,14 +47,14 @@ else
                 <td>
                     @if (item.OwnerId.ToString() == ViewBag.LoggedUserId || ViewBag.IsUserAdmin)
                     {
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @:|
+                        @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", new { id = item.Id }) @:|
                     }                    
 
-                    @Html.ActionLink("Details", "Details", new { id = item.Code })
+                    @Html.ActionLink(SharedStrings.ButtonDetails, "Details", new { id = item.Code })
 
                     @if (ViewBag.IsUserAdmin)
                     {
-                       @:| @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                       @:| @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", new { id = item.Id })
                     }                    
                 </td>
             </tr>
@@ -62,7 +62,7 @@ else
     </table>
     <br />
 
-    <Text>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</Text>
+    <Text>@string.Format(@SharedStrings.Paging, Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber, Model.PageCount)</Text>
     @Html.PagedListPager(Model, page => Url.Action("Index",
         new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 }
