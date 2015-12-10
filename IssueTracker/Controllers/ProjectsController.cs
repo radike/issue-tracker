@@ -14,6 +14,7 @@ using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Models;
+using System.Text.RegularExpressions;
 
 namespace IssueTracker.Controllers
 {
@@ -61,7 +62,7 @@ namespace IssueTracker.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var project = _projectRepo.GetAll().AsQueryable().Where(p => p.Code == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
-            
+
             if (project == null)
             {
                 return HttpNotFound();
@@ -94,36 +95,38 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Title,Code,SelectedUsers,OwnerId")] ProjectViewModel project)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(project);
+            // if the code already exists
+            if (Enumerable.Any(_projectRepo.GetAll(), p => p.Code.Equals(project.Code.ToUpper())))
             {
-                // if the code already exists
-                if (Enumerable.Any(_projectRepo.GetAll(), p => p.Code.Equals(project.Code.ToUpper())))
-                {
-                    ViewBag.ErrorUniqueCode = "Entered code is already associated with another project.";
-                    ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
-                    return View(project);
-                }
-                
-                // if the code has invalid format
-                if (!Helper.CheckProjectCodePattern(project.Code))
-                {
-                    ViewBag.ErrorInvalidFormatCode = "Entered code has invalid format. Only characters are allowed.";
-                    ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
-                    return View(project);
-                }
-
-                project.Id = Guid.NewGuid();
-                project.Code = project.Code.ToUpper();
-
-                addOwnerToUsers(project);
-                
-                project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
-
-                _projectRepo.Add(Mapper.Map<Project>(project));
-                return RedirectToAction("Index");
+                ViewBag.ErrorUniqueCode = "Entered code is already associated with another project.";
+                ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
+                return View(project);
             }
 
-            return View(project);
+            if (ProjectCodeHasInvalidFormat(project.Code))
+            {
+                ViewBag.ErrorInvalidFormatCode = "Entered code has invalid format. Only characters are allowed.";
+                ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
+                return View(project);
+            }
+
+            project.Id = Guid.NewGuid();
+            project.Code = project.Code.ToUpper();
+
+            addOwnerToUsers(project);
+
+            project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id.ToString())).ToList();
+
+            _projectRepo.Add(Mapper.Map<Project>(project));
+            return RedirectToAction("Index");
+        }
+
+        private static bool ProjectCodeHasInvalidFormat(string s)
+        {
+            var rgx = new Regex(@"^[a-zA-Z]+$");// e.g.: CODE-19
+            return !rgx.IsMatch(s);
         }
 
         // GET: Projects/Edit/5

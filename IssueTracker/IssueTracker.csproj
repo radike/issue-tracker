@@ -181,7 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstractions\CultureHelper.cs" />
-    <Compile Include="Abstractions\Helper.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\CultureFilter.cs" />
     <Compile Include="App_Start\CultureConfig.cs" />
