@@ -268,7 +268,7 @@ namespace IssueTracker.Controllers
 
                 issueRepo.Add(issue);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = issue.Code });
             }
 
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email", viewModel.AssigneeId);
