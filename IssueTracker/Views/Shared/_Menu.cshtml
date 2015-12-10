@@ -46,15 +46,15 @@
                                 <span>Search</span>
                             </a>
                         </li> -->
-                        <li><a class="gn-icon @Html.ActivePage("Home", "Index", "gn-selected")" href="@Url.Action("Index", "Home")"><i class="fa fa-home menu-icon"></i>Home</a></li>
-                        <li><a class="gn-icon @Html.ActivePage("Issues", "Index", "gn-selected")" href="@Url.Action("Index", "Issues")"><i class="fa fa-tasks menu-icon"></i>Tasks</a></li>
-                        <li><a class="gn-icon @Html.ActivePage("Projects", "Index", "gn-selected")" href="@Url.Action("Index", "Projects")"><i class="fa fa-briefcase menu-icon"></i>Projects</a></li>
-                        <li><a class="gn-icon @Html.ActivePage("Users", "Index", "gn-selected")" href="@Url.Action("Index", "Users")"><i class="fa fa-users menu-icon"></i>Users</a></li>
+                        <li><a class="gn-icon @Html.ActivePage("Home", "gn-selected")" href="@Url.Action("Index", "Home")"><i class="fa fa-home menu-icon"></i>Home</a></li>
+                        <li><a class="gn-icon @Html.ActivePage("Issues", "gn-selected")" href="@Url.Action("Index", "Issues")"><i class="fa fa-tasks menu-icon"></i>Tasks</a></li>
+                        <li><a class="gn-icon @Html.ActivePage("Projects", "gn-selected")" href="@Url.Action("Index", "Projects")"><i class="fa fa-briefcase menu-icon"></i>Projects</a></li>
+                        <li><a class="gn-icon @Html.ActivePage("Users", "gn-selected")" href="@Url.Action("Index", "Users")"><i class="fa fa-users menu-icon"></i>Users</a></li>
                         @if (User.Identity.IsAuthenticated)
                         {
                             if (User.IsInRole("Administrators"))
                             {
-                                <li><a class="gn-icon @Html.ActivePage("States", "Index")" href="@Url.Action("Index", "States")"><i class="fa fa-cogs menu-icon"></i>Settings</a></li>
+                                <li><a class="gn-icon @(Html.ActivePage("States", "gn-selected") ?? Html.ActivePage("StateWorkflows", "gn-selected"))" href="@Url.Action("Index", "States")"><i class="fa fa-cogs menu-icon"></i>Settings</a></li>
                                 <ul class="gn-submenu">
                                     <li><a class="gn-icon gn-icon gn-icon-cog" href="@Url.Action("Index", "States")">States</a></li>
                                     <li><a class="gn-icon gn-icon gn-icon-cog" href="@Url.Action("Index", "StateWorkflows")">Workflow</a></li>

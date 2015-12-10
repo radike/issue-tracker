@@ -55,7 +55,7 @@ namespace IssueTracker.Controllers
             ViewBag.AssigneeSort = sort == "assignee" ? "assignee_desc" : "assignee";
             ViewBag.StatusSort = sort == "status" ? "status_desc" : "status";
 
-            ViewBag.SearchProject = new SelectList(projectRepo.GetActiveProjects(), "Id", "Title");
+            ViewBag.SearchProject = new SelectList(projectRepo.GetAll(), "Id", "Title");
             ViewBag.SearchAssignee = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
             ViewBag.SearchReporter = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
             ViewBag.SearchState = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title");
@@ -233,7 +233,7 @@ namespace IssueTracker.Controllers
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
             
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
-            ViewBag.ProjectId = new SelectList(projectRepo.GetActiveProjects(), "Id", "Title");
+            ViewBag.ProjectId = new SelectList(projectRepo.GetAll(), "Id", "Title");
             ViewBag.ReporterId = getLoggedUser().Id;
 
             return View();
@@ -314,7 +314,7 @@ namespace IssueTracker.Controllers
             if (issue == null)
                 return HttpNotFound();
 
-            var activeProjects = projectRepo.GetActiveProjects();
+            var activeProjects = projectRepo.GetAll();
 
             var viewModel = Mapper.Map<IssueEditViewModel>(issue);
 

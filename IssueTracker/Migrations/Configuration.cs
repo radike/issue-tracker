@@ -25,7 +25,7 @@ namespace IssueTracker.Migrations
             seedUsersAndRoles(context);
         }
 
-        private static void seedUsersAndRoles(IssueTrackerContext context)
+        private void seedUsersAndRoles(IssueTrackerContext context)
         {
             var roleStore = new RoleStore<IdentityRole>(context);
             var roleManager = new RoleManager<IdentityRole>(roleStore);

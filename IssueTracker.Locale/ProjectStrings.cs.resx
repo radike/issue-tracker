@@ -123,6 +123,9 @@
   <data name="ListNoResultNew" xml:space="preserve">
     <value>nový projekt</value>
   </data>
+  <data name="TabMyProjects" xml:space="preserve">
+    <value>Moje projekty</value>
+  </data>
   <data name="TitleIndex" xml:space="preserve">
     <value>Seznam projektů</value>
   </data>

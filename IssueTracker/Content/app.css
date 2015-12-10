@@ -221,3 +221,11 @@ li#create-button {
 #lang-select div a.lang-select-cs {
     background-image: url('Images/lang_cs.gif');
 }
+
+.entity-listing {
+    table-layout:fixed;
+}
+
+.entity-listing tr td:last-child {
+    text-align: right;
+}

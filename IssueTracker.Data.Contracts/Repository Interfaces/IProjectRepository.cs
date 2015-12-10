@@ -10,6 +10,6 @@ namespace IssueTracker.Data.Contracts.Repository_Interfaces
 {
     public interface IProjectRepository : IDataRepository<Project>
     {
-        IEnumerable<Project> GetActiveProjects();
+        ICollection<Project> GetProjectsForUser(Guid userId);
     }
 }

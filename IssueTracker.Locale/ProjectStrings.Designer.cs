@@ -79,6 +79,15 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My projects.
+        /// </summary>
+        public static string TabMyProjects {
+            get {
+                return ResourceManager.GetString("TabMyProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse projects.
         /// </summary>
         public static string TitleIndex {

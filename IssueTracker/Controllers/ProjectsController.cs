@@ -38,20 +38,31 @@ namespace IssueTracker.Controllers
         // GET: Projects
         public ActionResult Index(int? page)
         {
-            var projectsTemp = _projectRepo.GetAll().AsQueryable()
-                .Where(n => n.Active)
-                .GroupBy(n => n.Id)
-                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
-                .ToList();
+            return List(null, page);
+        }
 
-            var projects = Mapper.Map<IEnumerable<ProjectViewModel>>(projectsTemp);
-            var pageNumber = page ?? 1;
-
+        public ActionResult List(string id, int? page)
+        {
             ViewBag.ErrorMessageNotOwner = TempData["ErrorMessageNotOwner"] as string;
             ViewBag.LoggedUserId = User.Identity.GetUserId();
             ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators.ToString());
 
-            return View(projects.ToPagedList(pageNumber, ProjectsPerPage));
+            Guid userId = new Guid(ViewBag.LoggedUserId);
+            ICollection<Project> projectsTemp;
+            switch (id)
+            {
+                case "All":
+                    projectsTemp = _projectRepo.GetAll();
+                    break;
+                default:
+                    projectsTemp = _projectRepo.GetProjectsForUser(userId);
+                    break;
+            } 
+
+            var projects = Mapper.Map<IEnumerable<ProjectViewModel>>(projectsTemp);
+            var pageNumber = page ?? 1;
+
+            return View("Index", projects.ToPagedList(pageNumber, ProjectsPerPage));
         }
 
         // GET: Projects/Details/XYZ
@@ -61,7 +72,7 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = _projectRepo.GetAll().AsQueryable().Where(p => p.Code == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+            var project = _projectRepo.FindSingleBy(p => p.Code == id);
 
             if (project == null)
             {

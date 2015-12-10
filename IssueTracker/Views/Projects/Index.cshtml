@@ -9,8 +9,9 @@
 }
 
 <ul class="nav nav-tabs">
-    <li role="presentation" class="@Html.ActivePage("Projects")"><a href="@Url.Action("Index", "Projects")">@SharedStrings.TabAll</a></li>
-    @if (ViewContext.RouteData.Values["action"].ToString() == "Index")
+    <li role="presentation" class="@(Html.ActivePage("Projects", action: "Index") ?? Html.ActivePage("Projects", action: "List", id: "MyProjects"))"><a href="@Url.Action("Index", "Projects")">@ProjectStrings.TabMyProjects</a></li>
+    <li role="presentation" class="@Html.ActivePage("Projects", action: "List", id: "All")"><a href="@Url.Action("List", "Projects", new { id = "All" })">@SharedStrings.TabAll</a></li>
+    @if (new string[] { "Index", "List" }.Contains(ViewContext.RouteData.Values["action"].ToString()))
     {
         <li id="create-button">
             <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Projects")'">
@@ -30,7 +31,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table entity-listing">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Title)

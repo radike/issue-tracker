@@ -123,6 +123,9 @@
   <data name="ListNoResultNew" xml:space="preserve">
     <value>new project</value>
   </data>
+  <data name="TabMyProjects" xml:space="preserve">
+    <value>My projects</value>
+  </data>
   <data name="TitleIndex" xml:space="preserve">
     <value>Browse projects</value>
   </data>
