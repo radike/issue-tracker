@@ -61,11 +61,20 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To issue.
+        ///   Looks up a localized string similar to Back to issue.
         /// </summary>
         public static string BackToIssue {
             get {
                 return ResourceManager.GetString("BackToIssue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no initial state. The issue couldn&apos;t be created..
+        /// </summary>
+        public static string ErrorMessageNoIniState {
+            get {
+                return ResourceManager.GetString("ErrorMessageNoIniState", resourceCulture);
             }
         }
         

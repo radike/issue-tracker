@@ -1,4 +1,5 @@
 ﻿using IssueTracker.Data.Entities;
+using IssueTracker.Locale;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
@@ -9,7 +10,7 @@ namespace IssueTracker.ViewModels
     {
         // Foreign keys
         [Required]
-        [Display(Name = "Issue")]
+        [Display(Name = "CommentIssue", ResourceType = typeof(CommentStrings))]
         public Guid IssueId { get; set; }
 
         [Required]
@@ -17,19 +18,20 @@ namespace IssueTracker.ViewModels
 
         // Parameters
         [Required]
-        [Display(Name = "Text")]
+        [Display(Name = "CommentText", ResourceType = typeof(CommentStrings))]
         [AllowHtml]
         public string Text { get; set; }
 
-        [Display(Name = "Posted on")]
+        [Display(Name = "CommentPostedOn", ResourceType = typeof(CommentStrings))]
         public DateTime? Posted { get; set; }
 
-        [Display(Name = "Author")]
+        [Display(Name = "CommentAuthor", ResourceType = typeof(CommentStrings))]
         public Guid AuthorId { get; set; }
 
         // Table definitions
         public virtual ApplicationUser User { get; set; }
 
+        [Display(Name = "CommentIssue", ResourceType = typeof(CommentStrings))]
         public virtual Issue Issue { get; set; }
         
     }

@@ -248,7 +248,7 @@ namespace IssueTracker.Controllers
                 var initialState = getInitialState();
                 if (initialState == null)
                 {
-                    TempData["ErrorSQL"] = "There is no initial state. The issue couldn't be created.";
+                    TempData["ErrorSQL"] = Locale.IssueStrings.ErrorMessageNoIniState;
 
                     return RedirectToAction("Create");
                 }

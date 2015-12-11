@@ -118,69 +118,69 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BackToIssue" xml:space="preserve">
-    <value>Back to issue</value>
+    <value>Zpět k problému</value>
   </data>
   <data name="ErrorMessageNoIniState" xml:space="preserve">
-    <value>There is no initial state. The issue couldn't be created.</value>
+    <value>Neexistuje žádný výchozí stav. Problém nemohl být vytvořen.</value>
   </data>
   <data name="IssueAssigneeId" xml:space="preserve">
-    <value>Assignee</value>
+    <value>Řešitel</value>
   </data>
   <data name="IssueCreated" xml:space="preserve">
-    <value>Created</value>
+    <value>Vytvořeno</value>
   </data>
   <data name="IssueDescription" xml:space="preserve">
-    <value>Issue description</value>
+    <value>Popis problému</value>
   </data>
   <data name="IssueProjectId" xml:space="preserve">
-    <value>Project</value>
+    <value>Projekt</value>
   </data>
   <data name="IssueReporterId" xml:space="preserve">
-    <value>Reporter</value>
+    <value>Zadavatel</value>
   </data>
   <data name="IssueState" xml:space="preserve">
-    <value>State</value>
+    <value>Stav</value>
   </data>
   <data name="IssueTitle" xml:space="preserve">
-    <value>Summary</value>
+    <value>Shrnutí</value>
   </data>
   <data name="ListNoResult" xml:space="preserve">
-    <value>No issue found.</value>
+    <value>Nebyly nalezeny žádné problémy.</value>
   </data>
   <data name="SearchNamePlaceholder" xml:space="preserve">
-    <value>Name</value>
+    <value>Název</value>
   </data>
   <data name="SelectAssigneeDefault" xml:space="preserve">
-    <value>- Select assignee -</value>
+    <value>- Vyberte řešitele -</value>
   </data>
   <data name="SelectProjectDefault" xml:space="preserve">
-    <value>- Select project -</value>
+    <value>- Vyberte projekt -</value>
   </data>
   <data name="SelectReporterDefault" xml:space="preserve">
-    <value>- Select reporter -</value>
+    <value>- Vyberte zadavatele -</value>
   </data>
   <data name="SelectStateDefault" xml:space="preserve">
-    <value>- Select state -</value>
+    <value>- Vyberte stav -</value>
   </data>
   <data name="TabAssignedToMe" xml:space="preserve">
-    <value>Assigned to me</value>
+    <value>Zadáno mně</value>
   </data>
   <data name="TabCreatedByMe" xml:space="preserve">
-    <value>Created by me</value>
+    <value>Vytvořeno mnou</value>
   </data>
   <data name="TabReportedByMe" xml:space="preserve">
-    <value>Reported by me</value>
+    <value>Ohlášeno mnou</value>
   </data>
   <data name="TitleCreate" xml:space="preserve">
-    <value>Create new issue</value>
+    <value>Vytvořit nový problém</value>
   </data>
   <data name="TitleDetails" xml:space="preserve">
-    <value>Issue {0}</value>
+    <value>Problém {0}</value>
   </data>
   <data name="TitleEdit" xml:space="preserve">
-    <value>Edit issue {0}</value>
+    <value>Upravit problém {0}</value>
   </data>
   <data name="TitleIndex" xml:space="preserve">
-    <value>Issues</value>
+    <value>Seznam problémů</value>
   </data>
 </root>

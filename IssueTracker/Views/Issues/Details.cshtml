@@ -1,7 +1,7 @@
 ﻿@model IssueTracker.ViewModels.IssueDetailViewModel
 
 @{
-    ViewBag.Title = "Issue " + Model.Issue.Code;
+    ViewBag.Title = string.Format(IssueStrings.TitleDetails, Model.Issue.Code);
 }
 <div>
     <br/>
@@ -12,7 +12,7 @@
     <hr />
     <h2>@Html.DisplayFor(model => model.Issue.Name)</h2>
     <div class="text-danger">@ViewBag.ErrorMessage</div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Issue.Code })
+    @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", new { id = Model.Issue.Code })
     @foreach (var item in Model.StateWorkflows)
     {
         <strong>
@@ -56,10 +56,10 @@
         </dd>
     </dl>
 
-    <h4>Comments</h4>
+    <h4>@CommentStrings.TitleComments</h4>
     @if (Model.Comments.ToList().Count == 0)
     {
-        <i>No comments</i>
+        <i>@CommentStrings.NoComments</i>
         <br /><br />
     }
     else
@@ -76,13 +76,13 @@
                     <td>
                         @if (ViewBag.LoggedUser.Id == item.AuthorId)
                         {
-                            @Html.ActionLink("Edit", "Edit", "Comments", new { id = item.Id }, null)
+                            @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", "Comments", new { id = item.Id }, null)
                         }      
                         
                         @if (ViewBag.IsUserAdmin)
                         {
                             @:|
-                            @Html.ActionLink("Delete", "Delete", "Comments", new { id = item.Id }, null)
+                            @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", "Comments", new { id = item.Id }, null)
                         }
                     </td>
                 </tr>
@@ -94,7 +94,7 @@
         @Html.AntiForgeryToken()         
         @Html.TextArea("Text", new { @class = "form-control" })           
         @Html.Hidden("IssueId", Model.Issue.Id)
-        <input class="btn btn-default dropdown-toggle" type="submit" value="Comment" />
+        <input class="btn btn-default dropdown-toggle" type="submit" value="@CommentStrings.FormComment" />
     }  
 </div>
 

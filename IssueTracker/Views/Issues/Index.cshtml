@@ -82,23 +82,23 @@ else
     <table class="table">
         <tr>
             <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Name).ToHtmlString(), "Index", new { sort = ViewBag.SummarySort })
-            </th>
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Assignee).ToHtmlString(), "Index", new { sort = ViewBag.AssigneeSort })
-            </th>
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Created).ToHtmlString(), "Index", new { sort = ViewBag.CreatedSort })
-            </th>
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Reporter).ToHtmlString(), "Index", new { sort = ViewBag.ReporterSort })
-            </th>
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Project).ToHtmlString(), "Index", new { sort = ViewBag.ProjectSort })
-            </th>
-            <th>
-                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().State).ToHtmlString(), "Index", new { sort = ViewBag.StatusSort })
-            </th>
+                    @Html.ActionLink(IssueStrings.IssueTitle, "Index", new { sort = ViewBag.SummarySort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Assignee).ToString(), "Index", new { sort = ViewBag.AssigneeSort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Created).ToString(), "Index", new { sort = ViewBag.CreatedSort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Reporter).ToString(), "Index", new { sort = ViewBag.ReporterSort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Project).ToString(), "Index", new { sort = ViewBag.ProjectSort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().State).ToString(), "Index", new { sort = ViewBag.StatusSort })
+                </th>
 
             @*<th></th>*@
         </tr>

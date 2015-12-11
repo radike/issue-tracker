@@ -123,6 +123,9 @@
   <data name="ButtonAdd" xml:space="preserve">
     <value>Přidat</value>
   </data>
+  <data name="ButtonClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
   <data name="ButtonDelete" xml:space="preserve">
     <value>Smazat</value>
   </data>
@@ -131,6 +134,9 @@
   </data>
   <data name="ButtonEdit" xml:space="preserve">
     <value>Upravit</value>
+  </data>
+  <data name="ButtonSearch" xml:space="preserve">
+    <value>Hledej</value>
   </data>
   <data name="DeleteMessageGeneric" xml:space="preserve">
     <value>Opravdu chcete tuto položku odstranit?</value>
