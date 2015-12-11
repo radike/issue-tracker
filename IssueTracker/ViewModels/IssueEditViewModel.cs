@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IssueTracker.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
@@ -10,6 +11,9 @@ namespace IssueTracker.ViewModels
         [Required]
         [Display(Name = "Project")]
         public Guid ProjectId { get; set; }
+
+        [Required]
+        public IssueType Type { get; set; }
 
         [Display(Name = "Assignee")]
         public string AssigneeId { get; set; }

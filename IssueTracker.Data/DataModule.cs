@@ -31,6 +31,7 @@ namespace IssueTracker.Data
             builder.RegisterType<ApplicationUserRepository>().As<IApplicationUserRepository>().InstancePerRequest();
             builder.RegisterType<StateService>().As<IStateService>().InstancePerRequest();
             builder.RegisterType<ProjectService>().As<IProjectService>().InstancePerRequest();
+            builder.RegisterType<IssueService>().As<IIssueService>().InstancePerRequest();
             base.Load(builder);
         }
     }

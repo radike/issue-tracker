@@ -1,4 +1,5 @@
 ﻿using Common.Data.Core.Contracts;
+using IssueTracker.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,15 +24,15 @@ namespace IssueTracker.Data.Entities
         
         public Guid StateId { get; set; }
 
-        
         public Guid ReporterId { get; set; }
 
-      
         public Guid AssigneeId { get; set; }
         
         public bool Active { get; set; }
 
         // Parameters
+        public IssueType Type { get; set; }
+
         public string Name { get; set; }
 
         public virtual State State { get; set; }

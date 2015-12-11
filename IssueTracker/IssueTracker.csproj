@@ -236,6 +236,10 @@
     <Compile Include="Migrations\201512061532441_ChangeUserPKToGuid.Designer.cs">
       <DependentUpon>201512061532441_ChangeUserPKToGuid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512111624325_AddIssueTypeProperty.cs" />
+    <Compile Include="Migrations\201512111624325_AddIssueTypeProperty.Designer.cs">
+      <DependentUpon>201512111624325_AddIssueTypeProperty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\UserRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -244,6 +248,7 @@
     <Compile Include="ViewModels\BaseVersioningViewModel.cs" />
     <Compile Include="ViewModels\CommentViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\IssueCreateViewModel.cs" />
     <Compile Include="ViewModels\IssueDetailViewModel.cs" />
     <Compile Include="ViewModels\IssueEditViewModel.cs" />
@@ -496,6 +501,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512061532441_ChangeUserPKToGuid.resx">
       <DependentUpon>201512061532441_ChangeUserPKToGuid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512111624325_AddIssueTypeProperty.resx">
+      <DependentUpon>201512111624325_AddIssueTypeProperty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
