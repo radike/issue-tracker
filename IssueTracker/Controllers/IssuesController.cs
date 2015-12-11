@@ -13,7 +13,6 @@ using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using System.Data.Entity.Validation;
-using static System.String;
 using System.Text.RegularExpressions;
 using IssueTracker.Models;
 
@@ -48,7 +47,7 @@ namespace IssueTracker.Controllers
             Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState)
         {
             // viewbag items are used in the header to sort the records
-            ViewBag.CreatedSort = IsNullOrEmpty(sort) ? "created_desc" : Empty;
+            ViewBag.CreatedSort = String.IsNullOrEmpty(sort) ? "created_desc" : String.Empty;
             ViewBag.SummarySort = sort == "summary" ? "summary_desc" : "summary";
             ViewBag.ReporterSort = sort == "reporter" ? "reporter_desc" : "reporter";
             ViewBag.ProjectSort = sort == "project" ? "project_desc" : "project";
@@ -83,12 +82,12 @@ namespace IssueTracker.Controllers
         private static List<Issue> searchIssues (List<Issue> issues, string searchName, string searchTitle, 
             Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState)
         {
-            if (!IsNullOrEmpty(searchName))
+            if (!String.IsNullOrEmpty(searchName))
             {
                 issues = issues.Where(s => s.Name.ToLower().Contains(searchName.ToLower())).ToList();
             }
 
-            if (!IsNullOrEmpty(searchTitle))
+            if (!String.IsNullOrEmpty(searchTitle))
             {
                 issues = issues.Where(s => (s.Project.Code + s.CodeNumber + ": " + s.Name).ToLower().Contains(searchTitle.ToLower())).ToList();
             }
