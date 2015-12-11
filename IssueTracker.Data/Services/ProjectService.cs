@@ -88,7 +88,6 @@ namespace IssueTracker.Data.Services
 
             addProjectOwnerToProjectUsers(project);
 
-            //TODO: add issues
             project.Issues = _issueRepo.FindBy(i => i.ProjectId == project.Id).ToList();
             project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id)).ToList();
 
