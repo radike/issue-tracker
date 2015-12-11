@@ -117,46 +117,67 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToList" xml:space="preserve">
-    <value>Back to list</value>
+  <data name="BackToIssue" xml:space="preserve">
+    <value>To issue</value>
   </data>
-  <data name="ButtonAdd" xml:space="preserve">
-    <value>Add</value>
+  <data name="IssueAssigneeId" xml:space="preserve">
+    <value>Assignee</value>
   </data>
-  <data name="ButtonClear" xml:space="preserve">
-    <value>Clear</value>
+  <data name="IssueCreated" xml:space="preserve">
+    <value>Created</value>
   </data>
-  <data name="ButtonDelete" xml:space="preserve">
-    <value>Delete</value>
+  <data name="IssueDescription" xml:space="preserve">
+    <value>Issue description</value>
   </data>
-  <data name="ButtonDetails" xml:space="preserve">
-    <value>Details</value>
+  <data name="IssueProjectId" xml:space="preserve">
+    <value>Project</value>
   </data>
-  <data name="ButtonEdit" xml:space="preserve">
-    <value>Edit</value>
+  <data name="IssueReporterId" xml:space="preserve">
+    <value>Reporter</value>
   </data>
-  <data name="ButtonSearch" xml:space="preserve">
-    <value>Search</value>
+  <data name="IssueState" xml:space="preserve">
+    <value>State</value>
   </data>
-  <data name="DeleteMessageGeneric" xml:space="preserve">
-    <value>Are you sure you want to delete this?</value>
+  <data name="IssueTitle" xml:space="preserve">
+    <value>Summary</value>
   </data>
-  <data name="FormCreate" xml:space="preserve">
-    <value>Create</value>
+  <data name="ListNoResult" xml:space="preserve">
+    <value>No issue found.</value>
   </data>
-  <data name="FormDelete" xml:space="preserve">
-    <value>Delete</value>
+  <data name="SearchNamePlaceholder" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="FormEdit" xml:space="preserve">
-    <value>Edit</value>
+  <data name="SelectAssigneeDefault" xml:space="preserve">
+    <value>- Select assignee -</value>
   </data>
-  <data name="FormSave" xml:space="preserve">
-    <value>Save</value>
+  <data name="SelectProjectDefault" xml:space="preserve">
+    <value>- Select project -</value>
   </data>
-  <data name="Paging" xml:space="preserve">
-    <value>Page {0} of {1}</value>
+  <data name="SelectReporterDefault" xml:space="preserve">
+    <value>- Select reporter -</value>
   </data>
-  <data name="TabAll" xml:space="preserve">
-    <value>All</value>
+  <data name="SelectStateDefault" xml:space="preserve">
+    <value>- Select state -</value>
+  </data>
+  <data name="TabAssignedToMe" xml:space="preserve">
+    <value>Assigned to me</value>
+  </data>
+  <data name="TabCreatedByMe" xml:space="preserve">
+    <value>Created by me</value>
+  </data>
+  <data name="TabReportedByMe" xml:space="preserve">
+    <value>Reported by me</value>
+  </data>
+  <data name="TitleCreate" xml:space="preserve">
+    <value>Create new issue</value>
+  </data>
+  <data name="TitleDetails" xml:space="preserve">
+    <value>Issue {0}</value>
+  </data>
+  <data name="TitleEdit" xml:space="preserve">
+    <value>Edit issue {0}</value>
+  </data>
+  <data name="TitleIndex" xml:space="preserve">
+    <value>Issues</value>
   </data>
 </root>
