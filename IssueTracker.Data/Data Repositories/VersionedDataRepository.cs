@@ -42,5 +42,15 @@ namespace IssueTracker.Data.Data_Repositories
         {
             return base.FindBy(i => i.Active).GroupBy(i => i.Id).Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault());
         }
+
+        public override void Remove(Guid id)
+        {
+            var entities = base.FindBy(p => p.Id == id);
+            foreach (var entity in entities)
+            {
+                entity.Active = false;
+            }
+            base.Save();
+        }
     }
 }
