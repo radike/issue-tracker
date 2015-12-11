@@ -60,7 +60,7 @@ namespace IssueTracker.Controllers
             ViewBag.SearchState = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title");
 
             var issuesTemp = issueRepo.GetAll().AsQueryable()
-                .Where(n => n.Active)
+                .Where(n => n.Active && n.Project.Active)
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
                 .Include(p => p.State)
