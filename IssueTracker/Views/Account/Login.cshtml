@@ -1,7 +1,7 @@
 ﻿@using IssueTracker.ViewModels
 @model IssueTracker.ViewModels.LoginViewModel
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = AccountStrings.LogIn;
 }
 
 @section AddToHead {
@@ -33,13 +33,13 @@
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form" }))
             {
                 @Html.AntiForgeryToken()
-                <h2 class="form-signin-heading">Please sign in</h2>
+                <h2 class="form-signin-heading">@AccountStrings.PleaseSignIn</h2>
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="input-group">
                     <span class="input-group-addon">
                         <i class="fa fa-envelope"></i>
                     </span>
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email address", type = "email", autofocus = "" })
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = AccountStrings.PlaceholderEmailAddress, type = "email", autofocus = "" })
                 </div>
                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
 
@@ -47,7 +47,7 @@
                     <span class="input-group-addon">
                         <i class="fa fa-key"></i>
                     </span>
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = AccountStrings.PlaceholderPassword, })
                 </div>
                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                 <div class="checkbox">
@@ -55,9 +55,9 @@
                     @Html.LabelFor(m => m.RememberMe)
                 </div>
                 @*<input type="submit" value="Log in" class="btn btn-default" />*@
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">@AccountStrings.LogIn</button>
                 <p>
-                    @Html.ActionLink("Register as a new user", "Register")
+                    @Html.ActionLink(AccountStrings.RegisterNewUser, "Register")
                 </p>
                 @* Enable this once you have account confirmation enabled for password reset functionality
                     <p>

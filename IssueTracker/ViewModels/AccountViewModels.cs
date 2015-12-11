@@ -49,16 +49,16 @@ namespace IssueTracker.ViewModels
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email"), DataType(DataType.EmailAddress)]
+        [Display(Name = "PlaceholderEmailAddress", ResourceType = typeof(Locale.AccountStrings)), DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "PlaceholderPassword", ResourceType = typeof(Locale.AccountStrings))]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "RememberMe", ResourceType = typeof(Locale.AccountStrings))]
         public bool RememberMe { get; set; }
     }
 
