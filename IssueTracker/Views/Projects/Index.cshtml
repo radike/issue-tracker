@@ -48,14 +48,14 @@ else
                 <td>
                     @if (item.OwnerId.ToString() == ViewBag.LoggedUserId || ViewBag.IsUserAdmin)
                     {
-                        @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", new { id = item.Id }) @:|
+                        @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", new { id = item.Code }) @:|
                     }                    
 
                     @Html.ActionLink(SharedStrings.ButtonDetails, "Details", new { id = item.Code })
 
                     @if (ViewBag.IsUserAdmin)
                     {
-                       @:| @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", new { id = item.Id })
+                       @:| @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", new { id = item.Code })
                     }                    
                 </td>
             </tr>

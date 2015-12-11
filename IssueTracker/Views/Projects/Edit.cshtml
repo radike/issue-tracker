@@ -15,7 +15,6 @@
         <h4>@ProjectStrings.EntityName</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.Code)
 
         <div class="form-group">

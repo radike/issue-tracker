@@ -16,24 +16,23 @@ using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Models;
 using System.Text.RegularExpressions;
 using IssueTracker.Locale;
+using IssueTracker.Data.Services;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class ProjectsController : Controller
     {
-        private IProjectRepository _projectRepo;
-        private IIssueRepository _issueRepo;
-        private IApplicationUserRepository _userRepo;
-
         private const int ProjectsPerPage = 20;
         private const int IssuesPerProjectPage = 10;
 
-        public ProjectsController(IProjectRepository projectRepository, IIssueRepository issueRepository, IApplicationUserRepository applicationUserRepository)
+        private IProjectService _service;
+        private IApplicationUserRepository _userRepo;
+
+        public ProjectsController(IProjectService service, IApplicationUserRepository userRepository)
         {
-            _projectRepo = projectRepository;
-            _issueRepo = issueRepository;
-            _userRepo = applicationUserRepository;
+            _service = service;
+            _userRepo = userRepository;
         }
 
         // GET: Projects
@@ -49,48 +48,42 @@ namespace IssueTracker.Controllers
             ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators.ToString());
 
             Guid userId = new Guid(ViewBag.LoggedUserId);
-            ICollection<Project> projectsTemp;
+            IEnumerable<Project> projects;
             switch (id)
             {
                 case "All":
-                    projectsTemp = _projectRepo.GetAll();
+                    projects = _service.GetProjects();
                     break;
                 default:
-                    projectsTemp = _projectRepo.GetProjectsForUser(userId);
+                    projects = _service.GetProjectsForUser(userId);
                     break;
-            } 
+            }
 
-            var projects = Mapper.Map<IEnumerable<ProjectViewModel>>(projectsTemp);
+            var viewModel = Mapper.Map<IEnumerable<ProjectViewModel>>(projects);
             var pageNumber = page ?? 1;
 
-            return View("Index", projects.ToPagedList(pageNumber, ProjectsPerPage));
+            return View("Index", viewModel.ToPagedList(pageNumber, ProjectsPerPage));
         }
 
         // GET: Projects/Details/XYZ
-        public ActionResult Details(string id, int? page)
+        public ActionResult Details(String id, int? page)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = _projectRepo.FindSingleBy(p => p.Code == id);
-
+            var project = _service.GetProject(id);
             if (project == null)
             {
                 return HttpNotFound();
             }
 
-            project.Issues = _issueRepo.GetAll()
-                .GroupBy(n => n.Id)
-                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
-                .Where(n => n.ProjectId == project.Id)
-                .ToList();
-
             var pageNumber = page ?? 1;
 
             var viewModel = Mapper.Map<ProjectViewModel>(project);
             viewModel.IssuesPage = viewModel.Issues.ToPagedList(pageNumber, IssuesPerProjectPage);
-            ViewBag.CanEdit = UserIsProjectOwnerOrHasAdminRights(viewModel);
+
+            ViewBag.CanEdit = UserIsProjectOwnerOrHasAdminRights(project);
 
             return View(viewModel);
         }
@@ -108,30 +101,24 @@ namespace IssueTracker.Controllers
         public ActionResult Create([Bind(Include = "Id,Title,Code,SelectedUsers,OwnerId")] ProjectViewModel project)
         {
             if (!ModelState.IsValid)
+            {
                 return View(project);
-            // if the code already exists
-            if (Enumerable.Any(_projectRepo.GetAll(), p => p.Code.Equals(project.Code.ToUpper())))
+            }
+            if (ProjectCodeHasInvalidFormat(project.Code))
+            {
+                ViewBag.ErrorInvalidFormatCode = ProjectStrings.ErrorMessageInvalidCode;
+                ViewBag.ErrorInvalidFormatCode = "Entered code has invalid format. Only characters are allowed.";
+                ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
+                return View(project);
+            }
+            if (_service.ProjectCodeIsNotUnique(project.Code))
             {
                 ViewBag.ErrorUniqueCode = ProjectStrings.ErrorMessageNotUniqueCode;
                 ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
                 return View(project);
             }
 
-            if (ProjectCodeHasInvalidFormat(project.Code))
-            {
-                ViewBag.ErrorInvalidFormatCode = ProjectStrings.ErrorMessageInvalidCode;
-                ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
-                return View(project);
-            }
-
-            project.Id = Guid.NewGuid();
-            project.Code = project.Code.ToUpper();
-
-            addProjectOwnerToProjectUsers(project);
-
-            project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id)).ToList();
-
-            _projectRepo.Add(Mapper.Map<Project>(project));
+            _service.CreateProject(Mapper.Map<Project>(project));
             return RedirectToAction("Index");
         }
 
@@ -142,29 +129,28 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Projects/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Edit(String id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var project = _projectRepo.GetAll().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
-
+            var project = _service.GetProject(id);
             if (project == null)
             {
                 return HttpNotFound();
             }
-
-            var viewModel = Mapper.Map<ProjectViewModel>(project);
-
-            if (!UserIsProjectOwnerOrHasAdminRights(viewModel))
+            if (!UserIsProjectOwnerOrHasAdminRights(project))
             {
                 TempData["ErrorMessageNotOwner"] = ProjectStrings.ErrorMessageEditNonadmin;
                 return RedirectToAction("Index");
             }
 
-            viewModel.SelectedUsers = viewModel.Users.Select(u => u.Id).ToList();
+            var viewModel = Mapper.Map<ProjectViewModel>(project);
+            viewModel.Id = project.Id;
+            viewModel.OwnerId = project.Owner.Id;
+            viewModel.SelectedUsers = project.Users.Select(u => u.Id).ToList();
+
             ViewBag.UsersList = _userRepo.GetAll();
 
             return View(viewModel);
@@ -173,63 +159,58 @@ namespace IssueTracker.Controllers
         // POST: Projects/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Code,SelectedUsers,OwnerId")] ProjectViewModel viewModel)
+        public ActionResult Edit([Bind(Include = "Title,Code,SelectedUsers,OwnerId")] ProjectViewModel viewModel)
         {
+            Guid? id = _service.GetProjectId(viewModel.Code);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            viewModel.Id = id.Value;
             if (!ModelState.IsValid)
+            {
+                var project = _service.GetProject(viewModel.Code);
+                IEnumerable<ApplicationUser> userList = _userRepo.GetAll();
+                viewModel.OwnerId = project.Owner.Id;
+                viewModel.SelectedUsers = project.Users.Select(u => u.Id).ToList();
+                ViewBag.UsersList = userList;
                 return View(viewModel);
-
-            addProjectOwnerToProjectUsers(viewModel);
-
-            var entity = Mapper.Map<Project>(viewModel);
-            entity.CreatedAt = DateTime.Now;
-            entity.Users = _userRepo.FindBy(u => entity.SelectedUsers.Contains(u.Id)).ToList();
-            _projectRepo.Add(entity);
+            }
+            Project entity = Mapper.Map<Project>(viewModel);
+            _service.EditProject(entity);
 
             return RedirectToAction("Index");
         }
 
         // GET: Projects/Delete/5
-        public ActionResult Delete(Guid? id)
+        public ActionResult Delete(String id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var project = _projectRepo.GetAll().AsQueryable().Where(p => p.Id == id && p.Active).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
-
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-
-            var viewModel = Mapper.Map<ProjectViewModel>(project);
-
             if (!User.IsInRole(UserRoles.Administrators.ToString()))
             {
                 TempData["ErrorMessageNotOwner"] = ProjectStrings.ErrorMessageDeleteNonadmin;
                 return RedirectToAction("Index");
             }
 
+            var project = _service.GetProject(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            var viewModel = Mapper.Map<ProjectViewModel>(project);
             return View(viewModel);
         }
 
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        public ActionResult DeleteConfirmed(String id)
         {
-            var projects = _projectRepo.FindBy(x => x.Id == id);
-
-            foreach (var project in projects)
-            {
-                project.Active = false;
-                //db.Entry(project).State = EntityState.Modified;
-
-            }
-
-            _projectRepo.Save();
-
+            _service.DeleteProject(id);
             return RedirectToAction("Index");
         }
 
@@ -238,15 +219,10 @@ namespace IssueTracker.Controllers
             base.Dispose(disposing);
         }
 
-        public bool UserIsProjectOwnerOrHasAdminRights(ProjectViewModel project)
+        public bool UserIsProjectOwnerOrHasAdminRights(Project project)
         {
             return User.IsInRole(UserRoles.Administrators.ToString())
                 || (project.OwnerId == Guid.Parse(User.Identity.GetUserId()));
-        }
-
-        private static void addProjectOwnerToProjectUsers(ProjectViewModel project)
-        {
-            project.SelectedUsers = project.SelectedUsers?.Union(new[] { project.OwnerId }) ?? new[] { project.OwnerId };
         }
     }
 }

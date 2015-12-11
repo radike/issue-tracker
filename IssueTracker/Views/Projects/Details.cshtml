@@ -46,7 +46,7 @@
 <p>
     @if (ViewBag.CanEdit)
     {
-        @Html.ActionLink(SharedStrings.FormEdit, "Edit", new { id = Model.Id }) @:|
+        @Html.ActionLink(SharedStrings.FormEdit, "Edit", new { id = Model.Code }) @:|
     }
     @Html.ActionLink(ProjectStrings.TitleIndex, "Index")
 </p>
