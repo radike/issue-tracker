@@ -41,7 +41,7 @@ namespace IssueTracker.Data.Services
 
         public Project GetProject(String code)
         {
-            return _projectRepo.Fetch()
+            var project = _projectRepo.Fetch()
                 .AsQueryable()
                 .Where(p => p.Code == code && p.Active)
                 .OrderByDescending(x => x.CreatedAt)
@@ -49,6 +49,8 @@ namespace IssueTracker.Data.Services
                 .Include(p => p.Owner)
                 .Include(p => p.Users)
                 .FirstOrDefault();
+            project.Issues = _issueRepo.Fetch().Where(i => i.ProjectId == project.Id).ToList();
+            return project;
         }
 
         public IEnumerable<Project> GetProjectsForUser(Guid userId)
@@ -65,7 +67,6 @@ namespace IssueTracker.Data.Services
             project.Id = Guid.NewGuid();
             project.Code = project.Code.ToUpper();
             project.CreatedAt = DateTime.Now;
-
             addProjectOwnerToProjectUsers(project);
             project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id)).ToList();
 
@@ -85,10 +86,7 @@ namespace IssueTracker.Data.Services
         public void EditProject(Project project)
         {
             project.CreatedAt = DateTime.Now;
-
             addProjectOwnerToProjectUsers(project);
-
-            project.Issues = _issueRepo.FindBy(i => i.ProjectId == project.Id).ToList();
             project.Users = _userRepo.FindBy(u => project.SelectedUsers.Contains(u.Id)).ToList();
 
             _projectRepo.Add(project);
