@@ -179,7 +179,7 @@ namespace IssueTracker.Controllers
             Project entity = Mapper.Map<Project>(viewModel);
             _service.EditProject(entity);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id = viewModel.Code });
         }
 
         // GET: Projects/Delete/5
