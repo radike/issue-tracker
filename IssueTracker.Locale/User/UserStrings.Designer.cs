@@ -39,7 +39,7 @@ namespace IssueTracker.Locale {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.UserStrings", typeof(UserStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.User.UserStrings", typeof(UserStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

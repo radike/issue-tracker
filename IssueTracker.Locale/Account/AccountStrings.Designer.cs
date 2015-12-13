@@ -39,7 +39,7 @@ namespace IssueTracker.Locale {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.AccountStrings", typeof(AccountStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.Account.AccountStrings", typeof(AccountStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,132 @@ namespace IssueTracker.Locale {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string AccountCode {
+            get {
+                return ResourceManager.GetString("AccountCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm new password.
+        /// </summary>
+        public static string AccountConfirmNewPassword {
+            get {
+                return ResourceManager.GetString("AccountConfirmNewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm password.
+        /// </summary>
+        public static string AccountConfirmPassword {
+            get {
+                return ResourceManager.GetString("AccountConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current password.
+        /// </summary>
+        public static string AccountCurrentPassword {
+            get {
+                return ResourceManager.GetString("AccountCurrentPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E-mail.
+        /// </summary>
+        public static string AccountEmail {
+            get {
+                return ResourceManager.GetString("AccountEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The new password and confirmation password do not match..
+        /// </summary>
+        public static string AccountErrorNewPasswordConfirmation {
+            get {
+                return ResourceManager.GetString("AccountErrorNewPasswordConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password and confirmation password do not match..
+        /// </summary>
+        public static string AccountErrorPasswordConfirmation {
+            get {
+                return ResourceManager.GetString("AccountErrorPasswordConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} must be at least {2} characters long..
+        /// </summary>
+        public static string AccountErrorPasswordLength {
+            get {
+                return ResourceManager.GetString("AccountErrorPasswordLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New password.
+        /// </summary>
+        public static string AccountNewPassword {
+            get {
+                return ResourceManager.GetString("AccountNewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string AccountPassword {
+            get {
+                return ResourceManager.GetString("AccountPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone number.
+        /// </summary>
+        public static string AccountPhoneNumber {
+            get {
+                return ResourceManager.GetString("AccountPhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember this browser?.
+        /// </summary>
+        public static string AccountRememberBrowser {
+            get {
+                return ResourceManager.GetString("AccountRememberBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new account..
+        /// </summary>
+        public static string CreateNewAccount {
+            get {
+                return ResourceManager.GetString("CreateNewAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string FormRegister {
+            get {
+                return ResourceManager.GetString("FormRegister", resourceCulture);
             }
         }
         
@@ -129,6 +255,15 @@ namespace IssueTracker.Locale {
         public static string RememberMe {
             get {
                 return ResourceManager.GetString("RememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string TitleRegister {
+            get {
+                return ResourceManager.GetString("TitleRegister", resourceCulture);
             }
         }
     }

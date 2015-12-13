@@ -40,136 +40,151 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountStrings.cs.Designer.cs">
+    <Compile Include="Account\AccountStrings.cs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AccountStrings.cs.resx</DependentUpon>
     </Compile>
-    <Compile Include="AccountStrings.Designer.cs">
+    <Compile Include="Account\AccountStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AccountStrings.resx</DependentUpon>
     </Compile>
-    <Compile Include="CommentStrings.cs.Designer.cs">
+    <Compile Include="Comment\CommentStrings.cs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CommentStrings.cs.resx</DependentUpon>
     </Compile>
-    <Compile Include="CommentStrings.Designer.cs">
+    <Compile Include="Comment\CommentStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CommentStrings.resx</DependentUpon>
     </Compile>
-    <Compile Include="IssueStrings.cs.Designer.cs">
+    <Compile Include="Issue\IssueStrings.cs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IssueStrings.cs.resx</DependentUpon>
     </Compile>
-    <Compile Include="IssueStrings.Designer.cs">
+    <Compile Include="Issue\IssueStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IssueStrings.resx</DependentUpon>
     </Compile>
-    <Compile Include="LayoutStrings.cs.Designer.cs">
+    <Compile Include="Layout\LayoutStrings.cs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LayoutStrings.cs.resx</DependentUpon>
     </Compile>
-    <Compile Include="LayoutStrings.Designer.cs">
+    <Compile Include="Layout\LayoutStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LayoutStrings.resx</DependentUpon>
     </Compile>
-    <Compile Include="ProjectStrings.cs.Designer.cs">
+    <Compile Include="Project\ProjectStrings.cs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ProjectStrings.cs.resx</DependentUpon>
     </Compile>
-    <Compile Include="ProjectStrings.Designer.cs">
+    <Compile Include="Project\ProjectStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ProjectStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharedStrings.cs.Designer.cs">
+    <Compile Include="Shared\SharedStrings.cs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SharedStrings.cs.resx</DependentUpon>
     </Compile>
-    <Compile Include="SharedStrings.Designer.cs">
+    <Compile Include="Shared\SharedStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SharedStrings.resx</DependentUpon>
     </Compile>
-    <Compile Include="UserStrings.cs.Designer.cs">
+    <Compile Include="User\UserStrings.cs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UserStrings.cs.resx</DependentUpon>
     </Compile>
-    <Compile Include="UserStrings.Designer.cs">
+    <Compile Include="User\UserStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UserStrings.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AccountStrings.cs.resx">
+    <EmbeddedResource Include="Account\AccountStrings.cs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AccountStrings.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="AccountStrings.resx">
+    <EmbeddedResource Include="Account\AccountStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AccountStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="CommentStrings.cs.resx">
+    <EmbeddedResource Include="Comment\CommentStrings.cs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommentStrings.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="CommentStrings.resx">
+    <EmbeddedResource Include="Comment\CommentStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommentStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="IssueStrings.cs.resx">
+    <EmbeddedResource Include="Issue\IssueStrings.cs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>IssueStrings.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="IssueStrings.resx">
+    <EmbeddedResource Include="Issue\IssueStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>IssueStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="LayoutStrings.cs.resx">
+    <EmbeddedResource Include="Layout\LayoutStrings.cs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LayoutStrings.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="LayoutStrings.resx">
+    <EmbeddedResource Include="Layout\LayoutStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LayoutStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProjectStrings.cs.resx">
+    <EmbeddedResource Include="Project\ProjectStrings.cs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ProjectStrings.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProjectStrings.resx">
+    <EmbeddedResource Include="Project\ProjectStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ProjectStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="SharedStrings.cs.resx">
+    <EmbeddedResource Include="Shared\SharedStrings.cs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SharedStrings.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="SharedStrings.resx">
+    <EmbeddedResource Include="Shared\SharedStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SharedStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserStrings.cs.resx">
+    <EmbeddedResource Include="User\UserStrings.cs.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UserStrings.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserStrings.resx">
+    <EmbeddedResource Include="User\UserStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UserStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

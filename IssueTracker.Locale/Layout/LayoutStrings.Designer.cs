@@ -22,14 +22,14 @@ namespace IssueTracker.Locale {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class CommentStrings {
+    public class LayoutStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CommentStrings() {
+        internal LayoutStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace IssueTracker.Locale {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.CommentStrings", typeof(CommentStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.Layout.LayoutStrings", typeof(LayoutStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,92 +61,74 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Author.
+        ///   Looks up a localized string similar to Home.
         /// </summary>
-        public static string CommentAuthor {
+        public static string MenuHome {
             get {
-                return ResourceManager.GetString("CommentAuthor", resourceCulture);
+                return ResourceManager.GetString("MenuHome", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Issue.
+        ///   Looks up a localized string similar to Tasks.
         /// </summary>
-        public static string CommentIssue {
+        public static string MenuIssues {
             get {
-                return ResourceManager.GetString("CommentIssue", resourceCulture);
+                return ResourceManager.GetString("MenuIssues", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Posted on.
+        ///   Looks up a localized string similar to Projects.
         /// </summary>
-        public static string CommentPostedOn {
+        public static string MenuProjects {
             get {
-                return ResourceManager.GetString("CommentPostedOn", resourceCulture);
+                return ResourceManager.GetString("MenuProjects", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text.
+        ///   Looks up a localized string similar to Setings.
         /// </summary>
-        public static string CommentText {
+        public static string MenuSettings {
             get {
-                return ResourceManager.GetString("CommentText", resourceCulture);
+                return ResourceManager.GetString("MenuSettings", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comment.
+        ///   Looks up a localized string similar to States.
         /// </summary>
-        public static string EntityName {
+        public static string MenuStates {
             get {
-                return ResourceManager.GetString("EntityName", resourceCulture);
+                return ResourceManager.GetString("MenuStates", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comment.
+        ///   Looks up a localized string similar to Users.
         /// </summary>
-        public static string FormComment {
+        public static string MenuUsers {
             get {
-                return ResourceManager.GetString("FormComment", resourceCulture);
+                return ResourceManager.GetString("MenuUsers", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No changes.
+        ///   Looks up a localized string similar to Workflow.
         /// </summary>
-        public static string NoChanges {
+        public static string MenuWorkflow {
             get {
-                return ResourceManager.GetString("NoChanges", resourceCulture);
+                return ResourceManager.GetString("MenuWorkflow", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No comments.
+        ///   Looks up a localized string similar to Search.
         /// </summary>
-        public static string NoComments {
+        public static string SearchPlaceholder {
             get {
-                return ResourceManager.GetString("NoComments", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Comments.
-        /// </summary>
-        public static string TitleComments {
-            get {
-                return ResourceManager.GetString("TitleComments", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit comment.
-        /// </summary>
-        public static string TitleEdit {
-            get {
-                return ResourceManager.GetString("TitleEdit", resourceCulture);
+                return ResourceManager.GetString("SearchPlaceholder", resourceCulture);
             }
         }
     }

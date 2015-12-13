@@ -117,28 +117,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountCode" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="AccountConfirmNewPassword" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="AccountConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="AccountCurrentPassword" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="AccountEmail" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="AccountErrorNewPasswordConfirmation" xml:space="preserve">
+    <value>The new password and confirmation password do not match.</value>
+  </data>
+  <data name="AccountErrorPasswordConfirmation" xml:space="preserve">
+    <value>The password and confirmation password do not match.</value>
+  </data>
+  <data name="AccountErrorPasswordLength" xml:space="preserve">
+    <value>The {0} must be at least {2} characters long.</value>
+  </data>
+  <data name="AccountNewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="AccountPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AccountPhoneNumber" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="AccountRememberBrowser" xml:space="preserve">
+    <value>Remember this browser?</value>
+  </data>
+  <data name="CreateNewAccount" xml:space="preserve">
+    <value>Create a new account.</value>
+  </data>
+  <data name="FormRegister" xml:space="preserve">
+    <value>Register</value>
+  </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Přihlásit</value>
+    <value>Sign in</value>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Odhlásit</value>
+    <value>Logout</value>
   </data>
   <data name="PlaceholderEmailAddress" xml:space="preserve">
-    <value>E-mailová adresa</value>
+    <value>Email address</value>
   </data>
   <data name="PlaceholderPassword" xml:space="preserve">
-    <value>Heslo</value>
+    <value>Password</value>
   </data>
   <data name="PleaseSignIn" xml:space="preserve">
-    <value>Přihlašte se prosím</value>
+    <value>Please sign in</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Registrovat</value>
+    <value>Register</value>
   </data>
   <data name="RegisterNewUser" xml:space="preserve">
-    <value>Registrovat nového uživatele</value>
+    <value>Register as a new user</value>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Pamatovat si mě?</value>
+    <value>Remeber me?</value>
+  </data>
+  <data name="TitleRegister" xml:space="preserve">
+    <value>Register</value>
   </data>
 </root>
