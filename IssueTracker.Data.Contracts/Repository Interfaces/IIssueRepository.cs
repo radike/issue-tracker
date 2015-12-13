@@ -11,5 +11,6 @@ namespace IssueTracker.Data.Contracts.Repository_Interfaces
     public interface IIssueRepository : IDataRepository<Issue>
     {
         Issue GetByName(string name);
+        IQueryable<Issue> GetAllVersions(Guid id);
     }
 }

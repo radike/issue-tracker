@@ -1,13 +1,14 @@
-﻿@model IssueTracker.ViewModels.IssueDetailViewModel
+﻿@using IssueTracker.Entities
+@model IssueTracker.ViewModels.IssueDetailViewModel
 
 @{
     ViewBag.Title = string.Format(IssueStrings.TitleDetails, Model.Issue.Code);
 }
 <div>
-    <br/>
+    <br />
     <p>
         @Html.DisplayNameFor(model => model.Issue.Project):
-        @Html.ActionLink(Model.Issue.Project.Title, "Details", "Projects", new {id = Model.Issue.Project.Code}, null)
+        @Html.ActionLink(Model.Issue.Project.Title, "Details", "Projects", new { id = Model.Issue.Project.Code }, null)
     </p>
     <hr />
     <h2>@Html.DisplayFor(model => model.Issue.Name)</h2>
@@ -56,49 +57,100 @@
         </dd>
     </dl>
 
-    <h4>@CommentStrings.TitleComments</h4>
-    @if (Model.Comments.ToList().Count == 0)
+    <br /><br />
+    @if (ViewBag.Sub == "Comments")
     {
-        <i>@CommentStrings.NoComments</i>
-        <br /><br />
-    }
-    else
-    {
-        <table class="table">
-            @foreach (var item in Model.Comments)
-            {
-                <tr>
-                    <td style="font-weight: bold">@item.User.UserName</td>
-                    <td class="one-line">@item.Posted</td>
-                </tr>
-                <tr>
-                    <td>@Html.Raw(HttpUtility.HtmlDecode(@item.Text))</td>
-                    <td>
-                        @if (ViewBag.LoggedUser.Id == item.AuthorId)
-                        {
-                            @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", "Comments", new { id = item.Id }, null)
-                        }      
-                        
-                        @if (ViewBag.IsUserAdmin)
-                        {
-                            @:|
-                            @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", "Comments", new { id = item.Id }, null)
-                        }
-                    </td>
-                </tr>
-            }
-        </table>
-    }
-    @using (Html.BeginForm("Create", "Comments", new { id = Model.Issue.Id }))
-    {
-        @Html.AntiForgeryToken()         
-        @Html.TextArea("Text", new { @class = "form-control" })           
-        @Html.Hidden("IssueId", Model.Issue.Id)
-        <input class="btn btn-default dropdown-toggle" type="submit" value="@CommentStrings.FormComment" />
-    }  
-</div>
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.Comments})">Comments</a></li>
+            <li role="presentation"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.History})">History</a></li>
+        </ul>
+        <br />
+        
+        if (Model.Comments.ToList().Count == 0)
+        {
+            <i>@CommentStrings.NoComments</i>
+            <br />
+            <br />
+        }
+        else
+        {
+            <table class="table">
+                @foreach (var item in Model.Comments)
+                {
+                    <tr>
+                        <td style="font-weight: bold">@item.User.UserName</td>
+                        <td class="one-line">@item.Posted</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.Raw(HttpUtility.HtmlDecode(@item.Text))</td>
+                        <td>
+                            @if (ViewBag.LoggedUser.Id == item.AuthorId)
+                            {
+                                @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", "Comments", new { id = item.Id }, null)
+                            }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/ckeditor")
-    @Scripts.Render("~/bundles/ckeditor-replace")
-}
+                            @if (ViewBag.IsUserAdmin)
+                            {
+                                @:|
+                                @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", "Comments", new { id = item.Id }, null)
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        using (Html.BeginForm("Create", "Comments", new { id = Model.Issue.Id }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.TextArea("Text", new { @class = "form-control" })
+            @Html.Hidden("IssueId", Model.Issue.Id)
+            <input class="btn btn-default dropdown-toggle" type="submit" value="@CommentStrings.FormComment" />
+        }
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/ckeditor")
+            @Scripts.Render("~/bundles/ckeditor-replace")
+        }
+
+        }
+        else if (@ViewBag.Sub == "History")
+        {
+        <ul class="nav nav-tabs">
+            <li role="presentation"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.Comments})">Comments</a></li>
+            <li role="presentation" class="active"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.History})">History</a></li>
+        </ul>
+        <br/>
+
+        if (Model.Changes.ToList().Count == 0)
+        {
+            <i>@CommentStrings.NoChanges</i>
+            <br />
+            <br />
+        }
+        else
+        {
+            <table class="table history">
+                <thead>
+                    <tr>
+                        <td width="14%"><strong>When</strong></td>
+                        <td width="10%"><strong>What</strong></td>
+                        <td width="38%"><strong>Original value</strong></td>
+                        <td width="38%"><strong>New value</strong></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Changes)
+                    {
+                        <tr class="tr-with-hr">
+                            <td><i class="grayed">@item.Changed</i></td>
+                            <td>@item.Type</td>
+                            <td>@Html.Raw(HttpUtility.HtmlDecode(@item.From))</td>
+                            <td>@Html.Raw(HttpUtility.HtmlDecode(@item.To))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+
+</div>

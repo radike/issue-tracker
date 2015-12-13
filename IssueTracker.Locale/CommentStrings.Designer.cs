@@ -115,6 +115,15 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No changes.
+        /// </summary>
+        public static string NoChanges {
+            get {
+                return ResourceManager.GetString("NoChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No comments.
         /// </summary>
         public static string NoComments {

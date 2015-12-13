@@ -79,3 +79,20 @@ td.align-right {
     width: 100%; 
     height: 400px
 }
+
+.grayed {
+    color: lightslategray;
+}
+
+.tr-with-hr {
+    margin-bottom: 10px;
+}
+
+.history > tbody > tr > td:nth-child(2),  
+.history > tbody > tr > td:nth-child(3) {
+    border-right: 1px solid #ddd;
+}
+
+.history {
+    border-bottom: 1px solid #ddd;
+}

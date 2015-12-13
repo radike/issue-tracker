@@ -135,6 +135,9 @@
   <data name="FormComment" xml:space="preserve">
     <value>Odeslat komentář</value>
   </data>
+  <data name="NoChanges" xml:space="preserve">
+    <value>Žádne změny</value>
+  </data>
   <data name="NoComments" xml:space="preserve">
     <value>Žádné komentáře</value>
   </data>

@@ -14,6 +14,7 @@ using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using System.Data.Entity.Validation;
 using System.Text.RegularExpressions;
+using IssueTracker.Entities;
 using IssueTracker.Models;
 
 
@@ -175,7 +176,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Issues/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(string id, IssueSubDetail? sub)
         {
             IssueCode code = IssueCode.Parse(id);
             if (code == null)
@@ -220,11 +221,78 @@ namespace IssueTracker.Controllers
                 comment.User = applicationUserRepo.Get(comment.AuthorId);
             }
 
+            viewModel.Changes = getHistory(viewModel.Issue.Id, comments);
+
+            ViewBag.Sub = sub.ToString() == "" ? "Comments" : sub.ToString();
             ViewBag.LoggedUser = getLoggedUser();
             ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators.ToString());
             ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
+
             return View(viewModel);
         }
+
+        /// <summary>
+        /// Creates history of changes and added comments within given issue.
+        /// </summary>
+        /// <param name="id">Id of the issue</param>
+        /// <param name="comments">Comments from all versions of the issue</param>
+        /// <returns>List of all changes and comments</returns>
+        private List<IssueChange> getHistory(Guid id, IEnumerable<Comment> comments)
+        {
+            var allVersions = issueRepo.GetAllVersions(id).OrderBy(x => x.CreatedAt).ToList();
+            var changes = new List<IssueChange>();
+
+            // find all changes within the issue
+            Issue previousVersion = null;
+            foreach (var version in allVersions)
+            {
+                if (previousVersion != null)
+                {
+                    changes.AddRange(findChange(previousVersion, version));
+                }
+                previousVersion = version;
+            }
+
+            // add comments into history
+            changes.AddRange(comments.Select(comment => new IssueChange(comment.CreatedAt, IssueChangeType.Comment, "", comment.Text)));
+
+            return changes.OrderBy(x => x.Changed).ToList();
+        }
+
+        /// <summary>
+        /// Finds changes within issue between given version and its previous variant (k and k-1).
+        /// </summary>
+        /// <param name="previous">Previous version of issue</param>
+        /// <param name="current">Any version of the issue</param>
+        /// <returns>List of found changes</returns>
+        private IEnumerable<IssueChange> findChange(Issue previous, Issue current)
+        {
+            var foundChanges = new List<IssueChange>();
+
+            if (previous.Name != current.Name)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Title, previous.Name, current.Name));
+            }
+            else if (previous.StateId != current.StateId)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.State, previous.State.Title, current.State.Title));
+            }
+            else if (previous.Type != current.Type)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Type, previous.Type.ToString(), current.Type.ToString()));
+            }
+            else if (previous.AssigneeId != current.AssigneeId)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Assignee, previous.Assignee.Email, current.Assignee.Email));
+            }
+            else if (previous.Description != current.Description)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Description, previous.Description, current.Description));
+            }
+
+            return foundChanges;
+        } 
+
 
         // GET: Issues/Create
         public ActionResult Create()
@@ -426,6 +494,24 @@ namespace IssueTracker.Controllers
             {
                 ;
             }
+        }
+
+        public class IssueChange
+        {
+            public DateTime Changed { get; set; }
+            public IssueChangeType Type { get; set; }
+            [AllowHtml]
+            public string From { get; set; }
+            [AllowHtml]
+            public string To { get; set; }
+
+            public IssueChange(DateTime changed, IssueChangeType type, string from, string to)
+            {
+                Changed = changed;
+                Type = type;
+                From = from;
+                To = to;
+            } 
         }
     }
 }

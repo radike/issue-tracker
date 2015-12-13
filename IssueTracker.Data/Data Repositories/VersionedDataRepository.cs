@@ -43,9 +43,15 @@ namespace IssueTracker.Data.Data_Repositories
             return base.FindBy(i => i.Active).GroupBy(i => i.Id).Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault());
         }
 
+        public IQueryable<TEntity> GetAllVersions(Guid id)
+        {
+            return base.FindBy(i => i.Id == id);
+        }
+
         public override void Remove(Guid id)
         {
             var entities = base.FindBy(p => p.Id == id);
+            // todo: remove sets Active flag only for the last version
             foreach (var entity in entities)
             {
                 entity.Active = false;

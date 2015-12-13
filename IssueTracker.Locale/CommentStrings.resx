@@ -135,6 +135,9 @@
   <data name="FormComment" xml:space="preserve">
     <value>Comment</value>
   </data>
+  <data name="NoChanges" xml:space="preserve">
+    <value>No changes</value>
+  </data>
   <data name="NoComments" xml:space="preserve">
     <value>No comments</value>
   </data>
