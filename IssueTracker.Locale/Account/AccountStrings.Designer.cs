@@ -169,11 +169,38 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new account..
+        ///   Looks up a localized string similar to Change your password.
         /// </summary>
-        public static string CreateNewAccount {
+        public static string ChangePassword {
             get {
-                return ResourceManager.GetString("CreateNewAccount", resourceCulture);
+                return ResourceManager.GetString("ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid code..
+        /// </summary>
+        public static string ErrorMessageInvalidCode {
+            get {
+                return ResourceManager.GetString("ErrorMessageInvalidCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid login attempt..
+        /// </summary>
+        public static string ErrorMessageInvalidLogin {
+            get {
+                return ResourceManager.GetString("ErrorMessageInvalidLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to External Logins.
+        /// </summary>
+        public static string ExternalLogins {
+            get {
+                return ResourceManager.GetString("ExternalLogins", resourceCulture);
             }
         }
         
@@ -201,6 +228,60 @@ namespace IssueTracker.Locale {
         public static string LogOut {
             get {
                 return ResourceManager.GetString("LogOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage.
+        /// </summary>
+        public static string Manage {
+            get {
+                return ResourceManager.GetString("Manage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change your account settings.
+        /// </summary>
+        public static string MessageChangeAccountSettings {
+            get {
+                return ResourceManager.GetString("MessageChangeAccountSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change password form.
+        /// </summary>
+        public static string MessageChangePassword {
+            get {
+                return ResourceManager.GetString("MessageChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new account..
+        /// </summary>
+        public static string MessageCreateNewAccount {
+            get {
+                return ResourceManager.GetString("MessageCreateNewAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error has occurred..
+        /// </summary>
+        public static string MessageErrorOccurred {
+            get {
+                return ResourceManager.GetString("MessageErrorOccurred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password has been changed..
+        /// </summary>
+        public static string MessagePasswordChanged {
+            get {
+                return ResourceManager.GetString("MessagePasswordChanged", resourceCulture);
             }
         }
         
@@ -255,6 +336,33 @@ namespace IssueTracker.Locale {
         public static string RememberMe {
             get {
                 return ResourceManager.GetString("RememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change password.
+        /// </summary>
+        public static string TitleChangePassword {
+            get {
+                return ResourceManager.GetString("TitleChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage.
+        /// </summary>
+        public static string TitleManage {
+            get {
+                return ResourceManager.GetString("TitleManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage your external logins.
+        /// </summary>
+        public static string TitleManageExternalLogins {
+            get {
+                return ResourceManager.GetString("TitleManageExternalLogins", resourceCulture);
             }
         }
         

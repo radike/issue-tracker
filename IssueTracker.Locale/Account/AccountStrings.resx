@@ -153,8 +153,17 @@
   <data name="AccountRememberBrowser" xml:space="preserve">
     <value>Remember this browser?</value>
   </data>
-  <data name="CreateNewAccount" xml:space="preserve">
-    <value>Create a new account.</value>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change your password</value>
+  </data>
+  <data name="ErrorMessageInvalidCode" xml:space="preserve">
+    <value>Invalid code.</value>
+  </data>
+  <data name="ErrorMessageInvalidLogin" xml:space="preserve">
+    <value>Invalid login attempt.</value>
+  </data>
+  <data name="ExternalLogins" xml:space="preserve">
+    <value>External Logins</value>
   </data>
   <data name="FormRegister" xml:space="preserve">
     <value>Register</value>
@@ -164,6 +173,24 @@
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Logout</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="MessageChangeAccountSettings" xml:space="preserve">
+    <value>Change your account settings</value>
+  </data>
+  <data name="MessageChangePassword" xml:space="preserve">
+    <value>Change password form</value>
+  </data>
+  <data name="MessageCreateNewAccount" xml:space="preserve">
+    <value>Create a new account.</value>
+  </data>
+  <data name="MessageErrorOccurred" xml:space="preserve">
+    <value>An error has occurred.</value>
+  </data>
+  <data name="MessagePasswordChanged" xml:space="preserve">
+    <value>Your password has been changed.</value>
   </data>
   <data name="PlaceholderEmailAddress" xml:space="preserve">
     <value>Email address</value>
@@ -182,6 +209,15 @@
   </data>
   <data name="RememberMe" xml:space="preserve">
     <value>Remeber me?</value>
+  </data>
+  <data name="TitleChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="TitleManage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="TitleManageExternalLogins" xml:space="preserve">
+    <value>Manage your external logins</value>
   </data>
   <data name="TitleRegister" xml:space="preserve">
     <value>Register</value>

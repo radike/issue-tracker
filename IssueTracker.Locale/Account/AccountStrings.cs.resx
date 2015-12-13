@@ -153,8 +153,17 @@
   <data name="AccountRememberBrowser" xml:space="preserve">
     <value>Pamatovat si tento prohlížeč?</value>
   </data>
-  <data name="CreateNewAccount" xml:space="preserve">
-    <value>Vytvoření nového účtu.</value>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Změnit heslo</value>
+  </data>
+  <data name="ErrorMessageInvalidCode" xml:space="preserve">
+    <value>Invalid code.</value>
+  </data>
+  <data name="ErrorMessageInvalidLogin" xml:space="preserve">
+    <value>Invalid login attempt.</value>
+  </data>
+  <data name="ExternalLogins" xml:space="preserve">
+    <value>Přihlášení přes externí účty</value>
   </data>
   <data name="FormRegister" xml:space="preserve">
     <value>Registrovat</value>
@@ -164,6 +173,24 @@
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Odhlásit</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Spravovat</value>
+  </data>
+  <data name="MessageChangeAccountSettings" xml:space="preserve">
+    <value>Upravte nastavení účtu</value>
+  </data>
+  <data name="MessageChangePassword" xml:space="preserve">
+    <value>Formulář pro změnu hesla</value>
+  </data>
+  <data name="MessageCreateNewAccount" xml:space="preserve">
+    <value>Vytvoření nového účtu.</value>
+  </data>
+  <data name="MessageErrorOccurred" xml:space="preserve">
+    <value>Došlo k chybě.</value>
+  </data>
+  <data name="MessagePasswordChanged" xml:space="preserve">
+    <value>Vaše heslo bylo změneno.</value>
   </data>
   <data name="PlaceholderEmailAddress" xml:space="preserve">
     <value>E-mailová adresa</value>
@@ -182,6 +209,15 @@
   </data>
   <data name="RememberMe" xml:space="preserve">
     <value>Pamatovat si mě?</value>
+  </data>
+  <data name="TitleChangePassword" xml:space="preserve">
+    <value>Změna hesla</value>
+  </data>
+  <data name="TitleManage" xml:space="preserve">
+    <value>Správa účtu</value>
+  </data>
+  <data name="TitleManageExternalLogins" xml:space="preserve">
+    <value>Správa externích účtů</value>
   </data>
   <data name="TitleRegister" xml:space="preserve">
     <value>Registrace</value>
