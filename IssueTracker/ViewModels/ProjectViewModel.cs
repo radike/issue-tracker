@@ -10,11 +10,12 @@ namespace IssueTracker.ViewModels
     {
         // Parameters
         [Required]
-        [Display(Name = "Project title")]
+        [Display(Name = "ProjectTitle", ResourceType = typeof(IssueTracker.Locale.ProjectStrings))]
         [MaxLength(255)]
         public string Title { get; set; }
 
         [Required]
+        [Display(Name = "ProjectCode", ResourceType = typeof(IssueTracker.Locale.ProjectStrings))]
         public string Code { get; set; }
 
         // Table definitions
@@ -22,13 +23,13 @@ namespace IssueTracker.ViewModels
 
         public IPagedList<IssueIndexViewModel> IssuesPage { get; set; }
 
-        [Display(Name = "Users")]
-        public IEnumerable<string> SelectedUsers { get; set; }
+        [Display(Name = "ProjectUsers", ResourceType = typeof(IssueTracker.Locale.ProjectStrings))]
+        public IEnumerable<Guid> SelectedUsers { get; set; }
 
         public virtual IEnumerable<ApplicationUser> Users { get; set; }
 
-        [Display(Name = "Project owner")]
-        public string OwnerId { get; set; }
+        [Display(Name = "ProjectOwner", ResourceType = typeof(IssueTracker.Locale.ProjectStrings))]
+        public Guid OwnerId { get; set; }
 
         public ApplicationUser Owner { get; set; }
         

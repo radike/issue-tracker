@@ -74,3 +74,53 @@ td.align-right {
 .search-table input[type="text"] {
     max-width: 100%;
 }
+
+#swVisualization {
+    width: 100%; 
+    height: 400px
+}
+
+.grayed {
+    color: lightslategray;
+}
+
+.tr-with-hr {
+    margin-bottom: 10px;
+}
+
+.history > tbody > tr > td:nth-child(2),  
+.history > tbody > tr > td:nth-child(3) {
+    border-right: 1px solid #ddd;
+}
+
+.history {
+    border-bottom: 1px solid #ddd;
+}
+
+.float-right {
+    float: right;
+}
+
+.detail > tbody > tr:last-child {
+    height: 100%;
+}
+
+.detail > tbody > tr > td {
+    border: none;
+}
+
+.detail > tbody > tr > td:nth-child(2) {
+    border-right: 1px solid #ddd;
+}
+
+.detail > tbody > tr > td:nth-child(1) {
+    text-align: right;
+}
+
+.black-link {
+    color: black;
+}
+
+.no-underline-link:hover {
+    text-decoration: none;
+}

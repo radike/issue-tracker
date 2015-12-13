@@ -5,64 +5,62 @@
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Browse Projects";
+    ViewBag.Title = ProjectStrings.TitleIndex;
 }
 
 <ul class="nav nav-tabs">
-    <li role="presentation" class="@Html.ActivePage("Projects")"><a href="@Url.Action("Index", "Projects")">All</a></li>
-    @if (ViewContext.RouteData.Values["action"].ToString() == "Index")
+    <li role="presentation" class="@(Html.ActivePage("Projects", action: "Index") ?? Html.ActivePage("Projects", action: "List", id: "MyProjects"))"><a href="@Url.Action("Index", "Projects")">@ProjectStrings.TabMyProjects</a></li>
+    <li role="presentation" class="@Html.ActivePage("Projects", action: "List", id: "All")"><a href="@Url.Action("List", "Projects", new { id = "All" })">@SharedStrings.TabAll</a></li>
+    @if (new string[] { "Index", "List" }.Contains(ViewContext.RouteData.Values["action"].ToString()))
     {
         <li id="create-button">
-            <button type="button" class="btn btn-primary" onclick="location.href=location.href +'/Create'">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+            <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Projects")'">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> @SharedStrings.ButtonAdd
             </button>
         </li>
     }
 </ul>
 
-<h2>Browse Projects</h2>
+<h2>@ViewBag.Title</h2>
 
 <div class="text-danger">@ViewBag.ErrorMessageNotOwner</div>
 
 @if (Model.Count == 0)
 {
-    <i>No project found. Create @Html.ActionLink("a new project", "Create").</i>
+    <i>@Html.Raw(string.Format(ProjectStrings.ListNoResult, Html.ActionLink(ProjectStrings.ListNoResultNew, "Create")))</i>
 }
 else
 {
-    <table class="table">
+    <table class="table entity-listing">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Title)
+                @ProjectStrings.ProjectTitle
             </th>
-            <th></th>
+            <th>
+                @ProjectStrings.ProjectOwner
+            </th>
+            <th>
+
+            </th>
+
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    @Html.ActionLink(item.Title, "Details", new { id = item.Code })
                 </td>
                 <td>
-                    @if (item.OwnerId == ViewBag.LoggedUserId || ViewBag.IsUserAdmin)
-                    {
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @:|
-                    }                    
-
-                    @Html.ActionLink("Details", "Details", new { id = item.Code })
-
-                    @if (ViewBag.IsUserAdmin)
-                    {
-                       @:| @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                    }                    
+                    @Html.DisplayFor(modelItem => item.Owner.UserName)
                 </td>
+                <td></td>
             </tr>
         }
     </table>
     <br />
 
-    <Text>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</Text>
+    <Text>@string.Format(@SharedStrings.Paging, Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber, Model.PageCount)</Text>
     @Html.PagedListPager(Model, page => Url.Action("Index",
         new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 }

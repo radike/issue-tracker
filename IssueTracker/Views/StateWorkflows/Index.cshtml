@@ -1,11 +1,22 @@
 ﻿@model IEnumerable<IssueTracker.ViewModels.StateWorkflowViewModel>
-
+@Scripts.Render("~/bundles/gojs")
+@Scripts.Render("~/bundles/gojs-model")
+<script>
+    function gojs_create_flow() {
+        jQuery.getJSON("StateWorkflows/WorkflowVisualization", load);
+    }
+    window.onload = gojs_init;
+</script>
 @{
     Layout = "~/Views/Shared/_SettingsTabbedLayout.cshtml";
     ViewBag.Title = "State workflow";
 }
 
 <h2>State workflow</h2>
+<br/>
+
+<div id="swVisualization"></div>
+<br /><br />
 
 @if (Model.ToList().Count == 0)
 {
@@ -13,7 +24,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table entity-listing">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.FromStateId)

@@ -16,15 +16,9 @@ namespace IssueTracker.Data.Data_Repositories
 
         }
 
-        public IEnumerable<Project> GetActiveProjects()
+        public ICollection<Project> GetProjectsForUser(Guid userId)
         {
-            using (var entityContext = new IssueTrackerContext())
-            {
-                return entityContext.Projects
-                    .Where(n => n.Active)
-                    .GroupBy(n => n.Id)
-                    .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault()).ToList();
-            }
+            return FindBy(i => i.OwnerId == userId || i.Users.Any(u => u.Id == userId)).ToList();
         }
     }
 }

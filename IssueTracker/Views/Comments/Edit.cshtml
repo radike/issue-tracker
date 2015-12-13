@@ -1,10 +1,10 @@
 ﻿@model IssueTracker.ViewModels.CommentViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = CommentStrings.TitleEdit;
 }
 
-<h2>Edit</h2>
+<h2>@ViewBag.Title</h2>
 
 
 @using (Html.BeginForm())
@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Comment</h4>
+        <h4>@CommentStrings.EntityName</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
@@ -28,14 +28,14 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="@SharedStrings.FormSave" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("To Issue", "Details", "Issues", new { id = Model.Issue.Code }, null)
+    @Html.ActionLink(IssueStrings.BackToIssue, "Details", "Issues", new { id = Model.Issue.Code }, null)
 </div>
 
 @section Scripts {

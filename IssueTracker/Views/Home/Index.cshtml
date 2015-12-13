@@ -1,10 +1,24 @@
-﻿@{
+﻿@model IssueTracker.ViewModels.DashboardViewModel
+@{
     ViewBag.Title = "Home Page";
 }
-
-<div class="col-lg-12">
-    <h1 class="page-header">Dashboard</h1>
-</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="col-lg-12 page-header">
+        <table class="dashboard-header">
+            <tr>
+                <td>Dashboard</td>
+                <td>
+                    <div class="project-select">
+                        @Html.LabelFor(model => model.ProjectId, htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownListFor(model => model.ProjectId, (SelectList)ViewBag.UsersList, new { @class = "form-control project-select", onchange = "$(this).closest('form').submit();" })
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
 <div class="row">
     <div class="col-sm-4">
         <div class="panel panel-primary">
@@ -14,8 +28,8 @@
                         <i class="fa fa-comments fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">26</div>
-                        <div>New Comments!</div>
+                        <div class="huge">@Model.QuestionCount</div>
+                        <div>Questions</div>
                     </div>
                 </div>
             </div>
@@ -36,8 +50,8 @@
                         <i class="fa fa-tasks fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">12</div>
-                        <div>New Tasks!</div>
+                        <div class="huge">@Model.TaskCount</div>
+                        <div>Tasks</div>
                     </div>
                 </div>
             </div>
@@ -55,11 +69,11 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-support fa-5x"></i>
+                        <i class="fa fa-bug fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">13</div>
-                        <div>Support Tickets!</div>
+                        <div class="huge">@Model.BugCount</div>
+                        <div>Bugs</div>
                     </div>
                 </div>
             </div>
@@ -84,13 +98,19 @@
             <div class="panel-body">
                 <div class="list-group">
                     <a href="#" class="list-group-item">
-                        <i class="fa fa-comment fa-fw"></i> New Comment
+                        <i class="fa fa-comment fa-fw"></i> New Question
                         <span class="pull-right text-muted small">
                             <em>4 minutes ago</em>
                         </span>
                     </a>
                     <a href="#" class="list-group-item">
-                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                        <i class="fa fa-tasks fa-fw"></i> New Task
+                        <span class="pull-right text-muted small">
+                            <em>43 minutes ago</em>
+                        </span>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <i class="fa fa-bug fa-fw"></i> 3 New Bugs
                         <span class="pull-right text-muted small">
                             <em>12 minutes ago</em>
                         </span>
@@ -99,12 +119,6 @@
                         <i class="fa fa-envelope fa-fw"></i> Message Sent
                         <span class="pull-right text-muted small">
                             <em>27 minutes ago</em>
-                        </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-tasks fa-fw"></i> New Task
-                        <span class="pull-right text-muted small">
-                            <em>43 minutes ago</em>
                         </span>
                     </a>
                     <a href="#" class="list-group-item">

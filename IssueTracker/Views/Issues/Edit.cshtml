@@ -1,10 +1,10 @@
 ﻿@model IssueTracker.ViewModels.IssueEditViewModel
 
 @{
-    ViewBag.Title = "Edit Issue " + Model.Code;
+    ViewBag.Title = string.Format(IssueStrings.TitleEdit, Model.Code);
 }
 
-<h2>Edit Issue @Html.DisplayFor(model => model.Code)</h2>
+<h2>@ViewBag.Title</h2>
 
 
 @using (Html.BeginForm())
@@ -17,7 +17,7 @@
         @Html.HiddenFor(model => model.Code)
         
         <div class="form-group">
-            @Html.LabelFor(model => model.ProjectId, "ProjectId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProjectId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
@@ -25,8 +25,15 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.AssigneeId, "Assignee", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Type, "Type", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.Type, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AssigneeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AssigneeId, "Assignee", htmlAttributes: new { @class = "control-label col-md-2" })            <div class="col-md-10">
                 @Html.DropDownList("AssigneeId", null, "", htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.AssigneeId, "", new { @class = "text-danger" })
             </div>
@@ -50,14 +57,14 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="@SharedStrings.FormSave" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("To Issue", "Details", new { id = Model.Code })
+    @Html.ActionLink(IssueStrings.BackToIssue, "Details", new { id = Model.Code })
 </div>
 
 @section Scripts {

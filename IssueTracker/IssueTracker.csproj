@@ -181,7 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstractions\CultureHelper.cs" />
-    <Compile Include="Abstractions\Helper.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\CultureFilter.cs" />
     <Compile Include="App_Start\CultureConfig.cs" />
@@ -237,6 +236,10 @@
     <Compile Include="Migrations\201512061532441_ChangeUserPKToGuid.Designer.cs">
       <DependentUpon>201512061532441_ChangeUserPKToGuid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512111624325_AddIssueTypeProperty.cs" />
+    <Compile Include="Migrations\201512111624325_AddIssueTypeProperty.Designer.cs">
+      <DependentUpon>201512111624325_AddIssueTypeProperty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\UserRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -245,6 +248,7 @@
     <Compile Include="ViewModels\BaseVersioningViewModel.cs" />
     <Compile Include="ViewModels\CommentViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\IssueCreateViewModel.cs" />
     <Compile Include="ViewModels\IssueDetailViewModel.cs" />
     <Compile Include="ViewModels\IssueEditViewModel.cs" />
@@ -272,6 +276,8 @@
     <Content Include="Content\Fonts\ecoicons\license.txt" />
     <Content Include="Content\Fonts\ecoicons\Read Me.txt" />
     <Content Include="Content\Fonts\fontawesome-webfont.svg" />
+    <Content Include="Scripts\go-model.js" />
+    <Content Include="Scripts\go.js" />
     <Content Include="Content\Images\jquery-ui\animated-overlay.gif" />
     <Content Include="Content\Images\jquery-ui\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\Images\jquery-ui\ui-bg_flat_75_ffffff_40x100.png" />
@@ -498,6 +504,9 @@
     <EmbeddedResource Include="Migrations\201512061532441_ChangeUserPKToGuid.resx">
       <DependentUpon>201512061532441_ChangeUserPKToGuid.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512111624325_AddIssueTypeProperty.resx">
+      <DependentUpon>201512111624325_AddIssueTypeProperty.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Data.Core\Common.Data.Core.csproj">
@@ -515,6 +524,10 @@
     <ProjectReference Include="..\IssueTracker.Entities\IssueTracker.Data.Entities.csproj">
       <Project>{92e2b591-c2bc-4a0a-be81-ed4fbc29aea1}</Project>
       <Name>IssueTracker.Data.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IssueTracker.Locale\IssueTracker.Locale.csproj">
+      <Project>{11898d27-3ed6-420c-9044-84a387962bc7}</Project>
+      <Name>IssueTracker.Locale</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

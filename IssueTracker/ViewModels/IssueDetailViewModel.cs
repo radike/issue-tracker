@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IssueTracker.Controllers;
 
 namespace IssueTracker.ViewModels
 {
@@ -11,6 +12,8 @@ namespace IssueTracker.ViewModels
         public IEnumerable<StateWorkflowViewModel> StateWorkflows { get; set; }
 
         public IEnumerable<CommentViewModel> Comments { get; set; }
+
+        public IEnumerable<IssuesController.IssueChange> Changes { get; set; }
 
     }
 }

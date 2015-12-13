@@ -6,7 +6,7 @@
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm"}))
     {
         @Html.AntiForgeryToken()
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">@AccountStrings.LogOut</a></li>
         <li id="lang-select">
             <a href="#" id="languageToggle">@ViewBag.LanguageNativeName</a>
             <div>
@@ -28,7 +28,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        <li>@Html.ActionLink(AccountStrings.Register, "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink(AccountStrings.LogIn, "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }

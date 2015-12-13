@@ -1,10 +1,10 @@
 ﻿@model IssueTracker.ViewModels.ProjectViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = @SharedStrings.FormEdit;
 }
 
-<h2>Edit</h2>
+<h2>@ViewBag.Title</h2>
 
 
 @using (Html.BeginForm())
@@ -12,10 +12,9 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Project</h4>
+        <h4>@ProjectStrings.EntityName</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.Code)
 
         <div class="form-group">
@@ -35,7 +34,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Users, htmlAttributes: new {@class = "control-label col-md-2"})
+            @Html.LabelFor(model => model.SelectedUsers, htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
                 @Html.ListBoxFor(model => model.SelectedUsers, new MultiSelectList(ViewBag.UsersList, "Id", "Email", Model.SelectedUsers))
                 @Html.ValidationMessageFor(model => model.SelectedUsers, "", new {@class = "text-danger"})
@@ -44,7 +43,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default"/>
+                <input type="submit" value="@SharedStrings.FormSave" class="btn btn-default"/>
             </div>
         </div>
 
@@ -52,7 +51,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(SharedStrings.BackToList, "Index")
 </div>
 
 @section Scripts {

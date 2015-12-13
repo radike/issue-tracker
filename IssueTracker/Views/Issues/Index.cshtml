@@ -7,31 +7,31 @@
 }
 
 @{
-    ViewBag.Title = "Issues";
+    ViewBag.Title = IssueStrings.TitleIndex;
 }
 
 <ul class="nav nav-tabs">
     @if (Request.RawUrl.Contains("?SearchAssignee="))
     {
-        <li role="presentation"><a href="@Url.Action("Index", "Issues")">All</a></li>
-        <li role="presentation" class="active"><a href="?SearchAssignee=@User.Identity.GetUserId()">Assigned to me</a></li>
-        <li role="presentation"><a href="?SearchReporter=@User.Identity.GetUserId()">Created by me</a></li>
+        <li role="presentation"><a href="@Url.Action("Index", "Issues")">@SharedStrings.TabAll</a></li>
+        <li role="presentation" class="active"><a href="?SearchAssignee=@User.Identity.GetUserId()">@IssueStrings.TabAssignedToMe</a></li>
+        <li role="presentation"><a href="?SearchReporter=@User.Identity.GetUserId()">@IssueStrings.TabCreatedByMe</a></li>
     }
     else if (Request.RawUrl.Contains("?SearchReporter="))
     {
-        <li role="presentation"><a href="@Url.Action("Index", "Issues")">All</a></li>
-        <li role="presentation"><a href="?SearchAssignee=@User.Identity.GetUserId()">Assigned to me</a></li>
-        <li role="presentation" class="active"><a href="?SearchReporter=@User.Identity.GetUserId()">Created by me</a></li>
+        <li role="presentation"><a href="@Url.Action("Index", "Issues")">@SharedStrings.TabAll</a></li>
+        <li role="presentation"><a href="?SearchAssignee=@User.Identity.GetUserId()">@IssueStrings.TabAssignedToMe</a></li>
+        <li role="presentation" class="active"><a href="?SearchReporter=@User.Identity.GetUserId()">@IssueStrings.TabCreatedByMe</a></li>
     }
     else
     {
-        <li role="presentation" class="active"><a href="@Url.Action("Index", "Issues")">All</a></li>
-        <li role="presentation"><a href="?SearchAssignee=@User.Identity.GetUserId()">Assigned to me</a></li>
-        <li role="presentation"><a href="?SearchReporter=@User.Identity.GetUserId()">Reported by me</a></li>
+        <li role="presentation" class="active"><a href="@Url.Action("Index", "Issues")">@SharedStrings.TabAll</a></li>
+        <li role="presentation"><a href="?SearchAssignee=@User.Identity.GetUserId()">@IssueStrings.TabAssignedToMe</a></li>
+        <li role="presentation"><a href="?SearchReporter=@User.Identity.GetUserId()">@IssueStrings.TabReportedByMe</a></li>
     }
     <li id="create-button">
         <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Issues")'">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> @SharedStrings.ButtonAdd
         </button>
     </li>
 </ul>
@@ -42,28 +42,34 @@
 {
     <table class="search-table">
         <tr>
-            <td width="70%" colspan="2">
-                @Html.TextBox("SearchName", null, new { @class = "form-control", @placeholder = "Name" })
+            <td colspan="2">
+                @Html.TextBox("SearchName", null, new { @class = "form-control", @placeholder = IssueStrings.SearchNamePlaceholder })
             </td>
-            <td width="30%" colspan="3">
-                @Html.DropDownList("SearchState", null, "- Select state -", new { @class = "form-control" })
+            <td>
+                @Html.DropDownList("SearchProject", null, IssueStrings.SelectProjectDefault, new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.DropDownList("SearchState", null, IssueStrings.SelectStateDefault, new { @class = "form-control" })
             </td>
         </tr>
         <tr>
-            <td width="30%">
-                @Html.DropDownList("SearchAssignee", null, "- Select assignee -", new { @class = "form-control" })
+            <td>
+                @Html.DropDownList("SearchAssignee", null, IssueStrings.SelectAssigneeDefault, new { @class = "form-control" })
             </td>
-            <td width="30%">
-                @Html.DropDownList("SearchReporter", null, "- Select reporter -", new { @class = "form-control" })
+            <td>
+                @Html.DropDownList("SearchReporter", null, IssueStrings.SelectReporterDefault, new { @class = "form-control" })
             </td>
-            <td width="30%">
-                @Html.DropDownList("SearchProject", null, "- Select project -", new { @class = "form-control" })
-            </td>
-            <td width="5%" class="right-align">
-                <input type="submit" value="Search" class="btn btn-primary" />
-            </td>
-            <td width="5%" class="right-align">
-                <input type="reset" value="Clear" class="btn btn-danger" />
+            <td colspan="2" align="right">
+                <table class="right-align">
+                    <tr>
+                        <td>
+                            <input type="submit" value="@SharedStrings.ButtonSearch" class="btn btn-primary" />
+                        </td>
+                        <td>
+                            <input type="reset" value="@SharedStrings.ButtonClear" class="btn btn-danger" />
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
@@ -73,34 +79,32 @@
 
 @if (Model.Count == 0)
 {
-    <i>No issue found.</i>
+    <i>@IssueStrings.ListNoResult</i>
 }
 else
 {
-    <h2>Issues</h2>
+    <h2>@IssueStrings.TitleIndex</h2>
 
     <table class="table">
         <tr>
             <th>
-                @Html.ActionLink("Summary", "Index", new { sort = ViewBag.SummarySort })
-            </th>
-            <th>
-                @Html.ActionLink("Assignee", "Index", new { sort = ViewBag.AssigneeSort })
-            </th>
-            <th>
-                @Html.ActionLink("Created", "Index", new { sort = ViewBag.CreatedSort })
-            </th>
-            <th>
-                @Html.ActionLink("Reporter", "Index", new { sort = ViewBag.ReporterSort })
-            </th>
-            <th>
-                @Html.ActionLink("Project", "Index", new { sort = ViewBag.ProjectSort })
-            </th>
-            <th>
-                @Html.ActionLink("Status", "Index", new { sort = ViewBag.StatusSort })
-            </th>
-
-            <th></th>
+                    @Html.ActionLink(IssueStrings.IssueTitle, "Index", new { sort = ViewBag.SummarySort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Assignee).ToString(), "Index", new { sort = ViewBag.AssigneeSort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Created).ToString(), "Index", new { sort = ViewBag.CreatedSort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Reporter).ToString(), "Index", new { sort = ViewBag.ReporterSort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Project).ToString(), "Index", new { sort = ViewBag.ProjectSort })
+                </th>
+                <th>
+                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().State).ToString(), "Index", new { sort = ViewBag.StatusSort })
+                </th>
         </tr>
 
         @foreach (var item in Model)
@@ -129,7 +133,7 @@ else
     </table>
     <br />
 
-    <Text>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</Text>
+    <Text>@string.Format(@SharedStrings.Paging, Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber, Model.PageCount)</Text>
     @Html.PagedListPager(Model, page => Url.Action("Index",
         new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 }

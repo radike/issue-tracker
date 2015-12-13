@@ -13,8 +13,8 @@ using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using System.Data.Entity.Validation;
-using static System.String;
 using System.Text.RegularExpressions;
+using IssueTracker.Entities;
 using IssueTracker.Models;
 
 
@@ -48,20 +48,20 @@ namespace IssueTracker.Controllers
             Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState)
         {
             // viewbag items are used in the header to sort the records
-            ViewBag.CreatedSort = IsNullOrEmpty(sort) ? "created_desc" : Empty;
+            ViewBag.CreatedSort = String.IsNullOrEmpty(sort) ? "created_desc" : String.Empty;
             ViewBag.SummarySort = sort == "summary" ? "summary_desc" : "summary";
             ViewBag.ReporterSort = sort == "reporter" ? "reporter_desc" : "reporter";
             ViewBag.ProjectSort = sort == "project" ? "project_desc" : "project";
             ViewBag.AssigneeSort = sort == "assignee" ? "assignee_desc" : "assignee";
             ViewBag.StatusSort = sort == "status" ? "status_desc" : "status";
 
-            ViewBag.SearchProject = new SelectList(projectRepo.GetActiveProjects(), "Id", "Title");
+            ViewBag.SearchProject = new SelectList(projectRepo.GetAll(), "Id", "Title");
             ViewBag.SearchAssignee = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
             ViewBag.SearchReporter = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
             ViewBag.SearchState = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title");
 
             var issuesTemp = issueRepo.GetAll().AsQueryable()
-                .Where(n => n.Active)
+                .Where(n => n.Active && n.Project.Active)
                 .GroupBy(n => n.Id)
                 .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
                 .Include(p => p.State)
@@ -83,12 +83,12 @@ namespace IssueTracker.Controllers
         private static List<Issue> searchIssues (List<Issue> issues, string searchName, string searchTitle, 
             Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState)
         {
-            if (!IsNullOrEmpty(searchName))
+            if (!String.IsNullOrEmpty(searchName))
             {
                 issues = issues.Where(s => s.Name.ToLower().Contains(searchName.ToLower())).ToList();
             }
 
-            if (!IsNullOrEmpty(searchTitle))
+            if (!String.IsNullOrEmpty(searchTitle))
             {
                 issues = issues.Where(s => (s.Project.Code + s.CodeNumber + ": " + s.Name).ToLower().Contains(searchTitle.ToLower())).ToList();
             }
@@ -176,7 +176,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Issues/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(string id, IssueSubDetail? sub)
         {
             IssueCode code = IssueCode.Parse(id);
             if (code == null)
@@ -221,11 +221,78 @@ namespace IssueTracker.Controllers
                 comment.User = applicationUserRepo.Get(comment.AuthorId);
             }
 
+            viewModel.Changes = getHistory(viewModel.Issue.Id, comments);
+
+            ViewBag.Sub = sub.ToString() == "" ? "Comments" : sub.ToString();
             ViewBag.LoggedUser = getLoggedUser();
             ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators.ToString());
             ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
+
             return View(viewModel);
         }
+
+        /// <summary>
+        /// Creates history of changes and added comments within given issue.
+        /// </summary>
+        /// <param name="id">Id of the issue</param>
+        /// <param name="comments">Comments from all versions of the issue</param>
+        /// <returns>List of all changes and comments</returns>
+        private List<IssueChange> getHistory(Guid id, IEnumerable<Comment> comments)
+        {
+            var allVersions = issueRepo.GetAllVersions(id).OrderBy(x => x.CreatedAt).ToList();
+            var changes = new List<IssueChange>();
+
+            // find all changes within the issue
+            Issue previousVersion = null;
+            foreach (var version in allVersions)
+            {
+                if (previousVersion != null)
+                {
+                    changes.AddRange(findChange(previousVersion, version));
+                }
+                previousVersion = version;
+            }
+
+            // add comments into history
+            changes.AddRange(comments.Select(comment => new IssueChange(comment.CreatedAt, IssueChangeType.Comment, "", comment.Text)));
+
+            return changes.OrderBy(x => x.Changed).ToList();
+        }
+
+        /// <summary>
+        /// Finds changes within issue between given version and its previous variant (k and k-1).
+        /// </summary>
+        /// <param name="previous">Previous version of issue</param>
+        /// <param name="current">Any version of the issue</param>
+        /// <returns>List of found changes</returns>
+        private IEnumerable<IssueChange> findChange(Issue previous, Issue current)
+        {
+            var foundChanges = new List<IssueChange>();
+
+            if (previous.Name != current.Name)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Title, previous.Name, current.Name));
+            }
+            else if (previous.StateId != current.StateId)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.State, previous.State.Title, current.State.Title));
+            }
+            else if (previous.Type != current.Type)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Type, previous.Type.ToString(), current.Type.ToString()));
+            }
+            else if (previous.AssigneeId != current.AssigneeId)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Assignee, previous.Assignee.Email, current.Assignee.Email));
+            }
+            else if (previous.Description != current.Description)
+            {
+                foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Description, previous.Description, current.Description));
+            }
+
+            return foundChanges;
+        } 
+
 
         // GET: Issues/Create
         public ActionResult Create()
@@ -233,7 +300,7 @@ namespace IssueTracker.Controllers
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
             
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
-            ViewBag.ProjectId = new SelectList(projectRepo.GetActiveProjects(), "Id", "Title");
+            ViewBag.ProjectId = new SelectList(projectRepo.GetAll(), "Id", "Title");
             ViewBag.ReporterId = getLoggedUser().Id;
 
             return View();
@@ -249,7 +316,7 @@ namespace IssueTracker.Controllers
                 var initialState = getInitialState();
                 if (initialState == null)
                 {
-                    TempData["ErrorSQL"] = "There is no initial state. The issue couldn't be created.";
+                    TempData["ErrorSQL"] = Locale.IssueStrings.ErrorMessageNoIniState;
 
                     return RedirectToAction("Create");
                 }
@@ -268,7 +335,7 @@ namespace IssueTracker.Controllers
 
                 issueRepo.Add(issue);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = issue.Code });
             }
 
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email", viewModel.AssigneeId);
@@ -314,7 +381,7 @@ namespace IssueTracker.Controllers
             if (issue == null)
                 return HttpNotFound();
 
-            var activeProjects = projectRepo.GetActiveProjects();
+            var activeProjects = projectRepo.GetAll();
 
             var viewModel = Mapper.Map<IssueEditViewModel>(issue);
 
@@ -427,6 +494,24 @@ namespace IssueTracker.Controllers
             {
                 ;
             }
+        }
+
+        public class IssueChange
+        {
+            public DateTime Changed { get; set; }
+            public IssueChangeType Type { get; set; }
+            [AllowHtml]
+            public string From { get; set; }
+            [AllowHtml]
+            public string To { get; set; }
+
+            public IssueChange(DateTime changed, IssueChangeType type, string from, string to)
+            {
+                Changed = changed;
+                Type = type;
+                From = from;
+                To = to;
+            } 
         }
     }
 }

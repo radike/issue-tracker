@@ -221,3 +221,32 @@ li#create-button {
 #lang-select div a.lang-select-cs {
     background-image: url('Images/lang_cs.gif');
 }
+
+.entity-listing {
+    table-layout:fixed;
+}
+
+.entity-listing tr td:last-child {
+    text-align: right;
+}
+
+.project-select {
+    display: initial;
+    width: auto;
+}
+
+.dashboard-header {
+    width: 100%;
+}
+
+.dashboard-header td:first-child {
+    font-size: 36px;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+}
+
+.dashboard-header td:last-of-type {
+    text-align: right;
+}
