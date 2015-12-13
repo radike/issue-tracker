@@ -7,14 +7,6 @@
 }
 <ul class="nav nav-tabs">
     <li role="presentation" class="@Html.ActivePage("Users")"><a href="@Url.Action("Index", "Users")">All</a></li>
-    @if (ViewContext.RouteData.Values["action"].ToString() == "Index")
-    {
-        <li id="create-button">
-            <button type="button" class="btn btn-primary" onclick="location.href=location.href +'/Create'">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
-            </button>
-        </li>
-    }
 </ul>
 <h2>All Users</h2>
 
