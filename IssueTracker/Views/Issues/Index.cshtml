@@ -42,28 +42,34 @@
 {
     <table class="search-table">
         <tr>
-            <td width="70%" colspan="2">
+            <td colspan="2">
                 @Html.TextBox("SearchName", null, new { @class = "form-control", @placeholder = IssueStrings.SearchNamePlaceholder })
             </td>
-            <td width="30%" colspan="3">
+            <td>
+                @Html.DropDownList("SearchProject", null, IssueStrings.SelectProjectDefault, new { @class = "form-control" })
+            </td>
+            <td>
                 @Html.DropDownList("SearchState", null, IssueStrings.SelectStateDefault, new { @class = "form-control" })
             </td>
         </tr>
         <tr>
-            <td width="30%">
+            <td>
                 @Html.DropDownList("SearchAssignee", null, IssueStrings.SelectAssigneeDefault, new { @class = "form-control" })
             </td>
-            <td width="30%">
+            <td>
                 @Html.DropDownList("SearchReporter", null, IssueStrings.SelectReporterDefault, new { @class = "form-control" })
             </td>
-            <td width="30%">
-                @Html.DropDownList("SearchProject", null, IssueStrings.SelectProjectDefault, new { @class = "form-control" })
-            </td>
-            <td width="5%" class="right-align">
-                <input type="submit" value="@SharedStrings.ButtonSearch" class="btn btn-primary" />
-            </td>
-            <td width="5%" class="right-align">
-                <input type="reset" value="@SharedStrings.ButtonClear" class="btn btn-danger" />
+            <td colspan="2" align="right">
+                <table class="right-align">
+                    <tr>
+                        <td>
+                            <input type="submit" value="@SharedStrings.ButtonSearch" class="btn btn-primary" />
+                        </td>
+                        <td>
+                            <input type="reset" value="@SharedStrings.ButtonClear" class="btn btn-danger" />
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
@@ -99,8 +105,6 @@ else
                 <th>
                     @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().State).ToString(), "Index", new { sort = ViewBag.StatusSort })
                 </th>
-
-            @*<th></th>*@
         </tr>
 
         @foreach (var item in Model)
