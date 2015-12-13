@@ -37,7 +37,7 @@ namespace IssueTracker.Data.Services
 
         public int GetIssueCount(IssueType issueType, Project project, bool includeClosedIssue = true)
         {
-            return GetIssueCount(issueType, project.Id, includeClosedIssue);
+            return project == null ? 0 : GetIssueCount(issueType, project.Id, includeClosedIssue);
         }
 
         public int GetIssueCount(IssueType issueType, Guid projectId, bool includeClosedIssue = true)
