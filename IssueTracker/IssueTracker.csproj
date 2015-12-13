@@ -276,6 +276,8 @@
     <Content Include="Content\Fonts\ecoicons\license.txt" />
     <Content Include="Content\Fonts\ecoicons\Read Me.txt" />
     <Content Include="Content\Fonts\fontawesome-webfont.svg" />
+    <Content Include="Scripts\go-model.js" />
+    <Content Include="Scripts\go.js" />
     <Content Include="Content\Images\jquery-ui\animated-overlay.gif" />
     <Content Include="Content\Images\jquery-ui\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\Images\jquery-ui\ui-bg_flat_75_ffffff_40x100.png" />

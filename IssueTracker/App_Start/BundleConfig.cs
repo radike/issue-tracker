@@ -71,6 +71,12 @@ namespace IssueTracker
             bundles.Add(new ScriptBundle("~/bundles/ckeditor-replace-desc").Include(
                         "~/Scripts/ckeditor/replace-desc.js"));
 
+            // state workflow visualizer
+            bundles.Add(new ScriptBundle("~/bundles/gojs").Include(
+                        "~/Scripts/go.js"));
+            bundles.Add(new ScriptBundle("~/bundles/gojs-model").Include(
+                        "~/Scripts/go-model.js"));
+
         }
     }
 }

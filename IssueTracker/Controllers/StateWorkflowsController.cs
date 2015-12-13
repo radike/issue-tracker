@@ -174,5 +174,47 @@ namespace IssueTracker.Controllers
         {
             base.Dispose(disposing);
         }
+        
+        /// <summary>
+        /// Creates JSON of states and worflows within the states for GOJS visualization.
+        /// </summary>
+        /// <returns>JSON of states and workflows</returns>
+        public JsonResult WorkflowVisualization()
+        {
+            var stateWorkflows = _stateWorkflowRepo.GetAll().Select(e => new {
+                e.FromStateId,
+                e.ToStateId
+            });
+            var states = _stateRepo.GetAll().Select(e => new {
+                e.Id,
+                e.Title,
+                e.Colour
+            });
+
+            var stateDictionary = new Dictionary<Guid, string>();
+            var nds = new List<object>();
+            var lnks = new List<object>();
+
+            foreach (var state in states)
+            {
+                stateDictionary.Add(state.Id, state.Title);
+                nds.Add(new { key = state.Title, color = state.Colour });
+            }
+
+            foreach (var stateWorkflow in stateWorkflows)
+            {
+                string from;
+                string to;
+
+                stateDictionary.TryGetValue(stateWorkflow.FromStateId, out from);
+                stateDictionary.TryGetValue(stateWorkflow.ToStateId, out to);
+                
+                lnks.Add(new {from, to});
+            }
+
+            var result = new { nodes = nds, links = lnks};
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }
