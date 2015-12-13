@@ -9,55 +9,67 @@
     <p>
         @Html.DisplayNameFor(model => model.Issue.Project):
         @Html.ActionLink(Model.Issue.Project.Title, "Details", "Projects", new { id = Model.Issue.Project.Code }, null)
+        > @Html.DisplayFor(model => model.Issue.Type):
+        @Html.ActionLink(Model.Issue.Code, "Details", "Issues", new { id = Model.Issue.Code }, null)
     </p>
     <hr />
     <h2>@Html.DisplayFor(model => model.Issue.Name)</h2>
+    <br />
     <div class="text-danger">@ViewBag.ErrorMessage</div>
-    @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", new { id = Model.Issue.Code })
-    @foreach (var item in Model.StateWorkflows)
+
+    <div id="create-button" class="float-right">
+        <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Issues", new {id = Model.Issue.Code})'">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> @SharedStrings.ButtonEdit
+        </button>
+    </div>
+
+    @if (Model.StateWorkflows.ToList().Count != 0)
     {
-        <strong>
-            | @Html.ActionLink(@Html.DisplayFor(modelItem => item.ToState.Title).ToString(), "ChangeStatus", new { issueId = Model.Issue.Id, to = item.ToStateId })
-        </strong>
+        <p>
+            @IssueStrings.ChangeState
+            @{ var isFirst = true; }
+            @foreach (var item in Model.StateWorkflows)
+            {
+                <strong>
+                    @if (!isFirst)
+                    {
+                        <span> | </span>
+                    }
+                    @{ isFirst = false; }
+                    @Html.ActionLink(@Html.DisplayFor(modelItem => item.ToState.Title).ToString(), "ChangeStatus", new {issueId = Model.Issue.Id, to = item.ToStateId})
+                </strong>
+            }
+        </p>
     }
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Issue.Created):
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Issue.Created)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Issue.State):
-        </dt>
-        <dd>
-            <span class="label state" style="background-color: @Html.DisplayFor(model => model.Issue.State.Colour);">@Html.DisplayFor(model => model.Issue.State.Title)</span>
-        </dd>
+    <table class="table detail">
+        <tr>
+            <td><strong>@Html.DisplayNameFor(model => model.Issue.Created):</strong></td>
+            <td>@Html.DisplayFor(model => model.Issue.Created)</td>
+            <td rowspan="4" width="60%">
+                <strong>@Html.DisplayNameFor(model => model.Issue.Description):</strong>
+                <br/><br/>
+                @Html.Raw(HttpUtility.HtmlDecode(Model.Issue.Description))
+            </td>
+        </tr>
+        <tr>
+            <td><strong>@Html.DisplayNameFor(model => model.Issue.State):</strong></td>
+            <td>
+                <a href="@Url.Action("Index", "Issues", new { searchState = Model.Issue.State.Id })" class="no-underline-link"><span class="label state" style="background-color: @Html.DisplayFor(model => model.Issue.State.Colour);">@Html.DisplayFor(model => model.Issue.State.Title)</span></a>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>@Html.DisplayNameFor(model => model.Issue.Reporter):</strong></td>
+            <td>@Html.ActionLink(Model.Issue.Reporter.Email, "Index", "Issues", new { searchReporter = Model.Issue.Reporter.Id }, new { @class = "black-link" })</td>
+        </tr>
+        <tr>
+            <td><strong>@Html.DisplayNameFor(model => model.Issue.Assignee):</strong></td>
+            <td>@Html.ActionLink(Model.Issue.Assignee.Email, "Index", "Issues", new { searchAssignee = Model.Issue.Assignee.Id }, new { @class = "black-link" })</td>
+        </tr>
+    </table>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Issue.Reporter):
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Issue.Reporter.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Issue.Assignee):
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Issue.Assignee.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Issue.Description):
-        </dt>
-        <dd>
-            @Html.Raw(HttpUtility.HtmlDecode(Model.Issue.Description))
-        </dd>
-    </dl>
-
-    <br /><br />
+    <br />
+    <br />
     @if (ViewBag.Sub == "Comments")
     {
         <ul class="nav nav-tabs">
@@ -65,7 +77,7 @@
             <li role="presentation"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.History})">History</a></li>
         </ul>
         <br />
-        
+
         if (Model.Comments.ToList().Count == 0)
         {
             <i>@CommentStrings.NoComments</i>
@@ -78,27 +90,32 @@
                 @foreach (var item in Model.Comments)
                 {
                     <tr>
-                        <td style="font-weight: bold">@item.User.UserName</td>
-                        <td class="one-line">@item.Posted</td>
-                    </tr>
-                    <tr>
-                        <td>@Html.Raw(HttpUtility.HtmlDecode(@item.Text))</td>
                         <td>
-                            @if (ViewBag.LoggedUser.Id == item.AuthorId)
-                            {
-                                @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", "Comments", new { id = item.Id }, null)
-                            }
+                            <strong>@item.User.UserName</strong>
+                            <small>
+                                <i class="grayed">@item.Posted</i>
+                            </small>
+                            <div class="float-right">
+                                @if (ViewBag.LoggedUser.Id == item.AuthorId)
+                                {
+                                    @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", "Comments", new { id = item.Id }, null)
+                                }
 
-                            @if (ViewBag.IsUserAdmin)
-                            {
-                                @:|
-                                @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", "Comments", new { id = item.Id }, null)
-                            }
+                                @if (ViewBag.IsUserAdmin)
+                                {
+                                    @:|
+                                    @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", "Comments", new { id = item.Id }, null)
+                                }
+                            </div>
+                            <br />
+                            @Html.Raw(HttpUtility.HtmlDecode(@item.Text))
                         </td>
                     </tr>
                 }
             </table>
         }
+        <br />
+        <br />
         using (Html.BeginForm("Create", "Comments", new { id = Model.Issue.Id }))
         {
             @Html.AntiForgeryToken()
@@ -112,14 +129,14 @@
             @Scripts.Render("~/bundles/ckeditor-replace")
         }
 
-        }
-        else if (@ViewBag.Sub == "History")
-        {
+    }
+    else if (@ViewBag.Sub == "History")
+    {
         <ul class="nav nav-tabs">
             <li role="presentation"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.Comments})">Comments</a></li>
             <li role="presentation" class="active"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.History})">History</a></li>
         </ul>
-        <br/>
+        <br />
 
         if (Model.Changes.ToList().Count == 0)
         {
@@ -140,7 +157,7 @@
                 </thead>
                 <tbody>
                     @foreach (var item in Model.Changes)
-                    {
+                {
                         <tr class="tr-with-hr">
                             <td><i class="grayed">@item.Changed</i></td>
                             <td>@item.Type</td>

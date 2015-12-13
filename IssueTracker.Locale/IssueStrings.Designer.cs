@@ -70,6 +70,15 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change state to: .
+        /// </summary>
+        public static string ChangeState {
+            get {
+                return ResourceManager.GetString("ChangeState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is no initial state. The issue couldn&apos;t be created..
         /// </summary>
         public static string ErrorMessageNoIniState {
@@ -138,6 +147,15 @@ namespace IssueTracker.Locale {
         public static string IssueTitle {
             get {
                 return ResourceManager.GetString("IssueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string IssueType {
+            get {
+                return ResourceManager.GetString("IssueType", resourceCulture);
             }
         }
         

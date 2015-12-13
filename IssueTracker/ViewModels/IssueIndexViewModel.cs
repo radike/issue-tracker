@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using IssueTracker.Entities;
 using IssueTracker.Locale;
 
 namespace IssueTracker.ViewModels
@@ -15,6 +16,9 @@ namespace IssueTracker.ViewModels
 
         [Display(Name = "IssueState", ResourceType = typeof(IssueStrings))]
         public StateViewModel State { get; set; }
+
+        [Display(Name = "IssueType", ResourceType = typeof(IssueStrings))]
+        public IssueType Type { get; set; }
 
         [Display(Name = "IssueCreated", ResourceType = typeof(IssueStrings))]
         public DateTime Created { get; set; }

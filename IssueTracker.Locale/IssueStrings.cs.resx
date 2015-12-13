@@ -120,6 +120,9 @@
   <data name="BackToIssue" xml:space="preserve">
     <value>Zpět k problému</value>
   </data>
+  <data name="ChangeState" xml:space="preserve">
+    <value>Změnit stav na: </value>
+  </data>
   <data name="ErrorMessageNoIniState" xml:space="preserve">
     <value>Neexistuje žádný výchozí stav. Problém nemohl být vytvořen.</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="IssueTitle" xml:space="preserve">
     <value>Shrnutí</value>
+  </data>
+  <data name="IssueType" xml:space="preserve">
+    <value>Typ</value>
   </data>
   <data name="ListNoResult" xml:space="preserve">
     <value>Nebyly nalezeny žádné problémy.</value>

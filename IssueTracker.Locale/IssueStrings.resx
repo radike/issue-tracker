@@ -120,6 +120,9 @@
   <data name="BackToIssue" xml:space="preserve">
     <value>Back to issue</value>
   </data>
+  <data name="ChangeState" xml:space="preserve">
+    <value>Change state to: </value>
+  </data>
   <data name="ErrorMessageNoIniState" xml:space="preserve">
     <value>There is no initial state. The issue couldn't be created.</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="IssueTitle" xml:space="preserve">
     <value>Summary</value>
+  </data>
+  <data name="IssueType" xml:space="preserve">
+    <value>Type</value>
   </data>
   <data name="ListNoResult" xml:space="preserve">
     <value>No issue found.</value>
