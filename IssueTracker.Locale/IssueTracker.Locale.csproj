@@ -101,6 +101,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SharedStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="UserStrings.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserStrings.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UserStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserStrings.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AccountStrings.cs.resx">
@@ -150,6 +160,14 @@
     <EmbeddedResource Include="SharedStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SharedStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserStrings.cs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserStrings.cs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

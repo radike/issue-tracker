@@ -2,24 +2,24 @@
 @using IssueTracker.Extensions;
 
 @{
-    ViewBag.Title = "List of Users";
+    ViewBag.Title = UserStrings.TitleIndex;
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
 }
 <ul class="nav nav-tabs">
-    <li role="presentation" class="@Html.ActivePage("Users")"><a href="@Url.Action("Index", "Users")">All</a></li>
+    <li role="presentation" class="@Html.ActivePage("Users")"><a href="@Url.Action("Index", "Users")">@SharedStrings.TabAll</a></li>
 </ul>
-<h2>All Users</h2>
+<h2>@ViewBag.Title</h2>
 
 <table class="table entity-listing">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UserName)
+            @UserStrings.ApplicationUserUsername
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Email)
+            @UserStrings.ApplicationUserEmail
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
+            @UserStrings.ApplicationUserPhone
         </th>
 
         <th></th>
