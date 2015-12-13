@@ -9,6 +9,17 @@
 
 <div>
     <hr />
+    @if (User.IsInRole("Administrators"))
+    {
+        <div id="create-button" class="float-right">
+            <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Users", new {id = Model.Id})'">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> @SharedStrings.ButtonEdit
+            </button>
+            <button type="button" class="btn btn-default" onclick="location.href = '@Url.Action("Delete", "Users", new { id = Model.Id })'">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> @SharedStrings.ButtonDelete
+            </button>
+        </div>
+    }
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.UserName)
@@ -36,9 +47,5 @@
     </dl>
 </div>
 <p>
-    @if (User.IsInRole(IssueTracker.Models.UserRoles.Administrators.ToString()))
-    {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) @:|
-    }
     @Html.ActionLink("Back to List of Users", "Index")
 </p>

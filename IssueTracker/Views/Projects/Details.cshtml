@@ -8,6 +8,17 @@
 <div>
     <h4>@ProjectStrings.TitleDetails</h4>
     <hr />
+    @if (ViewBag.CanEdit)
+    {
+        <div id="create-button" class="float-right">
+            <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Projects", new {id = Model.Code})'">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> @SharedStrings.ButtonEdit
+            </button>
+            <button type="button" class="btn btn-default" onclick="location.href = '@Url.Action("Delete", "Projects", new {id = Model.Code})'">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> @SharedStrings.ButtonDelete
+            </button>
+        </div>
+    }
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Title)
@@ -15,6 +26,16 @@
 
         <dd>
             @Html.DisplayFor(model => model.Title)
+        </dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Code)
         </dd>
     </dl>
 
@@ -44,10 +65,6 @@
     </dl>
 </div>
 <p>
-    @if (ViewBag.CanEdit)
-    {
-        @Html.ActionLink(SharedStrings.FormEdit, "Edit", new { id = Model.Code }) @:|
-    }
     @Html.ActionLink(ProjectStrings.TitleIndex, "Index")
 </p>
 
@@ -64,9 +81,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.IssuesPage.FirstOrDefault().Assignee)
             </th>
-            <th>
-
-            </th>
         </tr>
 
         @foreach (var item in Model.IssuesPage)
@@ -76,15 +90,12 @@
                     <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.State.Colour);">@Html.DisplayFor(modelItem => item.State.Title)</span>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.ActionLink(item.Name, "Details", "Issues", new { id = item.Code }, null)
                     <br />
                     <i><small>reported by @Html.DisplayFor(modelItem => item.Reporter.Email)</small></i>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Assignee.Email)
-                </td>
-                <td>
-                    @Html.ActionLink(SharedStrings.ButtonDetails, "Details", "Issues", new { id = item.Code }, null)
                 </td>
             </tr>
         }

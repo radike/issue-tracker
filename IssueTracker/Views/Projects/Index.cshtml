@@ -34,30 +34,27 @@ else
     <table class="table entity-listing">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Title)
+                @ProjectStrings.ProjectTitle
             </th>
-            <th></th>
+            <th>
+                @ProjectStrings.ProjectOwner
+            </th>
+            <th>
+
+            </th>
+
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    @Html.ActionLink(item.Title, "Details", new { id = item.Code })
                 </td>
                 <td>
-                    @if (item.OwnerId.ToString() == ViewBag.LoggedUserId || ViewBag.IsUserAdmin)
-                    {
-                        @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", new { id = item.Code }) @:|
-                    }                    
-
-                    @Html.ActionLink(SharedStrings.ButtonDetails, "Details", new { id = item.Code })
-
-                    @if (ViewBag.IsUserAdmin)
-                    {
-                       @:| @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", new { id = item.Code })
-                    }                    
+                    @Html.DisplayFor(modelItem => item.Owner.UserName)
                 </td>
+                <td></td>
             </tr>
         }
     </table>
