@@ -22,14 +22,14 @@ namespace IssueTracker.Locale {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AccountStrings {
+    public class LayoutStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AccountStrings() {
+        internal LayoutStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace IssueTracker.Locale {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.AccountStrings", typeof(AccountStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.Layout.LayoutStrings", typeof(LayoutStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,74 +61,74 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in.
+        ///   Looks up a localized string similar to Home.
         /// </summary>
-        public static string LogIn {
+        public static string MenuHome {
             get {
-                return ResourceManager.GetString("LogIn", resourceCulture);
+                return ResourceManager.GetString("MenuHome", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logout.
+        ///   Looks up a localized string similar to Tasks.
         /// </summary>
-        public static string LogOut {
+        public static string MenuIssues {
             get {
-                return ResourceManager.GetString("LogOut", resourceCulture);
+                return ResourceManager.GetString("MenuIssues", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email address.
+        ///   Looks up a localized string similar to Projects.
         /// </summary>
-        public static string PlaceholderEmailAddress {
+        public static string MenuProjects {
             get {
-                return ResourceManager.GetString("PlaceholderEmailAddress", resourceCulture);
+                return ResourceManager.GetString("MenuProjects", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password.
+        ///   Looks up a localized string similar to Setings.
         /// </summary>
-        public static string PlaceholderPassword {
+        public static string MenuSettings {
             get {
-                return ResourceManager.GetString("PlaceholderPassword", resourceCulture);
+                return ResourceManager.GetString("MenuSettings", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please sign in.
+        ///   Looks up a localized string similar to States.
         /// </summary>
-        public static string PleaseSignIn {
+        public static string MenuStates {
             get {
-                return ResourceManager.GetString("PleaseSignIn", resourceCulture);
+                return ResourceManager.GetString("MenuStates", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Register.
+        ///   Looks up a localized string similar to Users.
         /// </summary>
-        public static string Register {
+        public static string MenuUsers {
             get {
-                return ResourceManager.GetString("Register", resourceCulture);
+                return ResourceManager.GetString("MenuUsers", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Register as a new user.
+        ///   Looks up a localized string similar to Workflow.
         /// </summary>
-        public static string RegisterNewUser {
+        public static string MenuWorkflow {
             get {
-                return ResourceManager.GetString("RegisterNewUser", resourceCulture);
+                return ResourceManager.GetString("MenuWorkflow", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remeber me?.
+        ///   Looks up a localized string similar to Search.
         /// </summary>
-        public static string RememberMe {
+        public static string SearchPlaceholder {
             get {
-                return ResourceManager.GetString("RememberMe", resourceCulture);
+                return ResourceManager.GetString("SearchPlaceholder", resourceCulture);
             }
         }
     }

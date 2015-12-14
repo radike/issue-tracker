@@ -88,7 +88,7 @@ namespace IssueTracker.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", Locale.AccountStrings.ErrorMessageInvalidLogin);
                     return View(model);
             }
         }
@@ -131,7 +131,7 @@ namespace IssueTracker.Controllers
                     return View("Lockout");
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid code.");
+                    ModelState.AddModelError("", Locale.AccountStrings.ErrorMessageInvalidCode);
                     return View(model);
             }
         }

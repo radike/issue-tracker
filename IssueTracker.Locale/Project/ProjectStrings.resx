@@ -117,28 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="LogIn" xml:space="preserve">
-    <value>Přihlásit</value>
+  <data name="EntityName" xml:space="preserve">
+    <value>Project</value>
   </data>
-  <data name="LogOut" xml:space="preserve">
-    <value>Odhlásit</value>
+  <data name="ErrorMessageDeleteNonadmin" xml:space="preserve">
+    <value>Only project administrators can delete projects.</value>
   </data>
-  <data name="PlaceholderEmailAddress" xml:space="preserve">
-    <value>E-mailová adresa</value>
+  <data name="ErrorMessageEditNonadmin" xml:space="preserve">
+    <value>Only project owners and administrators can edit projects.</value>
   </data>
-  <data name="PlaceholderPassword" xml:space="preserve">
-    <value>Heslo</value>
+  <data name="ErrorMessageInvalidCode" xml:space="preserve">
+    <value>Entered code has invalid format. Only characters are allowed.</value>
   </data>
-  <data name="PleaseSignIn" xml:space="preserve">
-    <value>Přihlašte se prosím</value>
+  <data name="ErrorMessageNotUniqueCode" xml:space="preserve">
+    <value>Entered code is already associated with another project.</value>
   </data>
-  <data name="Register" xml:space="preserve">
-    <value>Registrovat</value>
+  <data name="HasNoIssues" xml:space="preserve">
+    <value>The project has no issues.</value>
   </data>
-  <data name="RegisterNewUser" xml:space="preserve">
-    <value>Registrovat nového uživatele</value>
+  <data name="ListNoResult" xml:space="preserve">
+    <value>No projects found. Create a {0}.</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Pamatovat si mě?</value>
+  <data name="ListNoResultNew" xml:space="preserve">
+    <value>new project</value>
+  </data>
+  <data name="ProjectCode" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="ProjectOwner" xml:space="preserve">
+    <value>Project owner</value>
+  </data>
+  <data name="ProjectTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ProjectUsers" xml:space="preserve">
+    <value>Project Users</value>
+  </data>
+  <data name="TabMyProjects" xml:space="preserve">
+    <value>My projects</value>
+  </data>
+  <data name="TitleDetails" xml:space="preserve">
+    <value>Project details</value>
+  </data>
+  <data name="TitleDetailsIncludeName" xml:space="preserve">
+    <value>Project '{0}' details</value>
+  </data>
+  <data name="TitleIndex" xml:space="preserve">
+    <value>Browse projects</value>
   </data>
 </root>
