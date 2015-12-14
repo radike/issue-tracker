@@ -11,10 +11,10 @@
     <h4>State workflow transition</h4>
     <hr />
     <div id="create-button" class="float-right">
-        <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "StateWorkflows", new {id = Model.Code})'">
+        <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "StateWorkflows", new {id = Model.Id})'">
             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> @SharedStrings.ButtonEdit
         </button>
-        <button type="button" class="btn btn-default" onclick="location.href = '@Url.Action("Delete", "StateWorkflows", new { id = Model.Code })'">
+        <button type="button" class="btn btn-default" onclick="location.href = '@Url.Action("Delete", "StateWorkflows", new { id = Model.Id })'">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> @SharedStrings.ButtonDelete
         </button>
     </div>
