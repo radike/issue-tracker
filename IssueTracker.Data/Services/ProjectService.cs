@@ -55,7 +55,7 @@ namespace IssueTracker.Data.Services
 
         public Project GetProject(Guid id)
         {
-            return _projectRepo.Fetch().AsNoTracking()
+            return _projectRepo.Fetch()
                     .Where(x => x.Id == id)
                     .OrderByDescending(x => x.CreatedAt).FirstOrDefault();
         }
