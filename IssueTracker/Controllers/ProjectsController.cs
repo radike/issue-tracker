@@ -45,7 +45,7 @@ namespace IssueTracker.Controllers
         {
             ViewBag.ErrorMessageNotOwner = TempData["ErrorMessageNotOwner"] as string;
             ViewBag.LoggedUserId = User.Identity.GetUserId();
-            ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators.ToString());
+            ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators);
 
             Guid userId = new Guid(ViewBag.LoggedUserId);
             IEnumerable<Project> projects;
@@ -189,7 +189,7 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (!User.IsInRole(UserRoles.Administrators.ToString()))
+            if (!User.IsInRole(UserRoles.Administrators))
             {
                 TempData["ErrorMessageNotOwner"] = ProjectStrings.ErrorMessageDeleteNonadmin;
                 return RedirectToAction("Index");
@@ -221,7 +221,7 @@ namespace IssueTracker.Controllers
 
         public bool UserIsProjectOwnerOrHasAdminRights(Project project)
         {
-            return User.IsInRole(UserRoles.Administrators.ToString())
+            return User.IsInRole(UserRoles.Administrators)
                 || (project.OwnerId == Guid.Parse(User.Identity.GetUserId()));
         }
     }

@@ -202,7 +202,7 @@ namespace IssueTracker.Controllers
 
             ViewBag.Sub = sub.ToString() == "" ? "Comments" : sub.ToString();
             ViewBag.LoggedUser = getLoggedUser();
-            ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators.ToString());
+            ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators);
             ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
 
             return View(viewModel);

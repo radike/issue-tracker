@@ -146,7 +146,7 @@ namespace IssueTracker.Controllers
                 return HttpNotFound();
             }
 
-            if (!User.IsInRole(UserRoles.Administrators.ToString()))
+            if (!User.IsInRole(UserRoles.Administrators))
             {
                 TempData["ErrorMessage"] = "Only administrators can delete comments.";
                 return RedirectToAction("Details","Issues", new { id = comment.Issue.Code });

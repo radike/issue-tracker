@@ -13,10 +13,11 @@ using IssueTracker.Data.Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Services;
+using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
-    [AuthorizeOrErrorPage(Roles = "Administrators")]
+    [AuthorizeOrErrorPage(Roles = UserRoles.Administrators)]
     public class StatesController : Controller
     {
         private IStateRepository _stateRepo;

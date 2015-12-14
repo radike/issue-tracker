@@ -52,7 +52,7 @@
                         <li><a class="gn-icon @Html.ActivePage("Users", "gn-selected")" href="@Url.Action("Index", "Users")"><i class="fa fa-users menu-icon"></i>@LayoutStrings.MenuUsers</a></li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            if (User.IsInRole("Administrators"))
+                            if (User.IsInRole(IssueTracker.Models.UserRoles.Administrators))
                             {
                                 <li><a class="gn-icon @(Html.ActivePage("States", "gn-selected") ?? Html.ActivePage("StateWorkflows", "gn-selected"))" href="@Url.Action("Index", "States")"><i class="fa fa-cogs menu-icon"></i>@LayoutStrings.MenuSettings</a></li>
                                 <ul class="gn-submenu">
