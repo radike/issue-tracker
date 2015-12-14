@@ -53,6 +53,13 @@ namespace IssueTracker.Data.Services
             return project;
         }
 
+        public Project GetProject(Guid id)
+        {
+            return _projectRepo.Fetch().AsNoTracking()
+                    .Where(x => x.Id == id)
+                    .OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+        }
+
         public IEnumerable<Project> GetProjectsForUser(Guid userId)
         {
             return _projectRepo.GetProjectsForUser(userId);

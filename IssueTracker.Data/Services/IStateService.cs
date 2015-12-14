@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IssueTracker.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,7 @@ namespace IssueTracker.Services
     public interface IStateService
     {
         IEnumerable<Guid> GetFinalStateIds();
+
+        IEnumerable<State> GetStatesOrderedByIndex();
     }
 }

@@ -19,6 +19,8 @@ namespace IssueTracker.Data.Services
 
         Project GetProject(String code);
 
+        Project GetProject(Guid id);
+
         void CreateProject(Project project);
 
         void EditProject(Project project);

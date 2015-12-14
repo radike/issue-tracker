@@ -18,5 +18,13 @@ namespace IssueTracker.Data.Services
         int GetIssueCount(IssueType issueType, Guid projectId);
         int GetIssueCount(IssueType issueType, Project project, bool includeClosedIssue = true);
         int GetIssueCount(IssueType issueType, Guid projectId, bool includeClosedIssue = true);
+        ICollection<Issue> GetAllIssues();
+        Issue GetByProjectCodeAndIssueNumber(string projectCode, int issueNumber);
+        ICollection<Comment> GetCommentsForIssue(Guid issueId);
+        int GetNewCodeNumber();
+        Issue GetNewEntityForEditing(string projectCode, int issueNumber);
+        Issue GetNewEntityForEditing(Guid issueId);
+        ICollection<Issue> GetAllVersions(Guid issueId);
+        Issue Add(Issue issue);
     }
 }

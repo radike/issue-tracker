@@ -10,6 +10,6 @@ namespace IssueTracker.Data.Contracts.Repository_Interfaces
 {
     public interface IStateWorkflowRepository : IDataRepository<StateWorkflow>
     {
-
+        IEnumerable<StateWorkflow> GetPossibleWorkflows(Guid fromStateId);
     }
 }

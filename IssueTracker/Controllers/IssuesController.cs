@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -8,37 +7,34 @@ using AutoMapper;
 using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using PagedList;
-using IssueTracker.Abstractions;
-using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
-using IssueTracker.Data.Data_Repositories;
-using System.Data.Entity.Validation;
 using System.Text.RegularExpressions;
 using IssueTracker.Entities;
 using IssueTracker.Models;
-
+using IssueTracker.Data.Services;
+using IssueTracker.Services;
 
 namespace IssueTracker.Controllers
 {
     [AuthorizeOrErrorPage]
     public class IssuesController : Controller
     {
-        private IProjectRepository projectRepo;
-        private IIssueRepository issueRepo;
+        private IIssueService _issueService;
+        private IStateService _stateService;
         private IStateWorkflowRepository stateWorkflowRepo;
-        private ICommentRepository commentRepo;
         private IApplicationUserRepository applicationUserRepo;
         private IStateRepository stateRepo;
+        private IProjectService _projectService;
 
         private const int ProjectsPerPage = 20;
 
-        public IssuesController(IProjectRepository projectRepository, IIssueRepository issueRepository, IStateWorkflowRepository stateWorkflowRepository,
-            ICommentRepository commentRepository, IApplicationUserRepository applicationUserRepository, IStateRepository stateRepository)
-        {
-            projectRepo = projectRepository;
-            issueRepo = issueRepository;
+        public IssuesController(IStateWorkflowRepository stateWorkflowRepository, IApplicationUserRepository applicationUserRepository, 
+            IStateRepository stateRepository, IIssueService issueService, IStateService stateService, IProjectService projectService)
+        {            
+            _projectService = projectService;
+            _issueService = issueService;
+            _stateService = stateService;
             stateWorkflowRepo = stateWorkflowRepository;
-            commentRepo = commentRepository;
             applicationUserRepo = applicationUserRepository;
             stateRepo = stateRepository;
         }
@@ -55,24 +51,15 @@ namespace IssueTracker.Controllers
             ViewBag.AssigneeSort = sort == "assignee" ? "assignee_desc" : "assignee";
             ViewBag.StatusSort = sort == "status" ? "status_desc" : "status";
 
-            ViewBag.SearchProject = new SelectList(projectRepo.GetAll(), "Id", "Title");
-            ViewBag.SearchAssignee = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
-            ViewBag.SearchReporter = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
-            ViewBag.SearchState = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title");
+            ViewBag.SearchProject = new SelectList(_projectService.GetProjects(), "Id", "Title");
+            ViewBag.SearchAssignee = ViewBag.SearchReporter = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
+            ViewBag.SearchState = new SelectList(_stateService.GetStatesOrderedByIndex(), "Id", "Title");
 
-            var issuesTemp = issueRepo.GetAll().AsQueryable()
-                .Where(n => n.Active && n.Project.Active)
-                .GroupBy(n => n.Id)
-                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
-                .Include(p => p.State)
-                .Include(p => p.Project)
-                .ToList();
+            var issuesTemp = _issueService.GetAllIssues().ToList();
 
             // search
             issuesTemp = searchIssues(issuesTemp, searchName, searchTitle, searchAssignee, searchReporter, searchProject, searchState);
-
-            issuesTemp = issuesTemp.OrderByDescending(x => x.Created).ToList();
-
+            
             var issues = Mapper.Map<IEnumerable<IssueIndexViewModel>>(issuesTemp);
             issues = GetSortedIssues(issues, sort);
 
@@ -182,10 +169,7 @@ namespace IssueTracker.Controllers
             if (code == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var issue = issueRepo.GetAll().AsQueryable()
-                .Where(i => i.Project.Code == code.ProjectCode && i.CodeNumber == code.IssueNumber)
-                .OrderByDescending(x => x.CreatedAt)
-                .Include(i => i.State).First();
+            var issue = _issueService.GetByProjectCodeAndIssueNumber(code.ProjectCode, code.IssueNumber);
 
             var viewModel = new IssueDetailViewModel
             {
@@ -198,7 +182,7 @@ namespace IssueTracker.Controllers
             }
 
             // possible workflows
-            var workflows = stateWorkflowRepo.GetAll().Where(c => c.FromStateId == viewModel.Issue.State.Id).ToList();
+            var workflows = stateWorkflowRepo.GetPossibleWorkflows(viewModel.Issue.State.Id);
             foreach (var stateWorkflow in workflows)
             {
                 stateWorkflow.ToState = stateRepo.Get(stateWorkflow.ToStateId);
@@ -206,14 +190,7 @@ namespace IssueTracker.Controllers
             viewModel.StateWorkflows = Mapper.Map<IEnumerable<StateWorkflowViewModel>>(workflows);
 
             // comments from all versions of the issue
-            var comments = commentRepo.GetAll().AsQueryable()
-                .Where(n => n.Active)
-                .GroupBy(n => n.Id)
-                .Select(g => g.OrderByDescending(x => x.CreatedAt).FirstOrDefault())
-                .Where(n => n.IssueId == issue.Id)
-                .OrderBy(n => n.Posted)
-                .Include(n => n.Author)
-                .ToList();
+            var comments = _issueService.GetCommentsForIssue(issue.Id);
 
             viewModel.Comments = Mapper.Map<IEnumerable<CommentViewModel>>(comments);
             foreach (var comment in viewModel.Comments)
@@ -239,7 +216,7 @@ namespace IssueTracker.Controllers
         /// <returns>List of all changes and comments</returns>
         private List<IssueChange> getHistory(Guid id, IEnumerable<Comment> comments)
         {
-            var allVersions = issueRepo.GetAllVersions(id).OrderBy(x => x.CreatedAt).ToList();
+            var allVersions = _issueService.GetAllVersions(id);
             var changes = new List<IssueChange>();
 
             // find all changes within the issue
@@ -300,7 +277,7 @@ namespace IssueTracker.Controllers
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
             
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
-            ViewBag.ProjectId = new SelectList(projectRepo.GetAll(), "Id", "Title");
+            ViewBag.ProjectId = new SelectList(_projectService.GetProjects(), "Id", "Title");
             ViewBag.ReporterId = getLoggedUser().Id;
 
             return View();
@@ -321,9 +298,7 @@ namespace IssueTracker.Controllers
                     return RedirectToAction("Create");
                 }
 
-                var projectTemp = projectRepo.GetAll()
-                    .Where(x => x.Id == viewModel.ProjectId)
-                    .OrderByDescending(x => x.CreatedAt).First();
+                var projectTemp = _projectService.GetProject(viewModel.ProjectId);
 
                 var issue = Mapper.Map<Issue>(viewModel);
                 issue.StateId = initialState.Id;
@@ -331,15 +306,15 @@ namespace IssueTracker.Controllers
                 issue.Created = DateTime.Now;
                 issue.ProjectCreatedAt = projectTemp.CreatedAt;
                 issue.Id = Guid.NewGuid();
-                issue.CodeNumber = issueRepo.GetAll().Max(x => (int?)x.CodeNumber) + 1 ?? 1;
+                issue.CodeNumber = _issueService.GetNewCodeNumber();
 
-                issueRepo.Add(issue);
+                _issueService.Add(issue);
 
                 return RedirectToAction("Details", new { id = issue.Code });
             }
 
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email", viewModel.AssigneeId);
-            ViewBag.ProjectId = new SelectList(projectRepo.GetAll(), "Id", "Title", viewModel.ProjectId);
+            ViewBag.ProjectId = new SelectList(_projectService.GetProjects(), "Id", "Title", viewModel.ProjectId);
 
             return View(viewModel);
         }
@@ -373,21 +348,18 @@ namespace IssueTracker.Controllers
             if (code == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var issue = issueRepo.GetAll().AsQueryable()
-                .Where(i => i.Project.Code == code.ProjectCode && i.CodeNumber == code.IssueNumber)
-                .OrderByDescending(x => x.CreatedAt)
-                .Include(i => i.State).First();
+            var issue = _issueService.GetByProjectCodeAndIssueNumber(code.ProjectCode, code.IssueNumber);
 
             if (issue == null)
                 return HttpNotFound();
 
-            var activeProjects = projectRepo.GetAll();
+            var activeProjects = _projectService.GetProjects();
 
             var viewModel = Mapper.Map<IssueEditViewModel>(issue);
 
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email", issue.AssigneeId);
             ViewBag.ProjectId = new SelectList(activeProjects, "Id", "Title", issue.ProjectId);
-            ViewBag.StateId = new SelectList(stateRepo.GetStatesOrderedByIndex(), "Id", "Title", issue.StateId);
+            ViewBag.StateId = new SelectList(_stateService.GetStatesOrderedByIndex(), "Id", "Title", issue.StateId);
 
             return View(viewModel);
         }
@@ -404,11 +376,7 @@ namespace IssueTracker.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
                 // create a new entity
-                var entityNew = issueRepo.Fetch()
-                    .AsNoTracking()
-                    .Where(i => i.Project.Code == code.ProjectCode && i.CodeNumber == code.IssueNumber)
-                    .OrderByDescending(x => x.CreatedAt)
-                    .First();
+                var entityNew = _issueService.GetNewEntityForEditing(code.ProjectCode, code.IssueNumber);
                 entityNew.Reporter = null;
                 entityNew.Assignee = null;
                 entityNew.State = null;
@@ -418,7 +386,7 @@ namespace IssueTracker.Controllers
                 // in case the project was changed
                 if (viewModel.ProjectId != entityNew.ProjectId)
                 {
-                    var projectTemp = projectRepo.GetAll().Where(x => x.Id == viewModel.ProjectId).OrderByDescending(x => x.CreatedAt).First();
+                    var projectTemp = _projectService.GetProject(viewModel.ProjectId);
                     entityNew.ProjectCreatedAt = projectTemp.CreatedAt;
                 }
                 // map viewModel to the entity
@@ -426,14 +394,14 @@ namespace IssueTracker.Controllers
                 // change CreatedAt
                 entityNew.CreatedAt = DateTime.Now;
                 // save the entity
-                issueRepo.Add(entityNew);
+                _issueService.Add(entityNew);
 
                 return RedirectToAction("Details", new { id = viewModel.Code });
 
             }
 
             ViewBag.AssigneeId = new SelectList(applicationUserRepo.GetAll(), "Id", "Email", viewModel.AssigneeId);
-            ViewBag.ProjectId = new SelectList(projectRepo.GetAll(), "Id", "Title", viewModel.ProjectId);
+            ViewBag.ProjectId = new SelectList(_projectService.GetProjects(), "Id", "Title", viewModel.ProjectId);
 
             return View(viewModel);
         }
@@ -441,7 +409,7 @@ namespace IssueTracker.Controllers
         public ActionResult ChangeStatus(Guid issueId, Guid to)
         {
             // create a new entity
-            var entityNew = issueRepo.Fetch().AsNoTracking().Where(x => x.Id == issueId).OrderByDescending(x => x.CreatedAt).First();
+            var entityNew = _issueService.GetNewEntityForEditing(issueId);
             if (entityNew != null)
             {
                 // change status
@@ -454,7 +422,7 @@ namespace IssueTracker.Controllers
                 entityNew.State = null;
                 entityNew.Comments = null;
                 entityNew.Project = null;
-                issueRepo.Add(entityNew);
+                _issueService.Add(entityNew);
             }
 
             if (HttpContext.Request.UrlReferrer != null)

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using IssueTracker.Data.Entities;
 
 namespace IssueTracker.Services
 {
@@ -24,6 +25,11 @@ namespace IssueTracker.Services
             var allStates = _stateRepo.Fetch().Select(x => x.Id);
 
             return allStates.Except(statesWithTransition).ToList();
+        }
+
+        public IEnumerable<State> GetStatesOrderedByIndex()
+        {
+            return _stateRepo.GetStatesOrderedByIndex();
         }
     }
 }
