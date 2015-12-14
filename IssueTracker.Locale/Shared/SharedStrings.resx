@@ -153,10 +153,22 @@
   <data name="FormSave" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
   <data name="Paging" xml:space="preserve">
     <value>Page {0} of {1}</value>
   </data>
   <data name="TabAll" xml:space="preserve">
     <value>All</value>
+  </data>
+  <data name="TabStates" xml:space="preserve">
+    <value>States</value>
+  </data>
+  <data name="TabWorkflow" xml:space="preserve">
+    <value>Workflow</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

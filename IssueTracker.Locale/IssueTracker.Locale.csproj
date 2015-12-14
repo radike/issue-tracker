@@ -101,6 +101,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SharedStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="State\StateStrings.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StateStrings.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="State\StateStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StateStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="User\UserStrings.cs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -171,6 +181,16 @@
     <EmbeddedResource Include="Shared\SharedStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SharedStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="State\StateStrings.cs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StateStrings.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="State\StateStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StateStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="User\UserStrings.cs.resx">

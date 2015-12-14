@@ -117,58 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToList" xml:space="preserve">
-    <value>Zpět na seznam</value>
+  <data name="EntityName" xml:space="preserve">
+    <value>State</value>
   </data>
-  <data name="ButtonAdd" xml:space="preserve">
-    <value>Přidat</value>
+  <data name="ErrorMessageCannotRemove" xml:space="preserve">
+    <value>There is some workflow transition or issue using this state. The removal was terminated.</value>
   </data>
-  <data name="ButtonClear" xml:space="preserve">
-    <value>Vymazat</value>
+  <data name="ListNoResult" xml:space="preserve">
+    <value>No state found. Create a {0}.</value>
   </data>
-  <data name="ButtonDelete" xml:space="preserve">
-    <value>Smazat</value>
+  <data name="ListNoResultNew" xml:space="preserve">
+    <value>new state</value>
   </data>
-  <data name="ButtonDetails" xml:space="preserve">
-    <value>Podrobnosti</value>
+  <data name="MessageNoInitialState" xml:space="preserve">
+    <value>No state is set as initial.</value>
   </data>
-  <data name="ButtonEdit" xml:space="preserve">
-    <value>Upravit</value>
+  <data name="PickColour" xml:space="preserve">
+    <value>Pick the colour</value>
   </data>
-  <data name="ButtonSearch" xml:space="preserve">
-    <value>Hledej</value>
+  <data name="StateColour" xml:space="preserve">
+    <value>Colour</value>
   </data>
-  <data name="DeleteMessageGeneric" xml:space="preserve">
-    <value>Opravdu chcete tuto položku odstranit?</value>
+  <data name="StateIsInitial" xml:space="preserve">
+    <value>Is initial?</value>
   </data>
-  <data name="FormCreate" xml:space="preserve">
-    <value>Přidat</value>
+  <data name="StateTitle" xml:space="preserve">
+    <value>Title</value>
   </data>
-  <data name="FormDelete" xml:space="preserve">
-    <value>Smazat</value>
+  <data name="TitleCreate" xml:space="preserve">
+    <value>Create a new state</value>
   </data>
-  <data name="FormEdit" xml:space="preserve">
-    <value>Upravit</value>
+  <data name="TitleDelete" xml:space="preserve">
+    <value>Delete state</value>
   </data>
-  <data name="FormSave" xml:space="preserve">
-    <value>Uložit</value>
+  <data name="TitleDetails" xml:space="preserve">
+    <value>Details of state {0}</value>
   </data>
-  <data name="No" xml:space="preserve">
-    <value>Ne</value>
+  <data name="TitleEdit" xml:space="preserve">
+    <value>Edit state</value>
   </data>
-  <data name="Paging" xml:space="preserve">
-    <value>Strana {0} z {1}</value>
+  <data name="TitleIndex" xml:space="preserve">
+    <value>All states</value>
   </data>
-  <data name="TabAll" xml:space="preserve">
-    <value>Vše</value>
+  <data name="TypeFinal" xml:space="preserve">
+    <value>FINAL</value>
   </data>
-  <data name="TabStates" xml:space="preserve">
-    <value>Stavy</value>
-  </data>
-  <data name="TabWorkflow" xml:space="preserve">
-    <value>Workflow</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Ano</value>
+  <data name="TypeInitial" xml:space="preserve">
+    <value>INITIAL</value>
   </data>
 </root>

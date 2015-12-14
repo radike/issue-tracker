@@ -22,14 +22,14 @@ namespace IssueTracker.Locale {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class SharedStrings {
+    public class StateStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SharedStrings() {
+        internal StateStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace IssueTracker.Locale {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.Shared.SharedStrings", typeof(SharedStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IssueTracker.Locale.State.StateStrings", typeof(StateStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,164 +61,146 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to list.
+        ///   Looks up a localized string similar to State.
         /// </summary>
-        public static string BackToList {
+        public static string EntityName {
             get {
-                return ResourceManager.GetString("BackToList", resourceCulture);
+                return ResourceManager.GetString("EntityName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add.
+        ///   Looks up a localized string similar to There is some workflow transition or issue using this state. The removal was terminated..
         /// </summary>
-        public static string ButtonAdd {
+        public static string ErrorMessageCannotRemove {
             get {
-                return ResourceManager.GetString("ButtonAdd", resourceCulture);
+                return ResourceManager.GetString("ErrorMessageCannotRemove", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear.
+        ///   Looks up a localized string similar to No state found. Create a {0}..
         /// </summary>
-        public static string ButtonClear {
+        public static string ListNoResult {
             get {
-                return ResourceManager.GetString("ButtonClear", resourceCulture);
+                return ResourceManager.GetString("ListNoResult", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete.
+        ///   Looks up a localized string similar to new state.
         /// </summary>
-        public static string ButtonDelete {
+        public static string ListNoResultNew {
             get {
-                return ResourceManager.GetString("ButtonDelete", resourceCulture);
+                return ResourceManager.GetString("ListNoResultNew", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Details.
+        ///   Looks up a localized string similar to No state is set as initial..
         /// </summary>
-        public static string ButtonDetails {
+        public static string MessageNoInitialState {
             get {
-                return ResourceManager.GetString("ButtonDetails", resourceCulture);
+                return ResourceManager.GetString("MessageNoInitialState", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit.
+        ///   Looks up a localized string similar to Pick the colour.
         /// </summary>
-        public static string ButtonEdit {
+        public static string PickColour {
             get {
-                return ResourceManager.GetString("ButtonEdit", resourceCulture);
+                return ResourceManager.GetString("PickColour", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search.
+        ///   Looks up a localized string similar to Colour.
         /// </summary>
-        public static string ButtonSearch {
+        public static string StateColour {
             get {
-                return ResourceManager.GetString("ButtonSearch", resourceCulture);
+                return ResourceManager.GetString("StateColour", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete this?.
+        ///   Looks up a localized string similar to Is initial?.
         /// </summary>
-        public static string DeleteMessageGeneric {
+        public static string StateIsInitial {
             get {
-                return ResourceManager.GetString("DeleteMessageGeneric", resourceCulture);
+                return ResourceManager.GetString("StateIsInitial", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create.
+        ///   Looks up a localized string similar to Title.
         /// </summary>
-        public static string FormCreate {
+        public static string StateTitle {
             get {
-                return ResourceManager.GetString("FormCreate", resourceCulture);
+                return ResourceManager.GetString("StateTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete.
+        ///   Looks up a localized string similar to Create a new state.
         /// </summary>
-        public static string FormDelete {
+        public static string TitleCreate {
             get {
-                return ResourceManager.GetString("FormDelete", resourceCulture);
+                return ResourceManager.GetString("TitleCreate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit.
+        ///   Looks up a localized string similar to Delete state.
         /// </summary>
-        public static string FormEdit {
+        public static string TitleDelete {
             get {
-                return ResourceManager.GetString("FormEdit", resourceCulture);
+                return ResourceManager.GetString("TitleDelete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save.
+        ///   Looks up a localized string similar to Details of state {0}.
         /// </summary>
-        public static string FormSave {
+        public static string TitleDetails {
             get {
-                return ResourceManager.GetString("FormSave", resourceCulture);
+                return ResourceManager.GetString("TitleDetails", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No.
+        ///   Looks up a localized string similar to Edit state.
         /// </summary>
-        public static string No {
+        public static string TitleEdit {
             get {
-                return ResourceManager.GetString("No", resourceCulture);
+                return ResourceManager.GetString("TitleEdit", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Page {0} of {1}.
+        ///   Looks up a localized string similar to All states.
         /// </summary>
-        public static string Paging {
+        public static string TitleIndex {
             get {
-                return ResourceManager.GetString("Paging", resourceCulture);
+                return ResourceManager.GetString("TitleIndex", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All.
+        ///   Looks up a localized string similar to FINAL.
         /// </summary>
-        public static string TabAll {
+        public static string TypeFinal {
             get {
-                return ResourceManager.GetString("TabAll", resourceCulture);
+                return ResourceManager.GetString("TypeFinal", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to States.
+        ///   Looks up a localized string similar to INITIAL.
         /// </summary>
-        public static string TabStates {
+        public static string TypeInitial {
             get {
-                return ResourceManager.GetString("TabStates", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Workflow.
-        /// </summary>
-        public static string TabWorkflow {
-            get {
-                return ResourceManager.GetString("TabWorkflow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Yes.
-        /// </summary>
-        public static string Yes {
-            get {
-                return ResourceManager.GetString("Yes", resourceCulture);
+                return ResourceManager.GetString("TypeInitial", resourceCulture);
             }
         }
     }

@@ -159,7 +159,7 @@ namespace IssueTracker.Controllers
             }
             catch (Exception)
             {
-                TempData["ErrorSQL"] = "There is some workflow transition or issue using this state. The removal was terminated.";
+                TempData["ErrorSQL"] = Locale.StateStrings.ErrorMessageCannotRemove;
 
                 return RedirectToAction("Delete", "States", new { id = id });
             }
