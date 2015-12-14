@@ -101,6 +101,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SharedStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="StateWorkflow\StateWorkflowStrings.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StateWorkflowStrings.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StateWorkflow\StateWorkflowStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StateWorkflowStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="State\StateStrings.cs.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -181,6 +191,16 @@
     <EmbeddedResource Include="Shared\SharedStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SharedStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StateWorkflow\StateWorkflowStrings.cs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StateWorkflowStrings.cs.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StateWorkflow\StateWorkflowStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StateWorkflowStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>IssueTracker.Locale</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="State\StateStrings.cs.resx">

@@ -9,10 +9,10 @@
 </script>
 @{
     Layout = "~/Views/Shared/_SettingsTabbedLayout.cshtml";
-    ViewBag.Title = "State workflow";
+    ViewBag.Title = StateWorkflowStrings.TitleIndex;
 }
 
-<h2>State workflow</h2>
+<h2>@ViewBag.Title</h2>
 <br/>
 
 <div id="swVisualization"></div>
@@ -20,7 +20,7 @@
 
 @if (Model.ToList().Count == 0)
 {
-    <i>No state workflow found. Create @Html.ActionLink("a new state workflow", "Create").</i>
+    <i>@Html.Raw(string.Format(StateWorkflowStrings.ListNoResult, Html.ActionLink(StateWorkflowStrings.ListNoResultNew, "Create")))</i>
 }
 else
 {
@@ -45,9 +45,9 @@ else
                     @Html.DisplayFor(modelItem => item.ToState.Title)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", new { id = item.Id }) |
+                    @Html.ActionLink(SharedStrings.ButtonDetails, "Details", new { id = item.Id }) |
+                    @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", new { id = item.Id })
                 </td>
             </tr>
         }

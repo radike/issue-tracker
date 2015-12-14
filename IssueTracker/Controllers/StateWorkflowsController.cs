@@ -73,7 +73,7 @@ namespace IssueTracker.Controllers
             {
                 if (viewModel.FromStateId == viewModel.ToStateId)
                 {
-                    ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
+                    ViewBag.ErrorSameFromAndTo = Locale.StateWorkflowStrings.ErrorMessageFromToSame;
                     ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
                     ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
@@ -123,7 +123,7 @@ namespace IssueTracker.Controllers
             {
                 if (viewModel.FromStateId == viewModel.ToStateId)
                 {
-                    ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
+                    ViewBag.ErrorSameFromAndTo = Locale.StateWorkflowStrings.ErrorMessageFromToSame;
                     ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
                     ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 

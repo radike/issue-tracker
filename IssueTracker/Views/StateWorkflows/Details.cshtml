@@ -2,13 +2,13 @@
 
 @{
     Layout = "~/Views/Shared/_SettingsTabbedLayout.cshtml";
-    ViewBag.Title = "Transition detail";
+    ViewBag.Title = StateWorkflowStrings.TitleDetails;
 }
 
-<h2>Transition detail</h2>
+<h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>State workflow transition</h4>
+    <h4>@StateWorkflowStrings.EntityName</h4>
     <hr />
     <div id="create-button" class="float-right">
         <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "StateWorkflows", new {id = Model.Id})'">
@@ -38,5 +38,5 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Back to Workflows List", "Index")
+    @Html.ActionLink(SharedStrings.BackToList, "Index")
 </p>
