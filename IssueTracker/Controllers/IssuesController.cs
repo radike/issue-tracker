@@ -367,7 +367,7 @@ namespace IssueTracker.Controllers
         // POST: Issues/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Code,Name,Description,AssigneeId,ProjectId")] IssueEditViewModel viewModel)
+        public ActionResult Edit([Bind(Include = "Code,Name,Type,Description,AssigneeId,ProjectId")] IssueEditViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
