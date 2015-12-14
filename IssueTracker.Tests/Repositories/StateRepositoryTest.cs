@@ -1,11 +1,12 @@
-﻿using IssueTracker.Data;
-using IssueTracker.Data.Data_Repositories;
-using IssueTracker.Data.Entities;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using Moq;
+using Moq;
+using IssueTracker.Data.Data_Repositories;
+using IssueTracker.Services;
+using IssueTracker.Data.Entities;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
+using IssueTracker.Data.Contracts.Repository_Interfaces;
 
 namespace IssueTracker.Tests.Repositories
 {
@@ -13,31 +14,31 @@ namespace IssueTracker.Tests.Repositories
     public class StateRepositoryTest
     {
         [TestMethod]
-        public void GetStatesTest()
+        public void GetFinalStatesIdsTest()
         {
-            var data = new List<State>
+            Mock<IStateRepository> fakeStateRepo = new Mock<IStateRepository>();
+            Mock<IStateWorkflowRepository> fakeStateWorkflowRepo = new Mock<IStateWorkflowRepository>();
+            var stateService = new StateService(fakeStateRepo.Object, fakeStateWorkflowRepo.Object);
+
+            var openStateId = Guid.NewGuid();
+            var closedStateId = Guid.NewGuid();
+            List<State> states = new List<State>()
             {
-                new State() {Title = "Open", IsInitial = true, OrderIndex = 1},
-                new State() {Title = "Build", IsInitial = false, OrderIndex = 2},
-                new State() {Title = "Closed", IsInitial = false, OrderIndex = 3}
-            }.AsQueryable();
+                new State {Title = "Open", Colour = "black", IsInitial = true, OrderIndex = 1, Id = openStateId},
+                new State {Title = "Closed", Colour = "white", IsInitial = false, OrderIndex = 2, Id = closedStateId}
+            };
 
-            //var mockSet = new Mock<DbSet<State>>();
+            List<StateWorkflow> workflows = new List<StateWorkflow>()
+            {
+                new StateWorkflow {FromStateId = openStateId, ToStateId = closedStateId }
+            };
 
-            //mockSet.As<IQueryable<State>>().Setup(m => m.Provider)
-            //        .Returns(data.Provider);
-            //mockSet.As<IQueryable<State>>().Setup(m => m.Expression).Returns(data.Expression);
-            //mockSet.As<IQueryable<State>>().Setup(m => m.ElementType).Returns(data.ElementType);
-            //mockSet.As<IQueryable<State>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+            fakeStateRepo.Setup(i => i.Fetch()).Returns(states.AsQueryable());
+            fakeStateWorkflowRepo.Setup(i => i.Fetch()).Returns(workflows.AsQueryable());
 
-            //var mockContext = new Mock<IssueTrackerContext>();
-            //mockContext.Setup(m => m.States).Returns(mockSet.Object);
-            
-            //var service = new StateRepository(mockContext.Object);
+            var actual = stateService.GetFinalStateIds();
 
-            //var actual = service.GetInitialState();
-
-            //Assert.Equals(actual.Title, "Open");
+            Assert.AreEqual(actual.FirstOrDefault(), closedStateId);
         }
     }
 }
