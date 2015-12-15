@@ -26,88 +26,49 @@ namespace IssueTracker.Controllers
             _issueRepo = issueRepository;
             _userRepo = applicationUserRepository;
         }
-        /*
-        // GET: Comments
-        public ActionResult Index()
-        {
-            var comments = db.Comments.Where(c => c.DeletedAt == null).Include(c => c.Issue);
-            return View(Mapper.Map<IEnumerable<CommentViewModel>>(comments).ToList());
-        }
-    
-        // GET: Comments/Details/5
-        public ActionResult Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
-            var comment = db.Comments.Find(id);
-
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
-
-            comment.User = db.Users.Find(comment.AuthorId);
-
-            return View(Mapper.Map<CommentViewModel>(comment));
-        }
-        */
         // GET: Comments/Create
         public ActionResult Create(Guid id)
         {
             ViewBag.IssueId = id;
             return View();
         }
-        
+
         // POST: Comments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Text,Posted,IssueId")] CommentViewModel comment)
+        public ActionResult Create([Bind(Include = "Text,IssueId")] CommentViewModel comment)
         {
             if (ModelState.IsValid)
             {
                 comment.Issue = _issueRepo.Get(comment.IssueId);
-
                 comment.Id = Guid.NewGuid();
-                comment.Posted = DateTime.Now;
                 comment.AuthorId = getLoggedUser().Id;
+                comment.Posted = DateTime.Now;
                 comment.IssueCreatedAt = comment.Issue.CreatedAt;
+                comment.CreatedAt = DateTime.Now;
 
                 _commentRepo.Add(Mapper.Map<Comment>(comment));
                 return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
 
-            if (comment.Text.IsEmpty())
-            {
-                comment.Issue = _issueRepo.Get(comment.IssueId);
-
-                return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
-            }
-
-            ViewBag.IssueId = new SelectList(_issueRepo.GetAll(), "Id", "Name", comment.IssueId);
-            return View(comment);
+            comment.Issue = _issueRepo.Get(comment.IssueId);
+            return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
         }
 
         // GET: Comments/Edit/5
         public ActionResult Edit(Guid id)
         {
             var comment = _commentRepo.Get(id);
-
             if (comment == null)
             {
                 return HttpNotFound();
             }
-
             if (getLoggedUser().Id != comment.AuthorId)
             {
                 TempData["ErrorMessage"] = "Only owners can edit their comments.";
                 return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
-
-            ViewBag.IssueId = new SelectList(_issueRepo.GetAll(), "Id", "Name", comment.IssueId);
-
             return View(Mapper.Map<CommentViewModel>(comment));
         }
 
@@ -116,44 +77,41 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Text,Posted,IssueId")] CommentViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var oldEntity = _commentRepo.Get(viewModel.Id);
-                if(oldEntity == null) return HttpNotFound();
-
-                viewModel.Issue = _issueRepo.Get(viewModel.IssueId);
-                viewModel.Posted = oldEntity.Posted;
-                viewModel.AuthorId = oldEntity.Author.Id;
-                viewModel.IssueCreatedAt = viewModel.Issue.CreatedAt;
-                _commentRepo.Add(Mapper.Map<Comment>(viewModel));
-
-                return RedirectToAction("Details", "Issues", new {id = viewModel.Issue.Code});
+                var issue = _issueRepo.Get(viewModel.IssueId);
+                return RedirectToAction("Details", "Issues", new { id = issue.Code });
             }
-            // todo: otestovat
-            //viewModel.Issue = db.Issues.Find(viewModel.IssueId);
-            //ViewBag.IssueId = new SelectList(db.Issues, "Id", "Name", viewModel.IssueId);
+            var oldEntity = _commentRepo.Get(viewModel.Id);
+            if (oldEntity == null)
+            {
+                return HttpNotFound();
+            }
+            viewModel.Issue = _issueRepo.Get(viewModel.IssueId);
+            viewModel.Posted = oldEntity.Posted;
+            viewModel.AuthorId = oldEntity.Author.Id;
+            viewModel.IssueCreatedAt = viewModel.Issue.CreatedAt;
+            viewModel.CreatedAt = DateTime.Now;
 
-            return RedirectToAction("Details", "Issues", new {id = viewModel.Issue.Code});
+            _commentRepo.Add(Mapper.Map<Comment>(viewModel));
+
+            return RedirectToAction("Details", "Issues", new { id = viewModel.Issue.Code });
         }
 
         // GET: Comments/Delete/5
         public ActionResult Delete(Guid id)
         {
             var comment = _commentRepo.Get(id);
-
             if (comment == null)
             {
                 return HttpNotFound();
             }
-
             if (!User.IsInRole(UserRoles.Administrators))
             {
                 TempData["ErrorMessage"] = "Only administrators can delete comments.";
-                return RedirectToAction("Details","Issues", new { id = comment.Issue.Code });
+                return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
-
             ViewBag.IssueCode = comment.Issue.Code;
-
             return View(Mapper.Map<CommentViewModel>(comment));
         }
 
@@ -182,6 +140,5 @@ namespace IssueTracker.Controllers
             }
             return null;
         }
-
     }
 }

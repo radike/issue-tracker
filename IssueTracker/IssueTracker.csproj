@@ -450,11 +450,8 @@
     <Content Include="Views\States\Details.cshtml" />
     <Content Include="Views\States\Edit.cshtml" />
     <Content Include="Views\States\Index.cshtml" />
-    <Content Include="Views\Comments\Create.cshtml" />
     <Content Include="Views\Comments\Delete.cshtml" />
-    <Content Include="Views\Comments\Details.cshtml" />
     <Content Include="Views\Comments\Edit.cshtml" />
-    <Content Include="Views\Comments\Index.cshtml" />
     <Content Include="Views\Issues\Create.cshtml" />
     <Content Include="Views\Issues\Details.cshtml" />
     <Content Include="Views\Issues\Edit.cshtml" />
