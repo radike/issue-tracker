@@ -10,10 +10,11 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IssueTracker.Data.Abstractions;
 
 namespace IssueTracker.Data
 {
-    public class IssueTrackerContext : ApplicationDbContext
+    public class IssueTrackerContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IDbContext
     {
         public IssueTrackerContext() : base()
         {

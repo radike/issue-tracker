@@ -57,13 +57,4 @@ namespace IssueTracker.Data.Entities
         {
         }
     }
-
-    public class ApplicationDbContext
-        : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IDbContext
-    {
-        public ApplicationDbContext()
-            : base("DefaultConnection")
-        {
-        }
-    }
 }

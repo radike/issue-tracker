@@ -61,6 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstractions\DataRepositoryBase.cs" />
+    <Compile Include="Abstractions\IDbContext.cs" />
     <Compile Include="Data Repositories\ApplicationUserRepository.cs" />
     <Compile Include="Data Repositories\CommentRepository.cs" />
     <Compile Include="Data Repositories\IssueRepository.cs" />

@@ -5,6 +5,7 @@ using IssueTracker.Data.Contracts.Repository_Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IssueTracker.Data.Abstractions;
 
 namespace IssueTracker.Data.Data_Repositories
 {

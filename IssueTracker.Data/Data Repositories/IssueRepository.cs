@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using IssueTracker.Data.Abstractions;
 
 namespace IssueTracker.Data.Data_Repositories
 {
