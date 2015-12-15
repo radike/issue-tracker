@@ -18,7 +18,8 @@ namespace IssueTracker.ViewModels
         [Required]
         public IssueType Type { get; set; }
 
-        [Display(Name = "IssueAssigneeId", ResourceType = typeof(IssueStrings))]        public string AssigneeId { get; set; }
+        [Display(Name = "IssueAssigneeId", ResourceType = typeof(IssueStrings))]
+        public string AssigneeId { get; set; }
 
         [Required]
         [Display(Name = "IssueTitle", ResourceType = typeof(IssueStrings))]

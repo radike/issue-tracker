@@ -80,6 +80,10 @@ namespace IssueTracker
             // Dashboard Charts
             bundles.Add(new ScriptBundle("~/bundles/charts").Include(
                 "~/Scripts/dashboard-charts.js"));
+
+            // Issues js functions
+            bundles.Add(new ScriptBundle("~/bundles/issues-js").Include(
+                        "~/Scripts/issues.js"));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using IssueTracker.Entities;
+using IssueTracker.Locale;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
@@ -15,7 +16,7 @@ namespace IssueTracker.ViewModels
         [Required]
         public IssueType Type { get; set; }
 
-        [Display(Name = "Assignee")]
+        [Display(Name = "IssueAssigneeId", ResourceType = typeof(IssueStrings))]
         public string AssigneeId { get; set; }
 
         [Required]

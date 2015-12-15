@@ -258,6 +258,7 @@
     <Compile Include="ViewModels\StateViewModel.cs" />
     <Compile Include="ViewModels\StateWorkflowViewModel.cs" />
     <Compile Include="ViewModels\UserEditViewModel.cs" />
+    <Compile Include="ViewModels\UserEmailViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -383,6 +384,7 @@
     <Content Include="Scripts\classie.js" />
     <Content Include="Scripts\gnmenu.js" />
     <Content Include="Scripts\hammer.min.js" />
+    <Content Include="Scripts\issues.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
