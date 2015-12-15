@@ -258,7 +258,7 @@ namespace IssueTracker.Controllers
             {
                 foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Type, previous.Type.ToString(), current.Type.ToString()));
             }
-            else if (previous.AssigneeId != null && previous.AssigneeId != current.AssigneeId)
+            else if (previous.AssigneeId != null && current.AssigneeId != null && previous.AssigneeId != current.AssigneeId)
             {
                 foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Assignee, previous.Assignee.Email, current.Assignee.Email));
             }
@@ -418,6 +418,12 @@ namespace IssueTracker.Controllers
             }
             // map viewModel to the entity
             entityNew = Mapper.Map(viewModel, entityNew);
+
+            if(viewModel.AssigneeId == null)
+            {
+                entityNew.AssigneeId = null;
+            }
+
             // change CreatedAt
             entityNew.CreatedAt = DateTime.Now;
             // save the entity
