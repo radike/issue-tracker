@@ -162,21 +162,10 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            var commentIssueIdTemp = new Guid();
+            var issue = _commentRepo.Get(id).Issue;
+            _commentRepo.Remove(id);
 
-            var comments = _commentRepo.FindBy(x => x.Id == id);
-            commentIssueIdTemp = comments.First().IssueId;
-
-            foreach (var comment in comments)
-            {
-                comment.Active = false;
-            }
-
-            _commentRepo.Save();
-
-            var commentIssueCodeTemp = _issueRepo.Get(commentIssueIdTemp);
-
-            return RedirectToAction("Details", "Issues", new { id = commentIssueCodeTemp.Code });
+            return RedirectToAction("Details", "Issues", new { id = issue.Code });
         }
 
         protected override void Dispose(bool disposing)
