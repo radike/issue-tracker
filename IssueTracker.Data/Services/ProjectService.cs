@@ -49,6 +49,10 @@ namespace IssueTracker.Data.Services
                 .Include(p => p.Owner)
                 .Include(p => p.Users)
                 .FirstOrDefault();
+            if (project == null)
+            {
+                return null;
+            }
             project.Issues = _issueRepo.Fetch().Where(i => i.ProjectId == project.Id).ToList();
             return project;
         }
