@@ -26,7 +26,7 @@ namespace IssueTracker.Data.Entities
 
         public Guid ReporterId { get; set; }
 
-        public Guid AssigneeId { get; set; }
+        public Guid? AssigneeId { get; set; }
         
         public bool Active { get; set; }
 

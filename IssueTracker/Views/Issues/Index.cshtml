@@ -114,7 +114,14 @@ else
                     @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new { id = item.Code }, null)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Assignee.Email)
+                    @if (item.Assignee != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Assignee.Email);
+                    }
+                    else
+                    {
+                        <span>unassigned</span>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Created)

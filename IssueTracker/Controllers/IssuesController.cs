@@ -258,7 +258,7 @@ namespace IssueTracker.Controllers
             {
                 foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Type, previous.Type.ToString(), current.Type.ToString()));
             }
-            else if (previous.AssigneeId != current.AssigneeId)
+            else if (previous.AssigneeId != null && previous.AssigneeId != current.AssigneeId)
             {
                 foundChanges.Add(new IssueChange(current.CreatedAt, IssueChangeType.Assignee, previous.Assignee.Email, current.Assignee.Email));
             }

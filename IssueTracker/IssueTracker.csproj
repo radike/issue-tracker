@@ -240,6 +240,10 @@
     <Compile Include="Migrations\201512111624325_AddIssueTypeProperty.Designer.cs">
       <DependentUpon>201512111624325_AddIssueTypeProperty.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512151730294_AssigneeIdNullable.cs" />
+    <Compile Include="Migrations\201512151730294_AssigneeIdNullable.Designer.cs">
+      <DependentUpon>201512151730294_AssigneeIdNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\UserRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -505,6 +509,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512111624325_AddIssueTypeProperty.resx">
       <DependentUpon>201512111624325_AddIssueTypeProperty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512151730294_AssigneeIdNullable.resx">
+      <DependentUpon>201512151730294_AssigneeIdNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

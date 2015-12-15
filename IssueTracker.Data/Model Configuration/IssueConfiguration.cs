@@ -17,7 +17,7 @@ namespace IssueTracker.Data.Model_Configuration
             Property(p => p.ProjectCreatedAt).IsRequired();
             Property(p => p.StateId).IsRequired();
             Property(p => p.ReporterId).IsRequired();
-            Property(p => p.AssigneeId).IsRequired();
+            Property(p => p.AssigneeId).IsOptional();
             Property(p => p.Active).IsRequired();
             Property(p => p.Created).IsRequired();
             Property(p => p.CodeNumber).IsRequired();
