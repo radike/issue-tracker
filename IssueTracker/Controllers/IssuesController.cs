@@ -423,7 +423,7 @@ namespace IssueTracker.Controllers
             // save the entity
             _issueService.Add(entityNew);
 
-            return RedirectToAction("Details", new { id = viewModel.Code });
+            return RedirectToAction("Details", new { id = entityNew.Code });
         }
 
         public ActionResult ChangeStatus(Guid issueId, Guid to)
