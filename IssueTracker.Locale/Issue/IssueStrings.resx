@@ -123,6 +123,12 @@
   <data name="ChangeState" xml:space="preserve">
     <value>Change state to: </value>
   </data>
+  <data name="ErrorMessageInvalidProjectCreate" xml:space="preserve">
+    <value>You have attempted to create an issue at the project, for which you are not among its users.</value>
+  </data>
+  <data name="ErrorMessageInvalidProjectEdit" xml:space="preserve">
+    <value>You have attempted to move an issue to the project, for which you are not among its users.</value>
+  </data>
   <data name="ErrorMessageNoIniState" xml:space="preserve">
     <value>There is no initial state. The issue couldn't be created.</value>
   </data>

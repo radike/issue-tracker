@@ -123,6 +123,12 @@
   <data name="ChangeState" xml:space="preserve">
     <value>Změnit stav na: </value>
   </data>
+  <data name="ErrorMessageInvalidProjectCreate" xml:space="preserve">
+    <value>Pokusil/a jste se o vytvoření problému v projektu, u kterého nejste mezi jeho uživateli.</value>
+  </data>
+  <data name="ErrorMessageInvalidProjectEdit" xml:space="preserve">
+    <value>Pokusil/a jste se o přesunutí problému do projektu, u kterého nejste mezi jeho uživateli.</value>
+  </data>
   <data name="ErrorMessageNoIniState" xml:space="preserve">
     <value>Neexistuje žádný výchozí stav. Problém nemohl být vytvořen.</value>
   </data>

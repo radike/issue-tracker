@@ -79,6 +79,24 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have attempted to create an issue at the project, for which you are not among its users..
+        /// </summary>
+        public static string ErrorMessageInvalidProjectCreate {
+            get {
+                return ResourceManager.GetString("ErrorMessageInvalidProjectCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have attempted to move an issue to the project, for which you are not among its users..
+        /// </summary>
+        public static string ErrorMessageInvalidProjectEdit {
+            get {
+                return ResourceManager.GetString("ErrorMessageInvalidProjectEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is no initial state. The issue couldn&apos;t be created..
         /// </summary>
         public static string ErrorMessageNoIniState {

@@ -274,8 +274,9 @@ namespace IssueTracker.Controllers
         public ActionResult Create()
         {
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
+            ViewBag.ErrorInvalidProject = TempData["ErrorInvalidProject"] as string;
             ViewBag.AssigneeId = new SelectList(System.Linq.Enumerable.Empty<UserEmailViewModel>(), "Id", "Email");
-            ViewBag.ProjectId = new SelectList(_projectService.GetProjects(), "Id", "Title");
+            ViewBag.ProjectId = new SelectList(_projectService.GetProjectsForUser(getLoggedUser().Id), "Id", "Title");
             ViewBag.ReporterId = getLoggedUser().Id;
             return View();
         }
@@ -289,7 +290,7 @@ namespace IssueTracker.Controllers
             {
                 var users = loadProjectUsersAsUserEmailViewModel(viewModel.ProjectId);
                 ViewBag.AssigneeId = new SelectList(users, "Id", "Email", viewModel.AssigneeId);
-                ViewBag.ProjectId = new SelectList(_projectService.GetProjects(), "Id", "Title", viewModel.ProjectId);
+                ViewBag.ProjectId = new SelectList(_projectService.GetProjectsForUser(getLoggedUser().Id), "Id", "Title", viewModel.ProjectId);
                 return View(viewModel);
             }
             var initialState = getInitialState();
@@ -300,6 +301,11 @@ namespace IssueTracker.Controllers
             }
 
             var projectTemp = _projectService.GetProject(viewModel.ProjectId);
+            if (!projectTemp.Users.Any(u => u.Id == getLoggedUser().Id))
+            {
+                TempData["ErrorInvalidProject"] = Locale.IssueStrings.ErrorMessageInvalidProjectCreate;
+                return RedirectToAction("Create");
+            }
 
             var issue = Mapper.Map<Issue>(viewModel);
             issue.StateId = initialState.Id;
@@ -373,6 +379,8 @@ namespace IssueTracker.Controllers
             if (code == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
+            ViewBag.ErrorInvalidProject = TempData["ErrorInvalidProject"] as string;
+
             var issue = _issueService.GetByProjectCodeAndIssueNumber(code.ProjectCode, code.IssueNumber);
 
             if (issue == null)
@@ -381,7 +389,7 @@ namespace IssueTracker.Controllers
             var viewModel = Mapper.Map<IssueEditViewModel>(issue);
 
             ViewBag.AssigneeId = new SelectList(loadProjectUsersAsUserEmailViewModel(issue.ProjectId), "Id", "Email", issue.AssigneeId);
-            ViewBag.ProjectId = new SelectList(_projectService.GetProjects(), "Id", "Title", issue.ProjectId);
+            ViewBag.ProjectId = new SelectList(_projectService.GetProjectsForUser(getLoggedUser().Id), "Id", "Title", issue.ProjectId);
             ViewBag.StateId = new SelectList(_stateService.GetStatesOrderedByIndex(), "Id", "Title", issue.StateId);
 
             return View(viewModel);
@@ -395,12 +403,19 @@ namespace IssueTracker.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.AssigneeId = new SelectList(loadProjectUsersAsUserEmailViewModel(viewModel.ProjectId), "Id", "Email", viewModel.AssigneeId);
-                ViewBag.ProjectId = new SelectList(_projectService.GetProjects(), "Id", "Title", viewModel.ProjectId);
+                ViewBag.ProjectId = new SelectList(_projectService.GetProjectsForUser(getLoggedUser().Id), "Id", "Title", viewModel.ProjectId);
                 return View(viewModel);
             }
             IssueCode code = IssueCode.Parse(viewModel.Code);
             if (code == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var projectTemp = _projectService.GetProject(viewModel.ProjectId);
+            if (!projectTemp.Users.Any(u => u.Id == getLoggedUser().Id))
+            {
+                TempData["ErrorInvalidProject"] = Locale.IssueStrings.ErrorMessageInvalidProjectEdit;
+                return RedirectToAction("Edit", "Issues", new { id = viewModel.Code });
+            }
 
             // create a new entity
             var entityNew = _issueService.GetNewEntityForEditing(code.ProjectCode, code.IssueNumber);
@@ -413,7 +428,6 @@ namespace IssueTracker.Controllers
             // in case the project was changed
             if (viewModel.ProjectId != entityNew.ProjectId)
             {
-                var projectTemp = _projectService.GetProject(viewModel.ProjectId);
                 entityNew.ProjectCreatedAt = projectTemp.CreatedAt;
             }
             // map viewModel to the entity
