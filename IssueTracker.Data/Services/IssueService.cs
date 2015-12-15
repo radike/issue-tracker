@@ -15,20 +15,19 @@ namespace IssueTracker.Data.Services
         private IIssueRepository _issueRepo;
         private IProjectRepository _projectRepo;
         private ICommentRepository _commentRepo;
+        private IStateWorkflowRepository _stateWfRepo;
 
-        public IssueService(IIssueRepository issueRepository, IProjectRepository projectRepository, ICommentRepository commentRepo)
+        public IssueService(IIssueRepository issueRepository, IProjectRepository projectRepository, ICommentRepository commentRepo, IStateWorkflowRepository stateWorkflowRepository)
         {
             _issueRepo = issueRepository;
             _projectRepo = projectRepository;
             _commentRepo = commentRepo;
+            _stateWfRepo = stateWorkflowRepository;
         }
 
         public ICollection<Issue> GetAllIssues()
         {
-            return _issueRepo.Fetch()
-                .Include(p => p.State)                                
-                .Include(p => p.Project)
-                .ToList();
+            return GetAllIssues(null);
         }
         public int GetNewCodeNumber()
         {
@@ -61,17 +60,27 @@ namespace IssueTracker.Data.Services
             throw new NotImplementedException();
         }
 
-        public int GetIssueCount(IssueType issueType, Guid projectId)
+        public int GetIssueCount(IssueType issueType, Guid? projectId)
         {
             throw new NotImplementedException();
         }
 
         public int GetIssueCount(IssueType issueType, Project project, bool includeClosedIssue = true)
         {
-            return project == null ? 0 : GetIssueCount(issueType, project.Id, includeClosedIssue);
+            Guid? projectId;
+
+            if (project == null)
+            {
+                projectId = null;
+            } else
+            {
+                projectId = project.Id;
+            }
+
+            return GetIssueCount(issueType, projectId, includeClosedIssue);
         }
 
-        public int GetIssueCount(IssueType issueType, Guid projectId, bool includeClosedIssue = true)
+        public int GetIssueCount(IssueType issueType, Guid? projectId, bool includeClosedIssue = true)
         {
             return GetIssuesByType(issueType, projectId, includeClosedIssue).Count;
         }
@@ -81,14 +90,21 @@ namespace IssueTracker.Data.Services
             throw new NotImplementedException();
         }
 
-        public ICollection<Issue> GetIssuesByType(IssueType type, Guid projectId)
+        public ICollection<Issue> GetIssuesByType(IssueType type, Guid? projectId)
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<Issue> GetIssuesByType(IssueType issueType, Guid projectId, bool includeClosedIssue = false)
+        public ICollection<Issue> GetIssuesByType(IssueType issueType, Guid? projectId, bool includeClosedIssue = false)
         {
-            return _issueRepo.FindBy(i => i.ProjectId == projectId && i.Type == issueType).ToList();
+            var issuesByType = _issueRepo.FindBy(i => i.Type == issueType);
+
+            if (projectId != null)
+            {
+                issuesByType = issuesByType.Where(i => i.ProjectId == projectId);
+            }
+
+            return issuesByType.ToList();
         }
 
         public ICollection<Issue> GetAllVersions(Guid id)
@@ -113,6 +129,20 @@ namespace IssueTracker.Data.Services
         public Issue Add(Issue issue)
         {
             return _issueRepo.Add(issue);
+        }
+
+        public ICollection<Issue> GetAllIssues(Guid? projectId)
+        {
+            var allIssues = _issueRepo.Fetch()
+                                      .Include(p => p.State)
+                                      .Include(p => p.Project);
+
+            if (projectId.HasValue)
+            {
+                allIssues = allIssues.Where(i => i.ProjectId == projectId);
+            }
+
+            return allIssues.ToList();
         }
     }
 }

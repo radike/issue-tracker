@@ -11,14 +11,15 @@ namespace IssueTracker.Data.Services
     public interface IIssueService
     {
         ICollection<Issue> GetIssuesByType(IssueType type);
-        ICollection<Issue> GetIssuesByType(IssueType type, Guid projectId);
-        ICollection<Issue> GetIssuesByType(IssueType type, Guid projectId, bool includeClosedIssue = true);
+        ICollection<Issue> GetIssuesByType(IssueType type, Guid? projectId);
+        ICollection<Issue> GetIssuesByType(IssueType type, Guid? projectId, bool includeClosedIssue = true);
         int GetIssueCount();
         int GetIssueCount(IssueType issueType);
-        int GetIssueCount(IssueType issueType, Guid projectId);
+        int GetIssueCount(IssueType issueType, Guid? projectId);
         int GetIssueCount(IssueType issueType, Project project, bool includeClosedIssue = true);
-        int GetIssueCount(IssueType issueType, Guid projectId, bool includeClosedIssue = true);
+        int GetIssueCount(IssueType issueType, Guid? projectId, bool includeClosedIssue = true);
         ICollection<Issue> GetAllIssues();
+        ICollection<Issue> GetAllIssues(Guid? projectId);
         Issue GetByProjectCodeAndIssueNumber(string projectCode, int issueNumber);
         ICollection<Comment> GetCommentsForIssue(Guid issueId);
         int GetNewCodeNumber();
@@ -26,5 +27,6 @@ namespace IssueTracker.Data.Services
         Issue GetNewEntityForEditing(Guid issueId);
         ICollection<Issue> GetAllVersions(Guid issueId);
         Issue Add(Issue issue);
+
     }
 }

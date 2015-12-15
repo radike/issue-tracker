@@ -250,3 +250,7 @@ li#create-button {
 .dashboard-header td:last-of-type {
     text-align: right;
 }
+
+.panel-body {
+    padding: 0;
+}

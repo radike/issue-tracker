@@ -27,6 +27,11 @@ namespace IssueTracker.Services
             return allStates.Except(statesWithTransition).ToList();
         }
 
+        public ICollection<State> GetInitialStates()
+        {
+            return _stateRepo.FindBy(s => s.IsInitial).ToList();
+        }
+
         public IEnumerable<State> GetStatesOrderedByIndex()
         {
             return _stateRepo.GetStatesOrderedByIndex();

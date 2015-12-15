@@ -69,6 +69,8 @@
     <Compile Include="Data Repositories\StateWorkflowRepository.cs" />
     <Compile Include="Data Repositories\VersionedDataRepository.cs" />
     <Compile Include="DataModule.cs" />
+    <Compile Include="Facade\Facade.cs" />
+    <Compile Include="Facade\IFacade.cs" />
     <Compile Include="IssueTrackerContext.cs" />
     <Compile Include="Model Configuration\ApplicationUserConfiguration.cs" />
     <Compile Include="Model Configuration\CommentConfiguration.cs" />

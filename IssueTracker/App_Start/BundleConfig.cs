@@ -77,6 +77,9 @@ namespace IssueTracker
             bundles.Add(new ScriptBundle("~/bundles/gojs-model").Include(
                         "~/Scripts/go-model.js"));
 
+            // Dashboard Charts
+            bundles.Add(new ScriptBundle("~/bundles/charts").Include(
+                "~/Scripts/dashboard-charts.js"));
         }
     }
 }

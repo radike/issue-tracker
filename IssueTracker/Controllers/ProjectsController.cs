@@ -17,6 +17,7 @@ using IssueTracker.Models;
 using System.Text.RegularExpressions;
 using IssueTracker.Locale;
 using IssueTracker.Data.Services;
+using IssueTracker.Data.Facade;
 
 namespace IssueTracker.Controllers
 {
@@ -28,9 +29,11 @@ namespace IssueTracker.Controllers
 
         private IProjectService _service;
         private IApplicationUserRepository _userRepo;
+        private IFacade _facade;
 
-        public ProjectsController(IProjectService service, IApplicationUserRepository userRepository)
+        public ProjectsController(IFacade facade, IProjectService service, IApplicationUserRepository userRepository)
         {
+            _facade = facade;
             _service = service;
             _userRepo = userRepository;
         }
@@ -212,6 +215,25 @@ namespace IssueTracker.Controllers
         {
             _service.DeleteProject(id);
             return RedirectToAction("Index");
+        }
+
+        public ContentResult IssueStats(string id)
+        {
+            var newIssues = 4;
+            var issuesInProgress = _facade.GetIssuesInProgress(id).Count;
+            var resolvedIssues = 10;
+
+            var result = new Dictionary<string, int>()
+            {
+                {"New", newIssues},
+                {"In progress", issuesInProgress},
+                {"Resolved", resolvedIssues}
+            };
+
+            var rows = result.Select(d => string.Format("[\"{0}\", {1}]", d.Key, d.Value));
+            string jsonString = string.Format("[{0}]", string.Join(",", rows));
+
+            return Content(jsonString, "application/json");
         }
 
         protected override void Dispose(bool disposing)

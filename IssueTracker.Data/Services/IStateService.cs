@@ -12,5 +12,6 @@ namespace IssueTracker.Services
         IEnumerable<Guid> GetFinalStateIds();
 
         IEnumerable<State> GetStatesOrderedByIndex();
+        ICollection<State> GetInitialStates();
     }
 }
