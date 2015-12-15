@@ -110,7 +110,6 @@ namespace IssueTracker.Controllers
             if (ProjectCodeHasInvalidFormat(project.Code))
             {
                 ViewBag.ErrorInvalidFormatCode = ProjectStrings.ErrorMessageInvalidCode;
-                ViewBag.ErrorInvalidFormatCode = "Entered code has invalid format. Only characters are allowed.";
                 ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
                 return View(project);
             }
