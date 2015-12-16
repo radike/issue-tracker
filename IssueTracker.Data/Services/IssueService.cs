@@ -196,7 +196,7 @@ namespace IssueTracker.Data.Services
             var raisedIssues = _issueRepo.FindBy(i => fromDate <= i.Created && i.Created <= toDate);
             if (projectId.HasValue)
             {
-                raisedIssues.Where(i => i.ProjectId == projectId);
+                raisedIssues = raisedIssues.Where(i => i.ProjectId == projectId);
             }
 
             return raisedIssues.ToList();
