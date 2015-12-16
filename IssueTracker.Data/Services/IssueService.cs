@@ -152,7 +152,7 @@ namespace IssueTracker.Data.Services
             var newIssues = _issueRepo.FindBy(i => i.State.IsInitial);
             if (projectId.HasValue)
             {
-                newIssues.Where(i => i.ProjectId == projectId);
+                newIssues = newIssues.Where(i => i.ProjectId == projectId);
             }
 
             return newIssues.ToList();
@@ -220,7 +220,7 @@ namespace IssueTracker.Data.Services
             var raisedIssues = _issueRepo.FindBy(i => fromDate <= i.ResolvedAt && i.ResolvedAt <= toDate);
             if (projectId.HasValue)
             {
-                raisedIssues.Where(i => i.ProjectId == projectId);
+                raisedIssues = raisedIssues.Where(i => i.ProjectId == projectId);
             }
 
             return raisedIssues.ToList();
