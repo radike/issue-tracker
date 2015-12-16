@@ -1,15 +1,9 @@
 ﻿using Autofac;
-using Common.Data.Core.Contracts;
 using IssueTracker.Data.Abstractions;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Data.Facade;
 using IssueTracker.Data.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IssueTracker.Data
 {

@@ -1,10 +1,7 @@
-﻿using Common.Data.Core;
-using Common.Data.Core.Contracts;
+﻿using Common.Data.Core.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq.Expressions;
 using IssueTracker.Data.Abstractions;
 

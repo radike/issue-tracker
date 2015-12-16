@@ -1,14 +1,9 @@
 ﻿using Common.Data.Core.Contracts;
-using IssueTracker.Data.Contracts;
 using IssueTracker.Data.Model_Configuration;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IssueTracker.Data.Abstractions;
 using IssueTracker.Entities;
 

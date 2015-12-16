@@ -6,8 +6,6 @@ using System.Web.Mvc;
 using AutoMapper;
 using IssueTracker.ViewModels;
 using System.Collections.Generic;
-using IssueTracker.Data;
-using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Entities;
 using IssueTracker.Models;

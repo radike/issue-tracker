@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using IssueTracker.Data.Data_Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using IssueTracker.Data.Contracts.Repository_Interfaces;

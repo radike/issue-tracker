@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using PagedList;
 using IssueTracker.ViewModels;
 using AutoMapper;
-using IssueTracker.Abstractions;
 using Microsoft.AspNet.Identity;
-using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
-using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Models;
 using System.Text.RegularExpressions;
 using IssueTracker.Locale;

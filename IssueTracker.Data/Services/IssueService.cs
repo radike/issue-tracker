@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IssueTracker.Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using System.Data.Entity;
-using IssueTracker.Data.Abstractions;
 
 namespace IssueTracker.Data.Services
 {

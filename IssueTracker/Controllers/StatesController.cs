@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -8,9 +6,7 @@ using AutoMapper;
 using IssueTracker.ViewModels;
 using System.Collections.Generic;
 using System.Threading;
-using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
-using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Data.Services;
 using IssueTracker.Entities;
 using IssueTracker.Models;
