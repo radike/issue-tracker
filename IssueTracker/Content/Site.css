@@ -69,6 +69,7 @@ td.align-right {
 
 .search-table .right-align {
     text-align: right;
+    float: right;
 }
 
 .search-table input[type="text"] {
@@ -129,4 +130,8 @@ td.align-right {
 .alter-position-after-buttons {
     position: relative;
     top: -15px;
+}
+
+.issue-type {
+    color: lightslategrey;
 }
