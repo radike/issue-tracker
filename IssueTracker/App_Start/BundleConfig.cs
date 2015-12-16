@@ -84,6 +84,11 @@ namespace IssueTracker
             // Issues js functions
             bundles.Add(new ScriptBundle("~/bundles/issues-js").Include(
                         "~/Scripts/issues.js"));
+
+            // Autocomplete
+            bundles.Add(new ScriptBundle("~/bundles/autocomplete").Include(
+                        "~/Scripts/autocomplete.js"));
+
         }
     }
 }
