@@ -124,3 +124,9 @@ td.align-right {
 .no-underline-link:hover {
     text-decoration: none;
 }
+
+/* deals with design problems caused by using <div id="create-button" class="float-right"> and <dl class="dl-horizontal"> */
+.alter-position-after-buttons {
+    position: relative;
+    top: -15px;
+}

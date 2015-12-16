@@ -26,16 +26,19 @@
         <dd>
             @Html.DisplayFor(model => model.FromState.Title)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ToStateId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ToState.Title)
-        </dd>
-
     </dl>
+
+    <div class="alter-position-after-buttons">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ToStateId)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ToState.Title)
+            </dd>
+        </dl>
+    </div>
 </div>
 <p>
     @Html.ActionLink(SharedStrings.BackToList, "Index")

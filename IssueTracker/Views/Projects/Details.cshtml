@@ -29,40 +29,44 @@
         </dd>
     </dl>
 
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Code)
-        </dt>
+    <div @if (ViewBag.CanEdit) { @: class="alter-position-after-buttons"
+         }>
 
-        <dd>
-            @Html.DisplayFor(model => model.Code)
-        </dd>
-    </dl>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Code)
+            </dt>
 
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.OwnerId)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Code)
+            </dd>
+        </dl>
 
-        <dd>
-            @Html.DisplayFor(model => model.Owner.Email)
-        </dd>
-    </dl>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.OwnerId)
+            </dt>
 
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.SelectedUsers)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Owner.Email)
+            </dd>
+        </dl>
 
-        <dd>
-            <ul>
-                @foreach (var user in Model.Users)
-                {
-                    <li>@user.Email</li>
-                }
-            </ul>
-        </dd>
-    </dl>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.SelectedUsers)
+            </dt>
+
+            <dd>
+                <ul>
+                    @foreach (var user in Model.Users)
+                    {
+                        <li>@user.Email</li>
+                    }
+                </ul>
+            </dd>
+        </dl>
+    </div>
 </div>
 <p>
     @Html.ActionLink(ProjectStrings.TitleIndex, "Index")
