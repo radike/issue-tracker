@@ -13,6 +13,7 @@ using IssueTracker.Entities;
 using IssueTracker.Models;
 using IssueTracker.Data.Services;
 using IssueTracker.Services;
+using IssueTracker.Data.Facade;
 
 namespace IssueTracker.Controllers
 {
@@ -28,9 +29,10 @@ namespace IssueTracker.Controllers
 
         private const int ProjectsPerPage = 20;
 
-        public IssuesController(IStateWorkflowRepository stateWorkflowRepository, IApplicationUserRepository applicationUserRepository,
+        public IssuesController(IFacade facade, IStateWorkflowRepository stateWorkflowRepository, IApplicationUserRepository applicationUserRepository,
             IStateRepository stateRepository, IIssueService issueService, IStateService stateService, IProjectService projectService)
         {
+            _facade = facade;
             _projectService = projectService;
             _issueService = issueService;
             _stateService = stateService;
@@ -106,6 +108,7 @@ namespace IssueTracker.Controllers
         private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
         private ProjectsByTitleComparer projectsComparer = new ProjectsByTitleComparer();
         private StatesByTitleComparer statesComparer = new StatesByTitleComparer();
+        private IFacade _facade;
 
         private IEnumerable<IssueIndexViewModel> GetSortedIssues(IEnumerable<IssueIndexViewModel> issues, string sortKey)
         {
@@ -456,6 +459,11 @@ namespace IssueTracker.Controllers
                 entityNew.StateId = to;
                 // change CreatedAt
                 entityNew.CreatedAt = DateTime.Now;
+                // mark as resolved if in final state
+                if (entityNew.ResolvedAt == null && _facade.IsIssueInFinalState(entityNew))
+                {
+                    entityNew.ResolvedAt = DateTime.Now;
+                }
                 // save the entity
                 entityNew.Reporter = null;
                 entityNew.Assignee = null;

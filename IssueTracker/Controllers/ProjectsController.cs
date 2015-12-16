@@ -218,9 +218,10 @@ namespace IssueTracker.Controllers
 
         public ContentResult IssueStats(string id)
         {
-            var newIssues = 4;
+
+            var newIssues = _facade.GetNewIssues(id).Count;
             var issuesInProgress = _facade.GetIssuesInProgress(id).Count;
-            var resolvedIssues = 10;
+            var resolvedIssues = _facade.GetResolvedIssues(id).Count;
 
             var result = new Dictionary<string, int>()
             {
@@ -230,6 +231,16 @@ namespace IssueTracker.Controllers
             };
 
             var rows = result.Select(d => string.Format("[\"{0}\", {1}]", d.Key, d.Value));
+            string jsonString = string.Format("[{0}]", string.Join(",", rows));
+
+            return Content(jsonString, "application/json");
+        }
+
+        public ContentResult ProjectProgress(string id)
+        {
+            var chartData = _facade.GetIssueBurndownChartData(id, 5);
+
+            var rows = chartData.Select(d => string.Format("[\"{0}\", {1}, {2}]", d.Item1, d.Item2, d.Item3));
             string jsonString = string.Format("[{0}]", string.Join(",", rows));
 
             return Content(jsonString, "application/json");

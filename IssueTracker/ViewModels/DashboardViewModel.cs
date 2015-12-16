@@ -10,6 +10,7 @@ namespace IssueTracker.ViewModels
     {
         [Display(Name = "Select Project:")]
         public Guid? ProjectId { get; set; }
+        public string ProjectCode { get; set; }
         public int QuestionCount { get; set; }
         public int TaskCount { get; set; }
         public int BugCount { get; set; }

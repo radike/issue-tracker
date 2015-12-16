@@ -7,6 +7,7 @@ using IssueTracker.Data.Entities;
 using IssueTracker.Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using System.Data.Entity;
+using IssueTracker.Data.Abstractions;
 
 namespace IssueTracker.Data.Services
 {
@@ -72,7 +73,8 @@ namespace IssueTracker.Data.Services
             if (project == null)
             {
                 projectId = null;
-            } else
+            }
+            else
             {
                 projectId = project.Id;
             }
@@ -143,6 +145,85 @@ namespace IssueTracker.Data.Services
             }
 
             return allIssues.ToList();
+        }
+
+        public ICollection<Issue> GetNewIssues(Guid? projectId)
+        {
+            var newIssues = _issueRepo.FindBy(i => i.State.IsInitial);
+            if (projectId.HasValue)
+            {
+                newIssues.Where(i => i.ProjectId == projectId);
+            }
+
+            return newIssues.ToList();
+        }
+
+        public int GetRaisedIssueCount(DateTime fromDate, DateTime toDate)
+        {
+            return GetRaisedIssueCount(null, fromDate, toDate);
+        }
+
+        public int GetRaisedIssueCount(Guid? projectId, DateTime fromDate, DateTime toDate)
+        {
+            return GetRaisedIssues(projectId, fromDate, toDate).Count;
+        }
+
+        public ICollection<Issue> GetRaisedIssues(int year, int monthFrom, int monthTo)
+        {
+            return GetRaisedIssues(null, year, monthFrom, monthTo);
+        }
+
+        public ICollection<Issue> GetRaisedIssues(Guid? projectId, int year, int month)
+        {
+            return GetRaisedIssues(projectId, year, month, month);
+        }
+
+        public ICollection<Issue> GetRaisedIssues(Guid? projectId, int year, int monthFrom, int monthTo)
+        {
+            DateTime fromDate = new DateTime(year, monthFrom, 1, 0, 0, 0);
+            DateTime toDate = new DateTime(year, monthTo, DateTime.DaysInMonth(year, monthTo), 23, 59, 59);
+
+            return GetRaisedIssues(projectId, fromDate, toDate);
+        }
+
+        public ICollection<Issue> GetRaisedIssues(DateTime fromDate, DateTime toDate)
+        {
+            return GetRaisedIssues(null, fromDate, toDate);
+        }
+
+        public ICollection<Issue> GetRaisedIssues(Guid? projectId, DateTime fromDate, DateTime toDate)
+        {
+            var raisedIssues = _issueRepo.FindBy(i => fromDate <= i.Created && i.Created <= toDate);
+            if (projectId.HasValue)
+            {
+                raisedIssues.Where(i => i.ProjectId == projectId);
+            }
+
+            return raisedIssues.ToList();
+        }
+
+        public ICollection<Issue> GetResolvedIssues(Guid? projectId, int year, int month)
+        {
+            return GetResolvedIssues(projectId, year, month, month);
+        }
+
+        public ICollection<Issue> GetResolvedIssues(Guid? projectId, int year, int monthFrom, int monthTo)
+        {
+            DateTime fromDate = new DateTime(year, monthFrom, 1, 0, 0, 0);
+            DateTime toDate = new DateTime(year, monthTo, DateTime.DaysInMonth(year, monthTo), 23, 59, 59);
+
+            return GetResolvedIssues(projectId, fromDate, toDate);
+        }
+
+        public ICollection<Issue> GetResolvedIssues(Guid? projectId, DateTime fromDate, DateTime toDate)
+        {
+            var raisedIssues = _issueRepo.FindBy(i => fromDate <= i.ResolvedAt && i.ResolvedAt <= toDate);
+            if (projectId.HasValue)
+            {
+                raisedIssues.Where(i => i.ProjectId == projectId);
+            }
+
+            return raisedIssues.ToList();
         }
     }
 }

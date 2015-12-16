@@ -27,6 +27,14 @@ namespace IssueTracker.Data.Services
         Issue GetNewEntityForEditing(Guid issueId);
         ICollection<Issue> GetAllVersions(Guid issueId);
         Issue Add(Issue issue);
-
+        ICollection<Issue> GetNewIssues(Guid? projectId);
+        int GetRaisedIssueCount(DateTime fromDate, DateTime toDate);
+        int GetRaisedIssueCount(Guid? projectId, DateTime fromDate, DateTime toDate);
+        ICollection<Issue> GetRaisedIssues(DateTime fromDate, DateTime toDate);
+        ICollection<Issue> GetRaisedIssues(Guid? projectId, DateTime fromDate, DateTime toDate);
+        ICollection<Issue> GetRaisedIssues(Guid? projectId, int year, int month);
+        ICollection<Issue> GetResolvedIssues(Guid? projectId, int year, int month);
+        ICollection<Issue> GetResolvedIssues(Guid? projectId, int year, int monthFrom, int monthTo);
+        ICollection<Issue> GetResolvedIssues(Guid? projectId, DateTime fromDate, DateTime toDate);
     }
 }

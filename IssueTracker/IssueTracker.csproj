@@ -244,6 +244,10 @@
     <Compile Include="Migrations\201512151730294_AssigneeIdNullable.Designer.cs">
       <DependentUpon>201512151730294_AssigneeIdNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512161750038_AddIssueResolveDateProperty.cs" />
+    <Compile Include="Migrations\201512161750038_AddIssueResolveDateProperty.Designer.cs">
+      <DependentUpon>201512161750038_AddIssueResolveDateProperty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\UserRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -512,6 +516,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512151730294_AssigneeIdNullable.resx">
       <DependentUpon>201512151730294_AssigneeIdNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512161750038_AddIssueResolveDateProperty.resx">
+      <DependentUpon>201512161750038_AddIssueResolveDateProperty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

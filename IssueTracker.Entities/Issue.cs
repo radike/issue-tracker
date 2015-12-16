@@ -39,6 +39,8 @@ namespace IssueTracker.Data.Entities
         
         public DateTime Created { get; set; }
 
+        public DateTime? ResolvedAt { get; set; }
+
         public string Description { get; set; }
         
         public int CodeNumber { get; set; }

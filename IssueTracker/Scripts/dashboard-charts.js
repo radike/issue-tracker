@@ -14,13 +14,14 @@ function drawPieChart() {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Status');
         data.addColumn('number', 'Count');
-        
+
         data.addRows(result);
 
         // Set chart options
         var options = {
             'height': 500,
-            'chartArea': {left: 20, top: 40, width: '100%', height: '80%' },
+            'chartArea': { left: 20, top: 40, width: '100%', height: '80%' },
+            sliceVisibilityThreshold: 0
         };
 
         // Instantiate and draw our chart, passing in some options.
@@ -32,21 +33,23 @@ function drawPieChart() {
 google.load("visualization", "1", { packages: ['corechart'] });
 google.setOnLoadCallback(drawBarChart);
 function drawBarChart() {
-    var data = google.visualization.arrayToDataTable([
-    ['Month', 'Resolved', 'Raised'],
-    ['Sep', 10, 4],
-    ['Oct', 11, 4],
-    ['Nov', 6, 11],
-    ['Dec', 10, 5]
-    ]);
+    $.get("en-US/Projects/ProjectProgress/SAD", function (result) {
+        var data = google.visualization.arrayToDataTable([
+            ['Month', 'Resolved', 'Raised'],
+            ['Sep', 10, 4],
+            ['Oct', 11, 4],
+            ['Nov', 6, 11],
+            ['Dec', 10, 5]
+        ]);
 
-    var options = {
-        height: 500,
-        chartArea: { left: 50, top: 40, width: '70%', height: '80%' },
-    };
+        var options = {
+            height: 500,
+            chartArea: { left: 50, top: 40, width: '70%', height: '80%' },
+        };
 
-    var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart_div'));
-    chart.draw(data, options);
+        var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart_div'));
+        chart.draw(data, options);
+    });
 }
 
 

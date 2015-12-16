@@ -22,6 +22,7 @@ namespace IssueTracker.Data.Model_Configuration
             Property(p => p.Created).IsRequired();
             Property(p => p.CodeNumber).IsRequired();
             Property(p => p.Type).IsRequired();
+            Property(p => p.ResolvedAt).IsOptional();
 
             HasRequired(p => p.Project)
             .WithMany(c => c.Issues)
