@@ -115,6 +115,15 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to unassigned.
+        /// </summary>
+        public static string IssueAssigneeUnassigned {
+            get {
+                return ResourceManager.GetString("IssueAssigneeUnassigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created.
         /// </summary>
         public static string IssueCreated {
@@ -174,6 +183,33 @@ namespace IssueTracker.Locale {
         public static string IssueType {
             get {
                 return ResourceManager.GetString("IssueType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bug.
+        /// </summary>
+        public static string IssueTypeBug {
+            get {
+                return ResourceManager.GetString("IssueTypeBug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question.
+        /// </summary>
+        public static string IssueTypeQuestion {
+            get {
+                return ResourceManager.GetString("IssueTypeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task.
+        /// </summary>
+        public static string IssueTypeTask {
+            get {
+                return ResourceManager.GetString("IssueTypeTask", resourceCulture);
             }
         }
         

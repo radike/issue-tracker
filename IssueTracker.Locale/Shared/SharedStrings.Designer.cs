@@ -124,6 +124,60 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bugs.
+        /// </summary>
+        public static string DashboardBugs {
+            get {
+                return ResourceManager.GetString("DashboardBugs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Status.
+        /// </summary>
+        public static string DashboardCurrentStatus {
+            get {
+                return ResourceManager.GetString("DashboardCurrentStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questions.
+        /// </summary>
+        public static string DashboardQuestions {
+            get {
+                return ResourceManager.GetString("DashboardQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select project:.
+        /// </summary>
+        public static string DashboardSelectProject {
+            get {
+                return ResourceManager.GetString("DashboardSelectProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tasks.
+        /// </summary>
+        public static string DashboardTasks {
+            get {
+                return ResourceManager.GetString("DashboardTasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dashboard.
+        /// </summary>
+        public static string DashboardTitle {
+            get {
+                return ResourceManager.GetString("DashboardTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this?.
         /// </summary>
         public static string DeleteMessageGeneric {
@@ -165,6 +219,15 @@ namespace IssueTracker.Locale {
         public static string FormSave {
             get {
                 return ResourceManager.GetString("FormSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to History.
+        /// </summary>
+        public static string History {
+            get {
+                return ResourceManager.GetString("History", resourceCulture);
             }
         }
         
@@ -219,6 +282,15 @@ namespace IssueTracker.Locale {
         public static string TabWorkflow {
             get {
                 return ResourceManager.GetString("TabWorkflow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View details.
+        /// </summary>
+        public static string ViewDetails {
+            get {
+                return ResourceManager.GetString("ViewDetails", resourceCulture);
             }
         }
         

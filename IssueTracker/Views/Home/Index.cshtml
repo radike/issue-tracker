@@ -9,7 +9,7 @@
     <div class="col-lg-12 page-header">
         <table class="dashboard-header">
             <tr>
-                <td>Dashboard</td>
+                <td>@SharedStrings.DashboardTitle</td>
                 <td>
                     <div class="project-select">
                         @Html.LabelFor(model => model.ProjectId, htmlAttributes: new { @class = "control-label" })
@@ -30,13 +30,13 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">@Model.QuestionCount</div>
-                        <div>Questions</div>
+                        <div>@SharedStrings.DashboardQuestions</div>
                     </div>
                 </div>
             </div>
             <a href="#">
                 <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
+                    <span class="pull-left">@SharedStrings.ViewDetails</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
@@ -52,13 +52,13 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">@Model.TaskCount</div>
-                        <div>Tasks</div>
+                        <div>@SharedStrings.DashboardTasks</div>
                     </div>
                 </div>
             </div>
             <a href="#">
                 <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
+                    <span class="pull-left">@SharedStrings.ViewDetails</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
@@ -74,13 +74,13 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">@Model.BugCount</div>
-                        <div>Bugs</div>
+                        <div>@SharedStrings.DashboardBugs</div>
                     </div>
                 </div>
             </div>
             <a href="#">
                 <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
+                    <span class="pull-left">@SharedStrings.ViewDetails</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
@@ -163,11 +163,11 @@
         <!-- /.panel -->
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-pie-chart fa-fw"></i> Current Status
+                <i class="fa fa-pie-chart fa-fw"></i> @SharedStrings.DashboardCurrentStatus
             </div>
             <div class="panel-body">
                 <div id="chart_div"></div>
-                <a href="#" class="btn btn-default btn-block">View Details</a>
+                <a href="#" class="btn btn-default btn-block">@SharedStrings.ViewDetails</a>
             </div>
             <!-- /.panel-body -->
         </div>
@@ -180,7 +180,7 @@
             </div>
             <div class="panel-body">
                 <div id="bar_chart_div"></div>
-                <a href="#" class="btn btn-default btn-block">View Details</a>
+                <a href="#" class="btn btn-default btn-block">@SharedStrings.ViewDetails</a>
             </div>
             <!-- /.panel-body -->
         </div>

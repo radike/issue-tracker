@@ -8,7 +8,7 @@ namespace IssueTracker.ViewModels
 {
     public class DashboardViewModel
     {
-        [Display(Name = "Select Project:")]
+        [Display(Name = "DashboardSelectProject", ResourceType = typeof(Locale.SharedStrings))]
         public Guid? ProjectId { get; set; }
         public string ProjectCode { get; set; }
         public int QuestionCount { get; set; }

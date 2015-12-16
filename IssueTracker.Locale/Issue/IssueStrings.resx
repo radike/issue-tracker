@@ -135,6 +135,9 @@
   <data name="IssueAssigneeId" xml:space="preserve">
     <value>Assignee</value>
   </data>
+  <data name="IssueAssigneeUnassigned" xml:space="preserve">
+    <value>unassigned</value>
+  </data>
   <data name="IssueCreated" xml:space="preserve">
     <value>Created</value>
   </data>
@@ -155,6 +158,15 @@
   </data>
   <data name="IssueType" xml:space="preserve">
     <value>Type</value>
+  </data>
+  <data name="IssueTypeBug" xml:space="preserve">
+    <value>Bug</value>
+  </data>
+  <data name="IssueTypeQuestion" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="IssueTypeTask" xml:space="preserve">
+    <value>Task</value>
   </data>
   <data name="ListNoResult" xml:space="preserve">
     <value>No issue found.</value>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 
 namespace IssueTracker.Extensions
 {
@@ -33,6 +35,24 @@ namespace IssueTracker.Extensions
             }
 
             return classValue;
+        }
+
+        public static MvcHtmlString DisplayEnum(this HtmlHelper helper, Enum e)
+        {
+            string result = string.Empty;
+
+            var display = e.GetType()
+                       .GetMember(e.ToString()).First()
+                       .GetCustomAttributes(false)
+                       .OfType<DisplayAttribute>()
+                       .LastOrDefault();
+
+            if (display != null)
+            {
+                result = display.GetName();
+            }
+
+            return helper.DisplayName(result);
         }
 
     }

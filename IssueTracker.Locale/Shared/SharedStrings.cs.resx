@@ -138,6 +138,24 @@
   <data name="ButtonSearch" xml:space="preserve">
     <value>Hledej</value>
   </data>
+  <data name="DashboardBugs" xml:space="preserve">
+    <value>Chyby</value>
+  </data>
+  <data name="DashboardCurrentStatus" xml:space="preserve">
+    <value>Současný stav</value>
+  </data>
+  <data name="DashboardQuestions" xml:space="preserve">
+    <value>Otázky</value>
+  </data>
+  <data name="DashboardSelectProject" xml:space="preserve">
+    <value>Vybrat projekt:</value>
+  </data>
+  <data name="DashboardTasks" xml:space="preserve">
+    <value>Úkoly</value>
+  </data>
+  <data name="DashboardTitle" xml:space="preserve">
+    <value>Řídící panel</value>
+  </data>
   <data name="DeleteMessageGeneric" xml:space="preserve">
     <value>Opravdu chcete tuto položku odstranit?</value>
   </data>
@@ -152,6 +170,9 @@
   </data>
   <data name="FormSave" xml:space="preserve">
     <value>Uložit</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Historie</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>Ne</value>
@@ -170,6 +191,9 @@
   </data>
   <data name="TabWorkflow" xml:space="preserve">
     <value>Workflow</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>Zobrazit podrobnosti</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Ano</value>

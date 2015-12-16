@@ -138,6 +138,24 @@
   <data name="ButtonSearch" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="DashboardBugs" xml:space="preserve">
+    <value>Bugs</value>
+  </data>
+  <data name="DashboardCurrentStatus" xml:space="preserve">
+    <value>Current Status</value>
+  </data>
+  <data name="DashboardQuestions" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="DashboardSelectProject" xml:space="preserve">
+    <value>Select project:</value>
+  </data>
+  <data name="DashboardTasks" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="DashboardTitle" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
   <data name="DeleteMessageGeneric" xml:space="preserve">
     <value>Are you sure you want to delete this?</value>
   </data>
@@ -152,6 +170,9 @@
   </data>
   <data name="FormSave" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>History</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
@@ -170,6 +191,9 @@
   </data>
   <data name="TabWorkflow" xml:space="preserve">
     <value>Workflow</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>View details</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

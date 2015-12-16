@@ -16,6 +16,7 @@ namespace IssueTracker.ViewModels
         public DateTime ProjectCreatedAt { get; set; }
 
         [Required]
+        [Display(Name = "IssueType", ResourceType = typeof(IssueStrings))]
         public IssueType Type { get; set; }
 
         [Display(Name = "IssueAssigneeId", ResourceType = typeof(IssueStrings))]
