@@ -1,5 +1,4 @@
-﻿using IssueTracker.Data.Entities;
-using IssueTracker.Entities;
+﻿using IssueTracker.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,14 +1,9 @@
 ﻿using System;
+using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.Entity;
-using Common.Data.Core.Contracts;
 
-namespace IssueTracker.Data.Entities
+namespace IssueTracker.Entities
 {
 
     public class ApplicationUserRole : IdentityUserRole<Guid> {}

@@ -8,11 +8,11 @@ namespace IssueTracker.Abstractions
 {
     public class CultureHelper
     {
-        public static string PREFFERED_CULTURE_COOKIE = "locale";
-        public static CultureInfo DEFAULT_CULTURE = new CultureInfo("en-us", false);
+        public static string PrefferedCultureCookie = "locale";
+        public static CultureInfo DefaultCulture = new CultureInfo("en-us", false);
 
         public static IReadOnlyCollection<CultureInfo> SupportedCultures = new List<CultureInfo>() {
-            DEFAULT_CULTURE,
+            DefaultCulture,
             new CultureInfo("cs-cz", false)
         };
 
@@ -20,7 +20,7 @@ namespace IssueTracker.Abstractions
         {
             if (cultureCodes == null)
             {
-                return DEFAULT_CULTURE;
+                return DefaultCulture;
             }
 
             foreach (var code in cultureCodes)
@@ -41,7 +41,7 @@ namespace IssueTracker.Abstractions
                 }
             }
 
-            return DEFAULT_CULTURE;
+            return DefaultCulture;
         }
 
         public static CultureInfo CurrentCulture

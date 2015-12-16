@@ -20,7 +20,7 @@ namespace IssueTracker
 
         void Application_AcquireRequestState(object sender, EventArgs args)
         {
-            App_Start.CultureConfig.Application_AcquireRequestState(sender, args);
+            CultureConfig.Application_AcquireRequestState(sender, args);
         }
     }
 }

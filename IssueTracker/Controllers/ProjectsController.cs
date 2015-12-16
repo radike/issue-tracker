@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using PagedList;
-using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
 using IssueTracker.Abstractions;
@@ -18,6 +17,7 @@ using System.Text.RegularExpressions;
 using IssueTracker.Locale;
 using IssueTracker.Data.Services;
 using IssueTracker.Data.Facade;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Controllers
 {

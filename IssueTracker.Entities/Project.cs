@@ -1,13 +1,8 @@
-﻿using Common.Data.Core.Contracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Common.Data.Core.Contracts;
 
-namespace IssueTracker.Data.Entities
+namespace IssueTracker.Entities
 {
     public class Project : IIdentifiableEntity, IVersionableEntity
     {

@@ -1,7 +1,7 @@
 ﻿using Common.Data.Core.Contracts;
-using IssueTracker.Data.Entities;
 using System;
 using System.Collections.Generic;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Data.Contracts.Repository_Interfaces
 {

@@ -3,10 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using Moq;
 using IssueTracker.Data.Services;
-using IssueTracker.Data.Entities;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Tests.Repositories
 {

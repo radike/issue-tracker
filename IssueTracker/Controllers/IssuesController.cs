@@ -4,15 +4,13 @@ using System.Net;
 using System.Web.Mvc;
 using System.Collections.Generic;
 using AutoMapper;
-using IssueTracker.Data.Entities;
+using IssueTracker.Entities;
 using IssueTracker.ViewModels;
 using PagedList;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using System.Text.RegularExpressions;
-using IssueTracker.Entities;
 using IssueTracker.Models;
 using IssueTracker.Data.Services;
-using IssueTracker.Services;
 using IssueTracker.Data.Facade;
 
 namespace IssueTracker.Controllers

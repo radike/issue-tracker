@@ -4,12 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.WebPages;
-using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
 using IssueTracker.Data;
 using IssueTracker.Models;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Controllers
 {

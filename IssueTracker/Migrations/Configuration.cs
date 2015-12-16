@@ -1,7 +1,8 @@
+using IssueTracker.Entities;
+
 namespace IssueTracker.Migrations
 {
     using Data;
-    using Data.Entities;
     using IssueTracker.Models;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;

@@ -1,11 +1,11 @@
 ﻿using IssueTracker.Data.Contracts.Repository_Interfaces;
-using IssueTracker.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Data.Services
 {

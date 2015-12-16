@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using IssueTracker.Data.Entities;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Extensions
 {

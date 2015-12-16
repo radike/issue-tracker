@@ -9,10 +9,10 @@ using IssueTracker.ViewModels;
 using System.Collections.Generic;
 using System.Threading;
 using IssueTracker.Data;
-using IssueTracker.Data.Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
-using IssueTracker.Services;
+using IssueTracker.Data.Services;
+using IssueTracker.Entities;
 using IssueTracker.Models;
 
 namespace IssueTracker.Controllers

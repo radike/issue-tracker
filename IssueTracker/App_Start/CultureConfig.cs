@@ -1,11 +1,10 @@
-﻿using IssueTracker.Abstractions;
-using System;
-using System.Collections;
+﻿using System;
 using System.Globalization;
 using System.Threading;
 using System.Web;
+using IssueTracker.Abstractions;
 
-namespace IssueTracker.App_Start
+namespace IssueTracker
 {
     public static class CultureConfig
     {
@@ -13,7 +12,7 @@ namespace IssueTracker.App_Start
         {
             var app = (HttpApplication) sender;
             var requestContext = app.Context.Request.RequestContext;
-            var cultureCookie = requestContext.HttpContext.Request.Cookies[CultureHelper.PREFFERED_CULTURE_COOKIE];
+            var cultureCookie = requestContext.HttpContext.Request.Cookies[CultureHelper.PrefferedCultureCookie];
             var cultureCode = requestContext.RouteData.Values["culture"] as string;
 
             CultureInfo culture = null;
@@ -49,7 +48,7 @@ namespace IssueTracker.App_Start
         {
             if (cookie == null)
             {
-                cookie = new HttpCookie(CultureHelper.PREFFERED_CULTURE_COOKIE, culture.Name)
+                cookie = new HttpCookie(CultureHelper.PrefferedCultureCookie, culture.Name)
                 {
                     Expires = DateTime.MaxValue
                 };

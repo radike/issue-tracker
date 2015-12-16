@@ -5,7 +5,6 @@ using IssueTracker.Data.Contracts.Repository_Interfaces;
 using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Data.Facade;
 using IssueTracker.Data.Services;
-using IssueTracker.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

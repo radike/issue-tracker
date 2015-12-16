@@ -2,12 +2,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using IssueTracker.Data.Data_Repositories;
-using IssueTracker.Services;
-using IssueTracker.Data.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
 using System.Linq.Expressions;
+using IssueTracker.Data.Services;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Tests.Repositories
 {

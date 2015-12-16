@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IssueTracker.Data.Entities;
 using IssueTracker.Data.Services;
-using IssueTracker.Services;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Data.Facade
 {

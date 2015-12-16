@@ -1,7 +1,7 @@
 ﻿using System;
-using IssueTracker.Data.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using IssueTracker.Entities;
 using PagedList;
 
 namespace IssueTracker.ViewModels

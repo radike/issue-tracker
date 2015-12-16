@@ -1,11 +1,10 @@
-﻿using IssueTracker.Data.Contracts.Repository_Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using IssueTracker.Data.Entities;
+using IssueTracker.Data.Contracts.Repository_Interfaces;
+using IssueTracker.Entities;
 
-namespace IssueTracker.Services
+namespace IssueTracker.Data.Services
 {
     public class StateService : IStateService
     {

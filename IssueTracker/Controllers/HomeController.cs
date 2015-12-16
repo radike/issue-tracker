@@ -1,5 +1,4 @@
 ﻿using IssueTracker.Data.Contracts.Repository_Interfaces;
-using IssueTracker.Data.Entities;
 using IssueTracker.Data.Services;
 using IssueTracker.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -7,6 +6,7 @@ using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Controllers
 {

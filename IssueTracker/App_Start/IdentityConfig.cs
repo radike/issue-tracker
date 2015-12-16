@@ -5,9 +5,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using System.Web.Mvc;
-using IssueTracker.Data.Entities;
 using IssueTracker.Data;
 using System.Security.Claims;
+using IssueTracker.Entities;
 using IssueTracker.Extensions;
 
 namespace IssueTracker

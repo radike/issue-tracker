@@ -1,5 +1,4 @@
 ﻿using Common.Data.Core.Contracts;
-using IssueTracker.Data.Entities;
 using IssueTracker.Data.Contracts;
 using IssueTracker.Data.Model_Configuration;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -11,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IssueTracker.Data.Abstractions;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Data
 {
