@@ -187,6 +187,15 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch language.
+        /// </summary>
+        public static string SwitchLanguage {
+            get {
+                return ResourceManager.GetString("SwitchLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string TabAll {

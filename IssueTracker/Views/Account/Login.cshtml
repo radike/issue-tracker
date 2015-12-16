@@ -49,10 +49,17 @@
                     </span>
                     @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = AccountStrings.PlaceholderPassword, })
                 </div>
-                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                <div class="checkbox">
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger", style = "display: block" })
+                <div class="checkbox" style="float: left">
                     @Html.CheckBoxFor(m => m.RememberMe)
                     @Html.LabelFor(m => m.RememberMe)
+                </div>
+                <div id="lang-select" class="lang-select lang-select-login" style="float: right">
+                    <a href="#" title="@SharedStrings.SwitchLanguage">@ViewBag.LanguageNativeName</a>
+                    <div>
+                        @Html.ActionLink("English", null, new { culture = "en-US", id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "lang-select-en" })
+                        @Html.ActionLink("čeština", null, new { culture = "cs-CZ", id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "lang-select-cs" })
+                    </div>
                 </div>
                 @*<input type="submit" value="Log in" class="btn btn-default" />*@
                 <button class="btn btn-lg btn-primary btn-block" type="submit">@AccountStrings.LogIn</button>

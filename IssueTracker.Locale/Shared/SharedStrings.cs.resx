@@ -159,6 +159,9 @@
   <data name="Paging" xml:space="preserve">
     <value>Strana {0} z {1}</value>
   </data>
+  <data name="SwitchLanguage" xml:space="preserve">
+    <value>Přepnout jazyk</value>
+  </data>
   <data name="TabAll" xml:space="preserve">
     <value>Vše</value>
   </data>

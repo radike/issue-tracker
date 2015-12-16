@@ -194,11 +194,11 @@ li#create-button {
 }
 
 /* Language selection menu */
-#lang-select div {
+.lang-select div {
     display: none;
 }
 
-#lang-select div a {
+.lang-select div a {
     padding-left: 4.0em;
     color: #333333;
     text-align: left;
@@ -207,19 +207,58 @@ li#create-button {
     border-top: 1px solid #cccccc;
 }
 
-#lang-select div a:hover {
+.lang-select div a:hover {
     color: #ffffff;    
-    background-color:  #999999;
     border-bottom: 1px solid #777777;
     border-top: 1px solid #aaaaaa;
+    background: #999999 0.7em 50% no-repeat;
+    text-decoration: none;
 }
 
-#lang-select div a.lang-select-en {
+.lang-select div a.lang-select-en {
     background-image: url('Images/lang_en.gif');
 }
 
-#lang-select div a.lang-select-cs {
+.lang-select div a.lang-select-cs {
     background-image: url('Images/lang_cs.gif');
+}
+
+.lang-select-login {
+    position: relative;
+}
+
+.lang-select-login a {
+    margin: 10px 0 10px 0;
+    display: block
+}
+
+.lang-select-login div {
+    position: absolute;
+    top: 2.2em;
+    right: 0;
+}
+
+.lang-select-login div a {
+    padding: 0.5em 1em 0.5em 4.0em;
+    margin: 0;
+}
+
+.lang-select-login div a:first-of-type  {
+    border-top-left-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-right-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+}
+
+.lang-select-login div a:last-of-type {
+    border-bottom-left-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-bottom-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
 }
 
 .entity-listing {
