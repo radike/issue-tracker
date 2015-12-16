@@ -1,6 +1,7 @@
 ﻿@model PagedList.IPagedList<IssueTracker.ViewModels.IssueIndexViewModel>
 @using IssueTracker.Entities
 @using Microsoft.AspNet.Identity
+@using IssueTracker.Extensions
 @using PagedList.Mvc;
 
 @section AddToHead {
@@ -116,7 +117,7 @@ else
         {
             <tr>
                 <td>
-                    <small class="issue-type">[@Html.DisplayFor(modelItem => item.Type)]</small>
+                    <small class="issue-type">[@Html.DisplayEnum(item.Type)]</small>
                 </td>
                 <td>
                     @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new {id = item.Code}, null)
