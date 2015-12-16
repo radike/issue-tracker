@@ -232,6 +232,15 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to - Select type -.
+        /// </summary>
+        public static string SelectTypeDefault {
+            get {
+                return ResourceManager.GetString("SelectTypeDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assigned to me.
         /// </summary>
         public static string TabAssignedToMe {

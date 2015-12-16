@@ -43,7 +43,7 @@ namespace IssueTracker.Controllers
 
         // GET: Issues
         public ActionResult Index(int? page, string sort, string searchName, string searchTitle,
-            Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState)
+            Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState, IssueType? searchType)
         {
             // viewbag items are used in the header to sort the records
             ViewBag.CreatedSort = String.IsNullOrEmpty(sort) ? "created_desc" : String.Empty;
@@ -56,11 +56,11 @@ namespace IssueTracker.Controllers
             ViewBag.SearchProject = new SelectList(_projectService.GetProjects(), "Id", "Title");
             ViewBag.SearchAssignee = ViewBag.SearchReporter = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
             ViewBag.SearchState = new SelectList(_stateService.GetStatesOrderedByIndex(), "Id", "Title");
-
+            
             var issuesTemp = _issueService.GetAllIssues().ToList();
 
             // search
-            issuesTemp = searchIssues(issuesTemp, searchName, searchTitle, searchAssignee, searchReporter, searchProject, searchState);
+            issuesTemp = searchIssues(issuesTemp, searchName, searchTitle, searchAssignee, searchReporter, searchProject, searchState, searchType);
 
             var issues = Mapper.Map<IEnumerable<IssueIndexViewModel>>(issuesTemp);
             issues = GetSortedIssues(issues, sort);
@@ -70,7 +70,7 @@ namespace IssueTracker.Controllers
         }
 
         private static List<Issue> searchIssues(List<Issue> issues, string searchName, string searchTitle,
-            Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState)
+            Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState, IssueType? searchType)
         {
             if (!String.IsNullOrEmpty(searchName))
             {
@@ -100,6 +100,11 @@ namespace IssueTracker.Controllers
             if (searchState != null)
             {
                 issues = issues.Where(s => s.StateId == searchState).ToList();
+            }
+
+            if (searchType != null)
+            {
+                issues = issues.Where(s => s.Type == searchType).ToList();
             }
 
             return issues;
