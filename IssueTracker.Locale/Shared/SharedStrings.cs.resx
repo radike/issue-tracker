@@ -147,6 +147,9 @@
   <data name="DashboardQuestions" xml:space="preserve">
     <value>Otázky</value>
   </data>
+  <data name="DashboardRaisedVsResolved" xml:space="preserve">
+    <value>Vytvořené vs. zavřené</value>
+  </data>
   <data name="DashboardSelectProject" xml:space="preserve">
     <value>Vybrat projekt:</value>
   </data>

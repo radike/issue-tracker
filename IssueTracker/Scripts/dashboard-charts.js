@@ -8,7 +8,7 @@ google.setOnLoadCallback(drawPieChart);
 // instantiates the pie chart, passes in the data and
 // draws it.
 function drawPieChart() {
-    $.get("en-US/Projects/IssueStats/SAD", function (result) {
+    $.get("en-US/Projects/IssueStats/" + $('#ProjectCode').attr('value'), function (result) {
 
         // Create the data table.
         var data = new google.visualization.DataTable();
@@ -21,7 +21,6 @@ function drawPieChart() {
         var options = {
             'height': 500,
             'chartArea': { left: 20, top: 40, width: '100%', height: '80%' },
-            sliceVisibilityThreshold: 0
         };
 
         // Instantiate and draw our chart, passing in some options.
@@ -33,14 +32,9 @@ function drawPieChart() {
 google.load("visualization", "1", { packages: ['corechart'] });
 google.setOnLoadCallback(drawBarChart);
 function drawBarChart() {
-    $.get("en-US/Projects/ProjectProgress/SAD", function (result) {
-        var data = google.visualization.arrayToDataTable([
-            ['Month', 'Resolved', 'Raised'],
-            ['Sep', 10, 4],
-            ['Oct', 11, 4],
-            ['Nov', 6, 11],
-            ['Dec', 10, 5]
-        ]);
+    $.get("en-US/Projects/ProjectProgress/" + $('#ProjectCode').attr('value'), function (result) {
+        result.unshift(['Month', 'Resolved', 'Raised']);
+        var data = google.visualization.arrayToDataTable(result);
 
         var options = {
             height: 500,

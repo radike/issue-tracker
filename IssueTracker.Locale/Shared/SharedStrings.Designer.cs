@@ -151,6 +151,15 @@ namespace IssueTracker.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Raised vs Resolved.
+        /// </summary>
+        public static string DashboardRaisedVsResolved {
+            get {
+                return ResourceManager.GetString("DashboardRaisedVsResolved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select project:.
         /// </summary>
         public static string DashboardSelectProject {

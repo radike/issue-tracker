@@ -147,6 +147,9 @@
   <data name="DashboardQuestions" xml:space="preserve">
     <value>Questions</value>
   </data>
+  <data name="DashboardRaisedVsResolved" xml:space="preserve">
+    <value>Raised vs Resolved</value>
+  </data>
   <data name="DashboardSelectProject" xml:space="preserve">
     <value>Select project:</value>
   </data>
