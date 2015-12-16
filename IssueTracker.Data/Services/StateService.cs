@@ -34,7 +34,7 @@ namespace IssueTracker.Services
 
         public IEnumerable<State> GetStatesOrderedByIndex()
         {
-            return _stateRepo.GetStatesOrderedByIndex();
+            return _stateRepo.Fetch().OrderBy(x => x.OrderIndex).ToList();
         }
     }
 }

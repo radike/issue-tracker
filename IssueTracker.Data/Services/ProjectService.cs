@@ -66,7 +66,7 @@ namespace IssueTracker.Data.Services
 
         public IEnumerable<Project> GetProjectsForUser(Guid userId)
         {
-            return _projectRepo.GetProjectsForUser(userId);
+            return _projectRepo.FindBy(i => i.OwnerId == userId || i.Users.Any(u => u.Id == userId)).ToList();
         }
 
         public void CreateProject(Project project)
