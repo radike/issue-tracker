@@ -13,7 +13,6 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>@StateWorkflowStrings.EntityName</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <span class="text-danger">@ViewBag.ErrorSameFromAndTo</span><br /><br />
