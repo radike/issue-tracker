@@ -1,5 +1,4 @@
-﻿@using IssueTracker.Entities
-@model IssueTracker.ViewModels.IssueCreateViewModel
+﻿@model IssueTracker.ViewModels.IssueCreateViewModel
 
 @{
     ViewBag.Title = IssueStrings.TitleCreate;
@@ -16,19 +15,21 @@
 
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Hidden("load-project-users-url", @Url.Action("LoadProjectUsers", "Issues"), new { @id = "LoadProjectUsersUrl" })
         <span class="text-danger">@ViewBag.ErrorSQL</span>
+        <span class="text-danger">@ViewBag.ErrorInvalidProject</span>
         <br /><br />
 
         <div class="form-group">
             @Html.LabelFor(model => model.ProjectId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control", @id = "ddlProject" })
                 @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Type, "Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Type, null, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EnumDropDownListFor(model => model.Type, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.AssigneeId, "", new { @class = "text-danger" })
@@ -36,9 +37,9 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.AssigneeId, "Assignee", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.AssigneeId, null, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("AssigneeId", null, "", htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("AssigneeId", null, "Unassigned", htmlAttributes: new { @class = "form-control", @id = "ddlAssignee" })
                 @Html.ValidationMessageFor(model => model.AssigneeId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -75,4 +76,5 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/ckeditor")
     @Scripts.Render("~/bundles/ckeditor-replace-desc")
+    @Scripts.Render("~/bundles/issues-js")
 }

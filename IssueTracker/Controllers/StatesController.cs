@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -8,19 +6,18 @@ using AutoMapper;
 using IssueTracker.ViewModels;
 using System.Collections.Generic;
 using System.Threading;
-using IssueTracker.Data;
-using IssueTracker.Data.Entities;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
-using IssueTracker.Data.Data_Repositories;
-using IssueTracker.Services;
+using IssueTracker.Data.Services;
+using IssueTracker.Entities;
+using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
-    [AuthorizeOrErrorPage(Roles = "Administrators")]
+    [AuthorizeOrErrorPage(Roles = UserRoles.Administrators)]
     public class StatesController : Controller
     {
-        private IStateRepository _stateRepo;
-        private IStateService _stateService;
+        private readonly IStateRepository _stateRepo;
+        private readonly IStateService _stateService;
 
         public StatesController(IStateRepository stateRepository, IStateService stateService)
         {
@@ -75,8 +72,7 @@ namespace IssueTracker.Controllers
                 {
                     removeInitialState(viewModel.Id);
                 }
-                //  var test = _stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
-                //    viewModel.OrderIndex = _stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+
                 viewModel.OrderIndex = _stateRepo.GetStatesOrderIndex();
                 _stateRepo.Add(Mapper.Map<State>(viewModel));
 
@@ -158,9 +154,9 @@ namespace IssueTracker.Controllers
             }
             catch (Exception)
             {
-                TempData["ErrorSQL"] = "There is some workflow transition or issue using this state. The removal was terminated.";
+                TempData["ErrorSQL"] = Locale.StateStrings.ErrorMessageCannotRemove;
 
-                return RedirectToAction("Delete", "States", new { id = id });
+                return RedirectToAction("Delete", "States", new {id });
             }
 
         }
@@ -200,12 +196,6 @@ namespace IssueTracker.Controllers
 
             _stateRepo.GetAll().First(c => c.Id == id).OrderIndex = toPosition;
             _stateRepo.Save();
-        }
-
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
         }
 
         /// <summary>

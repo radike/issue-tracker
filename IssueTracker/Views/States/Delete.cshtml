@@ -2,14 +2,13 @@
 
 @{
     Layout = "~/Views/Shared/_SettingsTabbedLayout.cshtml";
-    ViewBag.Title = "Delete";
+    ViewBag.Title = StateStrings.TitleDelete;
 }
 
-<h2>Delete</h2>
+<h2>@ViewBag.Title</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>@SharedStrings.DeleteMessageGeneric</h3>
 <div>
-    <h4>State</h4>
     <hr />
     <span class="text-danger">@ViewBag.ErrorSQL</span>
     <dl class="dl-horizontal">
@@ -35,8 +34,8 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-danger" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="@SharedStrings.FormDelete" class="btn btn-danger" /> |
+            @Html.ActionLink(SharedStrings.BackToList, "Index")
         </div>
     }
 </div>

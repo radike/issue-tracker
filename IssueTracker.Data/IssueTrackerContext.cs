@@ -1,26 +1,16 @@
 ﻿using Common.Data.Core.Contracts;
-using IssueTracker.Data.Entities;
-using IssueTracker.Data.Contracts;
 using IssueTracker.Data.Model_Configuration;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IssueTracker.Data.Abstractions;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Data
 {
-    public class IssueTrackerContext : ApplicationDbContext
+    public class IssueTrackerContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IDbContext
     {
-        public IssueTrackerContext() : base()
-        {
-            //  Database.SetInitializer<IssueTrackerContext>(null);
-            //DbContext
-        }
-
         public virtual DbSet<Issue> Issues { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<State> States { get; set; }
@@ -43,9 +33,6 @@ namespace IssueTracker.Data
             modelBuilder.Entity<Comment>().HasKey(c => new { c.Id, c.CreatedAt });
             modelBuilder.Entity<Issue>().HasKey(i => new { i.Id, i.CreatedAt });
             modelBuilder.Entity<Project>().HasKey(p => new { p.Id, p.CreatedAt });
-
-            
-
         }
 
         public static IssueTrackerContext Create()

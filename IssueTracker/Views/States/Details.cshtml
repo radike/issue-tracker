@@ -2,13 +2,12 @@
 
 @{
     Layout = "~/Views/Shared/_SettingsTabbedLayout.cshtml";
-    ViewBag.Title = "Details";
+    ViewBag.Title = string.Format(StateStrings.TitleDetails, Model.Title);
 }
 
-<h2>Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>State</h4>
     <hr />
     <div id="create-button" class="float-right">
         <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "States", new {id = Model.Id})'">
@@ -39,5 +38,5 @@
 </div>
 <p>
 
-    @Html.ActionLink("Back to States List", "Index")
+    @Html.ActionLink(SharedStrings.BackToList, "Index")
 </p>

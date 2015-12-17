@@ -1,6 +1,4 @@
-﻿using System.Web.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IssueTracker.Controllers;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IssueTracker.Tests.Controllers
 {

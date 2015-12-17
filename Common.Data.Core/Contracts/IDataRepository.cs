@@ -5,18 +5,18 @@ using System.Linq.Expressions;
 
 namespace Common.Data.Core.Contracts
 {
-    public interface IDataRepository<T> 
-        where T : class, IIdentifiableEntity, new()
+    public interface IDataRepository<TEntity>
+        where TEntity : class, IIdentifiableEntity, new()
     {
-        T Add(T entity);
-        void Remove(T entity);
+        TEntity Add(TEntity entity);
+        void Remove(TEntity entity);
         void Remove(Guid id);
-        T Update(T entity);
-        ICollection<T> GetAll();
-        IQueryable<T> Fetch();
-        T Get(Guid id);
+        TEntity Update(TEntity entity);
+        ICollection<TEntity> GetAll();
+        IQueryable<TEntity> Fetch();
+        TEntity Get(Guid id);
         void Save();
-        IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
-        T FindSingleBy(Expression<Func<T, bool>> predicate);
+        IQueryable<TEntity> FindBy(Expression<Func<TEntity, bool>> predicate);
+        TEntity FindSingleBy(Expression<Func<TEntity, bool>> predicate);
     }
 }

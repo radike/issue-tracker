@@ -1,5 +1,4 @@
 ﻿using IssueTracker.Abstractions;
-using System;
 using System.Web.Mvc;
 
 namespace IssueTracker

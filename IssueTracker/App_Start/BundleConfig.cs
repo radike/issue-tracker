@@ -4,7 +4,6 @@ namespace IssueTracker
 {
     public class BundleConfig
     {
-        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -12,9 +11,7 @@ namespace IssueTracker
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
-
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
+            
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
@@ -71,11 +68,23 @@ namespace IssueTracker
             bundles.Add(new ScriptBundle("~/bundles/ckeditor-replace-desc").Include(
                         "~/Scripts/ckeditor/replace-desc.js"));
 
-            // state workflow visualizer
+            // State workflow visualizer
             bundles.Add(new ScriptBundle("~/bundles/gojs").Include(
                         "~/Scripts/go.js"));
             bundles.Add(new ScriptBundle("~/bundles/gojs-model").Include(
                         "~/Scripts/go-model.js"));
+
+            // Dashboard Charts
+            bundles.Add(new ScriptBundle("~/bundles/charts").Include(
+                "~/Scripts/dashboard-charts.js"));
+
+            // Issues js functions
+            bundles.Add(new ScriptBundle("~/bundles/issues-js").Include(
+                        "~/Scripts/issues.js"));
+
+            // Autocomplete
+            bundles.Add(new ScriptBundle("~/bundles/autocomplete").Include(
+                        "~/Scripts/autocomplete.js"));
 
         }
     }

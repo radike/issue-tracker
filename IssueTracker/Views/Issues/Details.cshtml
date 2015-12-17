@@ -1,4 +1,5 @@
 ﻿@using IssueTracker.Entities
+@using IssueTracker.Extensions
 @model IssueTracker.ViewModels.IssueDetailViewModel
 
 @{
@@ -9,7 +10,7 @@
     <p>
         @Html.DisplayNameFor(model => model.Issue.Project):
         @Html.ActionLink(Model.Issue.Project.Title, "Details", "Projects", new { id = Model.Issue.Project.Code }, null)
-        > @Html.DisplayFor(model => model.Issue.Type):
+        > @Html.DisplayEnum(Model.Issue.Type):
         @Html.ActionLink(Model.Issue.Code, "Details", "Issues", new { id = Model.Issue.Code }, null)
     </p>
     <hr />
@@ -64,7 +65,14 @@
         </tr>
         <tr>
             <td><strong>@Html.DisplayNameFor(model => model.Issue.Assignee):</strong></td>
-            <td>@Html.ActionLink(Model.Issue.Assignee.Email, "Index", "Issues", new { searchAssignee = Model.Issue.Assignee.Id }, new { @class = "black-link" })</td>
+            @if (Model.Issue.Assignee != null)
+            {
+                <td>@Html.ActionLink(Model.Issue.Assignee.Email, "Index", "Issues", new { searchAssignee = Model.Issue.Assignee.Id }, new { @class = "black-link" })</td>
+            }
+            else
+            {
+                <td>@IssueStrings.IssueAssigneeUnassigned</td>
+            }
         </tr>
     </table>
 
@@ -73,8 +81,8 @@
     @if (ViewBag.Sub == "Comments")
     {
         <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.Comments})">Comments</a></li>
-            <li role="presentation"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.History})">History</a></li>
+            <li role="presentation" class="active"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.Comments})">@CommentStrings.TitleComments</a></li>
+            <li role="presentation"><a href="@Url.Action("Details", "Issues", new {id = Model.Issue.Code, sub = IssueSubDetail.History})">@SharedStrings.History</a></li>
         </ul>
         <br />
 

@@ -13,13 +13,13 @@
 
 @section Tabs {
     <ul class="nav nav-tabs">
-        <li role="presentation" class="@Html.ActivePage("States")"><a href="@Url.Action("Index", "States")">States</a></li>
-        <li role="presentation" class="@Html.ActivePage("StateWorkflows")"><a href="@Url.Action("Index", "StateWorkflows")">Workflow</a></li>
+        <li role="presentation" class="@Html.ActivePage("States")"><a href="@Url.Action("Index", "States")">@SharedStrings.TabStates</a></li>
+        <li role="presentation" class="@Html.ActivePage("StateWorkflows")"><a href="@Url.Action("Index", "StateWorkflows")">@SharedStrings.TabWorkflow</a></li>
         @if (ViewContext.RouteData.Values["action"].ToString() == "Index")
         {
             <li id="create-button">
-                <button type="button" class="btn btn-primary" onclick="location.href=location.href +'/Create'">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create")'">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> @SharedStrings.ButtonAdd
                 </button>
             </li>
         }

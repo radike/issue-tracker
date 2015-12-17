@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using PagedList;
-using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
 using AutoMapper;
-using IssueTracker.Abstractions;
 using Microsoft.AspNet.Identity;
-using IssueTracker.Data;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
-using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Models;
 using System.Text.RegularExpressions;
 using IssueTracker.Locale;
 using IssueTracker.Data.Services;
+using IssueTracker.Data.Facade;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Controllers
 {
@@ -26,11 +23,13 @@ namespace IssueTracker.Controllers
         private const int ProjectsPerPage = 20;
         private const int IssuesPerProjectPage = 10;
 
-        private IProjectService _service;
-        private IApplicationUserRepository _userRepo;
+        private readonly IProjectService _service;
+        private readonly IApplicationUserRepository _userRepo;
+        private readonly IFacade _facade;
 
-        public ProjectsController(IProjectService service, IApplicationUserRepository userRepository)
+        public ProjectsController(IFacade facade, IProjectService service, IApplicationUserRepository userRepository)
         {
+            _facade = facade;
             _service = service;
             _userRepo = userRepository;
         }
@@ -45,9 +44,9 @@ namespace IssueTracker.Controllers
         {
             ViewBag.ErrorMessageNotOwner = TempData["ErrorMessageNotOwner"] as string;
             ViewBag.LoggedUserId = User.Identity.GetUserId();
-            ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators.ToString());
+            ViewBag.IsUserAdmin = User.IsInRole(UserRoles.Administrators);
 
-            Guid userId = new Guid(ViewBag.LoggedUserId);
+            var userId = new Guid(ViewBag.LoggedUserId);
             IEnumerable<Project> projects;
             switch (id)
             {
@@ -66,7 +65,7 @@ namespace IssueTracker.Controllers
         }
 
         // GET: Projects/Details/XYZ
-        public ActionResult Details(String id, int? page)
+        public ActionResult Details(string id, int? page)
         {
             if (id == null)
             {
@@ -104,10 +103,9 @@ namespace IssueTracker.Controllers
             {
                 return View(project);
             }
-            if (ProjectCodeHasInvalidFormat(project.Code))
+            if (projectCodeHasInvalidFormat(project.Code))
             {
                 ViewBag.ErrorInvalidFormatCode = ProjectStrings.ErrorMessageInvalidCode;
-                ViewBag.ErrorInvalidFormatCode = "Entered code has invalid format. Only characters are allowed.";
                 ViewBag.UsersList = new MultiSelectList(_userRepo.GetAll(), "Id", "Email");
                 return View(project);
             }
@@ -122,14 +120,14 @@ namespace IssueTracker.Controllers
             return RedirectToAction("Index");
         }
 
-        private static bool ProjectCodeHasInvalidFormat(string s)
+        private static bool projectCodeHasInvalidFormat(string s)
         {
             var rgx = new Regex(@"^[a-zA-Z]+$");// e.g.: CODE-19
             return !rgx.IsMatch(s);
         }
 
         // GET: Projects/Edit/5
-        public ActionResult Edit(String id)
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
@@ -161,7 +159,7 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Title,Code,SelectedUsers,OwnerId")] ProjectViewModel viewModel)
         {
-            Guid? id = _service.GetProjectId(viewModel.Code);
+            var id = _service.GetProjectId(viewModel.Code);
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -176,20 +174,20 @@ namespace IssueTracker.Controllers
                 ViewBag.UsersList = userList;
                 return View(viewModel);
             }
-            Project entity = Mapper.Map<Project>(viewModel);
+            var entity = Mapper.Map<Project>(viewModel);
             _service.EditProject(entity);
 
             return RedirectToAction("Details", new { id = viewModel.Code });
         }
 
         // GET: Projects/Delete/5
-        public ActionResult Delete(String id)
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (!User.IsInRole(UserRoles.Administrators.ToString()))
+            if (!User.IsInRole(UserRoles.Administrators))
             {
                 TempData["ErrorMessageNotOwner"] = ProjectStrings.ErrorMessageDeleteNonadmin;
                 return RedirectToAction("Index");
@@ -202,6 +200,7 @@ namespace IssueTracker.Controllers
             }
 
             var viewModel = Mapper.Map<ProjectViewModel>(project);
+
             return View(viewModel);
         }
 
@@ -214,14 +213,38 @@ namespace IssueTracker.Controllers
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        public ContentResult IssueStats(string id)
         {
-            base.Dispose(disposing);
+            var newIssues = _facade.GetNewIssues(id).Count;
+            var issuesInProgress = _facade.GetIssuesInProgress(id).Count;
+            var resolvedIssues = _facade.GetResolvedIssues(id).Count;
+
+            var result = new Dictionary<string, int>()
+            {
+                {"New", newIssues},
+                {"In progress", issuesInProgress},
+                {"Resolved", resolvedIssues}
+            };
+
+            var rows = result.Select(d => string.Format("[\"{0}\", {1}]", d.Key, d.Value));
+            var jsonString = string.Format("[{0}]", string.Join(",", rows));
+
+            return Content(jsonString, "application/json");
+        }
+
+        public ContentResult ProjectProgress(string id)
+        {
+            var chartData = _facade.GetIssueBurndownChartData(id, 5);
+
+            var rows = chartData.Select(d => string.Format("[\"{0}\", {1}, {2}]", d.Item1, d.Item2, d.Item3));
+            string jsonString = string.Format("[{0}]", string.Join(",", rows));
+
+            return Content(jsonString, "application/json");
         }
 
         public bool UserIsProjectOwnerOrHasAdminRights(Project project)
         {
-            return User.IsInRole(UserRoles.Administrators.ToString())
+            return User.IsInRole(UserRoles.Administrators)
                 || (project.OwnerId == Guid.Parse(User.Identity.GetUserId()));
         }
     }

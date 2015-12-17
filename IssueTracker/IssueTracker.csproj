@@ -240,6 +240,14 @@
     <Compile Include="Migrations\201512111624325_AddIssueTypeProperty.Designer.cs">
       <DependentUpon>201512111624325_AddIssueTypeProperty.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512151730294_AssigneeIdNullable.cs" />
+    <Compile Include="Migrations\201512151730294_AssigneeIdNullable.Designer.cs">
+      <DependentUpon>201512151730294_AssigneeIdNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512161750038_AddIssueResolveDateProperty.cs" />
+    <Compile Include="Migrations\201512161750038_AddIssueResolveDateProperty.Designer.cs">
+      <DependentUpon>201512161750038_AddIssueResolveDateProperty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\UserRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -258,6 +266,7 @@
     <Compile Include="ViewModels\StateViewModel.cs" />
     <Compile Include="ViewModels\StateWorkflowViewModel.cs" />
     <Compile Include="ViewModels\UserEditViewModel.cs" />
+    <Compile Include="ViewModels\UserEmailViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -276,6 +285,8 @@
     <Content Include="Content\Fonts\ecoicons\license.txt" />
     <Content Include="Content\Fonts\ecoicons\Read Me.txt" />
     <Content Include="Content\Fonts\fontawesome-webfont.svg" />
+    <Content Include="Scripts\autocomplete.js" />
+    <Content Include="Scripts\dashboard-charts.js" />
     <Content Include="Scripts\go-model.js" />
     <Content Include="Scripts\go.js" />
     <Content Include="Content\Images\jquery-ui\animated-overlay.gif" />
@@ -382,6 +393,7 @@
     <Content Include="Scripts\classie.js" />
     <Content Include="Scripts\gnmenu.js" />
     <Content Include="Scripts\hammer.min.js" />
+    <Content Include="Scripts\issues.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -413,9 +425,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -447,11 +456,8 @@
     <Content Include="Views\States\Details.cshtml" />
     <Content Include="Views\States\Edit.cshtml" />
     <Content Include="Views\States\Index.cshtml" />
-    <Content Include="Views\Comments\Create.cshtml" />
     <Content Include="Views\Comments\Delete.cshtml" />
-    <Content Include="Views\Comments\Details.cshtml" />
     <Content Include="Views\Comments\Edit.cshtml" />
-    <Content Include="Views\Comments\Index.cshtml" />
     <Content Include="Views\Issues\Create.cshtml" />
     <Content Include="Views\Issues\Details.cshtml" />
     <Content Include="Views\Issues\Edit.cshtml" />
@@ -466,7 +472,6 @@
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Shared\_CustomLoginPartial.cshtml" />
     <Content Include="Views\Shared\_SettingsTabbedLayout.cshtml" />
-    <Content Include="Views\Users\Create.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
@@ -506,6 +511,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512111624325_AddIssueTypeProperty.resx">
       <DependentUpon>201512111624325_AddIssueTypeProperty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512151730294_AssigneeIdNullable.resx">
+      <DependentUpon>201512151730294_AssigneeIdNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512161750038_AddIssueResolveDateProperty.resx">
+      <DependentUpon>201512161750038_AddIssueResolveDateProperty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

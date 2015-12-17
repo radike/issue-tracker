@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using IssueTracker.Locale;
 
 namespace IssueTracker.ViewModels
 {
@@ -10,16 +11,16 @@ namespace IssueTracker.ViewModels
 
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "ApplicationUserEmail", ResourceType = typeof(UserStrings))]
         public string Email { get; set; }
         
         [Phone]
-        [Display(Name = "Phone Number")]
+        [Display(Name = "ApplicationUserPhone", ResourceType = typeof(UserStrings))]
         public string PhoneNumber { get; set; }
 
         [Required]
         [EmailAddress]
-        [Display(Name = "Username")]
+        [Display(Name = "ApplicationUserUsername", ResourceType = typeof(UserStrings))]
         public string UserName { get; set; }
     }
 }

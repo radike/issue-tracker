@@ -1,10 +1,5 @@
-﻿using IssueTracker.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity.ModelConfiguration;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Data.Model_Configuration
 {
@@ -17,11 +12,12 @@ namespace IssueTracker.Data.Model_Configuration
             Property(p => p.ProjectCreatedAt).IsRequired();
             Property(p => p.StateId).IsRequired();
             Property(p => p.ReporterId).IsRequired();
-            Property(p => p.AssigneeId).IsRequired();
+            Property(p => p.AssigneeId).IsOptional();
             Property(p => p.Active).IsRequired();
             Property(p => p.Created).IsRequired();
             Property(p => p.CodeNumber).IsRequired();
             Property(p => p.Type).IsRequired();
+            Property(p => p.ResolvedAt).IsOptional();
 
             HasRequired(p => p.Project)
             .WithMany(c => c.Issues)

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace IssueTracker.Models
+﻿namespace IssueTracker.Models
 {
     public class UserRoles
     {
-        public static UserRoles Administrators = new UserRoles("Administrators");
-        public static UserRoles Users = new UserRoles("Users");
-
+        public const string Administrators = "Administrators";
+        public static UserRoles AdministratorsUserRole = new UserRoles(Administrators);
+        public const string Users = "Users";
+        public static UserRoles UsersUserRole = new UserRoles(Users);
         private string name;
 
         private UserRoles(string name)

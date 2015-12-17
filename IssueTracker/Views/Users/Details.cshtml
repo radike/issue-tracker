@@ -1,15 +1,16 @@
-﻿@model IssueTracker.Data.Entities.ApplicationUser
+﻿@model IssueTracker.Entities.ApplicationUser
 
 @{
-    ViewBag.Title = "User Details";
+    ViewBag.Title = UserStrings.TitleDetails;
     Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    bool canEdit = User.IsInRole(IssueTracker.Models.UserRoles.Administrators);
 }
 
-<h2>User Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <div>
     <hr />
-    @if (User.IsInRole("Administrators"))
+    @if (canEdit)
     {
         <div id="create-button" class="float-right">
             <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Users", new {id = Model.Id})'">
@@ -22,30 +23,38 @@
     }
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.UserName)
+            @UserStrings.ApplicationUserUsername
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.UserName)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
     </dl>
+
+    <div @if (canEdit) { @: class="alter-position-after-buttons"
+            }>
+
+        <dl class="dl-horizontal">
+            <dt>
+                @UserStrings.ApplicationUserEmail
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>
+                @UserStrings.ApplicationUserPhone
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+        </dl>
+    </div>
 </div>
 <p>
-    @Html.ActionLink("Back to List of Users", "Index")
+    @Html.ActionLink(UserStrings.BackToList, "Index")
 </p>

@@ -1,36 +1,5 @@
 ﻿@using IssueTracker.Extensions;
 
-<script>
-    $(function () {
-        $('#SearchTitle').autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    url: '@Url.Action("AutoCompleteSearch", "Home")',
-                    dataType: "json",
-                    contentType: 'application/json, charset=utf-8',
-                    data: {
-                        query: $("#SearchTitle").val()
-                    },
-                    success: function(data) {
-                        response(data);
-                    },
-                    error: function(xhr, status, error) {
-                        alert(error);
-                    }
-                });
-            },
-            select: function (event, ui) {
-                window.location = "/en-US/Issues/Details/" + ui.item.Code;
-            },
-            minLength: 2
-    }).data("ui-autocomplete")._renderItem = function (ul, item) {
-            return $("<li></li>").data("ui-autocomplete-item", item)
-                .append("<a href='/en-US/Issues/Details/" + item.Code+ "'>" + item.Code + ":" + item.Title + "</a>")
-                .appendTo(ul);
-        };
-    });
-
-</script>
 <div>
     <ul id="gn-menu" class="gn-menu-main">
         <li class="gn-trigger">
@@ -40,19 +9,13 @@
             <nav id="nav" class="gn-menu-wrapper">
                 <div class="gn-scroller">
                     <ul class="gn-menu">
-                        <!-- <li class="gn-search-item"><i class="fa fa-search menu-icon"></i>
-                            <input placeholder="Search" type="search" class="gn-search">
-                            <a class="gn-icon">
-                                <span>Search</span>
-                            </a>
-                        </li> -->
                         <li><a class="gn-icon @Html.ActivePage("Home", "gn-selected")" href="@Url.Action("Index", "Home")"><i class="fa fa-home menu-icon"></i>@LayoutStrings.MenuHome</a></li>
                         <li><a class="gn-icon @Html.ActivePage("Issues", "gn-selected")" href="@Url.Action("Index", "Issues")"><i class="fa fa-tasks menu-icon"></i>@LayoutStrings.MenuIssues</a></li>
                         <li><a class="gn-icon @Html.ActivePage("Projects", "gn-selected")" href="@Url.Action("Index", "Projects")"><i class="fa fa-briefcase menu-icon"></i>@LayoutStrings.MenuProjects</a></li>
                         <li><a class="gn-icon @Html.ActivePage("Users", "gn-selected")" href="@Url.Action("Index", "Users")"><i class="fa fa-users menu-icon"></i>@LayoutStrings.MenuUsers</a></li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            if (User.IsInRole("Administrators"))
+                            if (User.IsInRole(IssueTracker.Models.UserRoles.Administrators))
                             {
                                 <li><a class="gn-icon @(Html.ActivePage("States", "gn-selected") ?? Html.ActivePage("StateWorkflows", "gn-selected"))" href="@Url.Action("Index", "States")"><i class="fa fa-cogs menu-icon"></i>@LayoutStrings.MenuSettings</a></li>
                                 <ul class="gn-submenu">
@@ -64,20 +27,17 @@
                         <li id="logout"><a class="gn-icon" href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out menu-icon"></i>@AccountStrings.LogOut</a></li>
                     </ul>
                 </div>
-                <!-- /gn-scroller -->
             </nav>
         </li>
         @Html.Partial("_CustomLoginPartial")
-        @*<li><a href="">Logout</a></li>*@
         <li id="search">
-        @using (Html.BeginForm("Index", "Issues"))
-        {
-            <i class="fa fa-search menu-icon"></i>
-            <input id="SearchTitle" name="SearchTitle" placeholder="@LayoutStrings.SearchPlaceholder" type="search" class="gn-search">
-        }
-            </li>
-        <!-- <li><a href="http://tympanus.net/codrops">Codrops</a></li> -->
-        <!-- <li><a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Development/HeaderEffects/"><span>Previous Demo</span></a></li> -->
-        <!-- <li><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=16030"><span>Back to the Codrops Article</span></a></li> -->
+            @using (Html.BeginForm("Index", "Issues"))
+            {
+                <i class="fa fa-search menu-icon"></i>
+                <input id="SearchTitle" name="SearchTitle" placeholder="@LayoutStrings.SearchPlaceholder" type="search" class="gn-search">
+            }
+        </li>
     </ul>
 </div>
+
+@Scripts.Render("~/bundles/autocomplete")

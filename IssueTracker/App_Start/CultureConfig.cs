@@ -1,11 +1,10 @@
-﻿using IssueTracker.Abstractions;
-using System;
-using System.Collections;
+﻿using System;
 using System.Globalization;
 using System.Threading;
 using System.Web;
+using IssueTracker.Abstractions;
 
-namespace IssueTracker.App_Start
+namespace IssueTracker
 {
     public static class CultureConfig
     {
@@ -13,29 +12,29 @@ namespace IssueTracker.App_Start
         {
             var app = (HttpApplication) sender;
             var requestContext = app.Context.Request.RequestContext;
-            var cultureCookie = requestContext.HttpContext.Request.Cookies[CultureHelper.PREFFERED_CULTURE_COOKIE];
+            var cultureCookie = requestContext.HttpContext.Request.Cookies[CultureHelper.PrefferedCultureCookie];
             var cultureCode = requestContext.RouteData.Values["culture"] as string;
 
-            CultureInfo culture = null;
+            CultureInfo culture;
 
             if (cultureCode != null)
             {
-                CheckLangToken(cultureCode, cultureCookie, app);
+                checkLangToken(cultureCode, cultureCookie, app);
                 culture = CultureHelper.GetSupportedCulture(cultureCode);
-                AppendLocaleCookie(cultureCookie, culture, requestContext);
+                appendLocaleCookie(cultureCookie, culture, requestContext);
             }
             else
             {
                 var langs = CultureHelper.GetCultureForCookie(cultureCookie) ?? app.Context.Request.UserLanguages;
                 culture = CultureHelper.GetSupportedCulture(langs);
-                AppendLocaleCookie(cultureCookie, culture, requestContext);
+                appendLocaleCookie(cultureCookie, culture, requestContext);
             }
 
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
         }
 
-        private static void CheckLangToken(string cultureCode, HttpCookie cultureCookie, HttpApplication app)
+        private static void checkLangToken(string cultureCode, HttpCookie cultureCookie, HttpApplication app)
         {
             if (CultureHelper.IsSupportedCulture(cultureCode)) return;
 
@@ -45,11 +44,11 @@ namespace IssueTracker.App_Start
             app.Response.RedirectToRoute(routeData);
         }
 
-        private static void AppendLocaleCookie(HttpCookie cookie, CultureInfo culture, System.Web.Routing.RequestContext requestContext)
+        private static void appendLocaleCookie(HttpCookie cookie, CultureInfo culture, System.Web.Routing.RequestContext requestContext)
         {
             if (cookie == null)
             {
-                cookie = new HttpCookie(CultureHelper.PREFFERED_CULTURE_COOKIE, culture.Name)
+                cookie = new HttpCookie(CultureHelper.PrefferedCultureCookie, culture.Name)
                 {
                     Expires = DateTime.MaxValue
                 };

@@ -1,14 +1,10 @@
-﻿using Common.Data.Core.Contracts;
-using IssueTracker.Data.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Common.Data.Core.Contracts;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System;
-using System.Data.Entity;
 
-namespace IssueTracker.Data.Entities
+namespace IssueTracker.Entities
 {
     public class ApplicationUser : IdentityUser<Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IUser<Guid>, IIdentifiableEntity
     {
@@ -18,7 +14,6 @@ namespace IssueTracker.Data.Entities
         }
 
         public ApplicationUser(string userName)
-            : base()
         {
             UserName = userName;
         }

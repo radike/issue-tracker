@@ -1,8 +1,8 @@
-﻿using IssueTracker.Data.Entities;
-using IssueTracker.Locale;
+﻿using IssueTracker.Locale;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using IssueTracker.Entities;
 
 namespace IssueTracker.ViewModels
 {

@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using IssueTracker.Data.Entities;
 using IssueTracker.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using IssueTracker.Entities;
 
 namespace IssueTracker
 {

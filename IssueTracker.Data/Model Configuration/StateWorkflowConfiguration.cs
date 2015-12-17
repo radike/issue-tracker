@@ -1,10 +1,5 @@
-﻿using IssueTracker.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity.ModelConfiguration;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Data.Model_Configuration
 {
@@ -14,8 +9,6 @@ namespace IssueTracker.Data.Model_Configuration
         {
             Property(p => p.FromStateId).IsRequired();
             Property(p => p.ToStateId).IsRequired();
-            Ignore(p => p.FromState);
-            Ignore(p => p.ToState);
         }
     }
 }

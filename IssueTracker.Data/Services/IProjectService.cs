@@ -1,30 +1,19 @@
-﻿using IssueTracker.Data.Contracts.Repository_Interfaces;
-using IssueTracker.Data.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IssueTracker.Entities;
 
 namespace IssueTracker.Data.Services
 {
     public interface IProjectService
     {
-
-        Guid? GetProjectId(String code);
-
+        Guid? GetProjectId(string code);
         IEnumerable<Project> GetProjects();
-
         IEnumerable<Project> GetProjectsForUser(Guid userId);
-
-        Project GetProject(String code);
-
+        Project GetProject(string code);
+        Project GetProject(Guid id);
         void CreateProject(Project project);
-
         void EditProject(Project project);
-
-        void DeleteProject(String code);
-
-        bool ProjectCodeIsNotUnique(String code);
+        void DeleteProject(string code);
+        bool ProjectCodeIsNotUnique(string code);
     }
 }

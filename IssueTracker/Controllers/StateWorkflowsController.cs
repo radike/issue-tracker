@@ -6,18 +6,17 @@ using System.Web.Mvc;
 using AutoMapper;
 using IssueTracker.ViewModels;
 using System.Collections.Generic;
-using IssueTracker.Data.Entities;
-using IssueTracker.Data;
-using IssueTracker.Data.Data_Repositories;
 using IssueTracker.Data.Contracts.Repository_Interfaces;
+using IssueTracker.Entities;
+using IssueTracker.Models;
 
 namespace IssueTracker.Controllers
 {
-    [AuthorizeOrErrorPage(Roles = "Administrators")]
+    [AuthorizeOrErrorPage(Roles = UserRoles.Administrators)]
     public class StateWorkflowsController : Controller
     {
-        private IStateWorkflowRepository _stateWorkflowRepo;
-        private IStateRepository _stateRepo;
+        private readonly IStateWorkflowRepository _stateWorkflowRepo;
+        private readonly IStateRepository _stateRepo;
         
         public StateWorkflowsController(IStateWorkflowRepository stateWorkflowRepository, IStateRepository stateRepository)
         {
@@ -33,6 +32,7 @@ namespace IssueTracker.Controllers
                 stateWorkflow.FromState = _stateRepo.Get(stateWorkflow.FromStateId);
                 stateWorkflow.ToState = _stateRepo.Get(stateWorkflow.ToStateId);
             }
+
             return View(Mapper.Map<IEnumerable<StateWorkflowViewModel>>(stateWorkflows).ToList());
         }
 
@@ -72,7 +72,7 @@ namespace IssueTracker.Controllers
             {
                 if (viewModel.FromStateId == viewModel.ToStateId)
                 {
-                    ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
+                    ViewBag.ErrorSameFromAndTo = Locale.StateWorkflowStrings.ErrorMessageFromToSame;
                     ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
                     ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
@@ -122,7 +122,7 @@ namespace IssueTracker.Controllers
             {
                 if (viewModel.FromStateId == viewModel.ToStateId)
                 {
-                    ViewBag.ErrorSameFromAndTo = "You have created invalid transition. From and To cannot be same.";
+                    ViewBag.ErrorSameFromAndTo = Locale.StateWorkflowStrings.ErrorMessageFromToSame;
                     ViewBag.FromStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.FromStateId);
                     ViewBag.ToStateId = new SelectList(_stateRepo.GetAll(), "Id", "Title", viewModel.ToStateId);
 
@@ -163,18 +163,13 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            var stateWorkflow = _stateWorkflowRepo.Get((Guid)id);
+            var stateWorkflow = _stateWorkflowRepo.Get(id);
 
             _stateWorkflowRepo.Remove(stateWorkflow);
 
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
-        
         /// <summary>
         /// Creates JSON of states and worflows within the states for GOJS visualization.
         /// </summary>

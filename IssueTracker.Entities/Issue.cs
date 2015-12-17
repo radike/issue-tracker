@@ -1,14 +1,8 @@
-﻿using Common.Data.Core.Contracts;
-using IssueTracker.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Common.Data.Core.Contracts;
 
-namespace IssueTracker.Data.Entities
+namespace IssueTracker.Entities
 {
     public class Issue : IIdentifiableEntity, IVersionableEntity
     {
@@ -26,7 +20,7 @@ namespace IssueTracker.Data.Entities
 
         public Guid ReporterId { get; set; }
 
-        public Guid AssigneeId { get; set; }
+        public Guid? AssigneeId { get; set; }
         
         public bool Active { get; set; }
 
@@ -38,6 +32,8 @@ namespace IssueTracker.Data.Entities
         public virtual State State { get; set; }
         
         public DateTime Created { get; set; }
+
+        public DateTime? ResolvedAt { get; set; }
 
         public string Description { get; set; }
         

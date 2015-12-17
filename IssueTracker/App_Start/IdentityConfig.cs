@@ -5,9 +5,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using System.Web.Mvc;
-using IssueTracker.Data.Entities;
 using IssueTracker.Data;
 using System.Security.Claims;
+using IssueTracker.Entities;
 using IssueTracker.Extensions;
 
 namespace IssueTracker
@@ -111,7 +111,7 @@ namespace IssueTracker
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             var user = filterContext.RequestContext.HttpContext.User;
-            if (user.Identity.IsAuthenticated == false)//user == null || user.Identity == null)
+            if (user.Identity.IsAuthenticated == false)
             {
                 base.HandleUnauthorizedRequest(filterContext);
             }

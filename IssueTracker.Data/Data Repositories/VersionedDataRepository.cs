@@ -1,18 +1,16 @@
-﻿using Common.Data.Core;
-using Common.Data.Core.Contracts;
+﻿using Common.Data.Core.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq.Expressions;
+using IssueTracker.Data.Abstractions;
 
 namespace IssueTracker.Data.Data_Repositories
 {
     public abstract class VersionedDataRepository<TEntity> : DataRepositoryBase<TEntity>
         where TEntity : class, IIdentifiableEntity, IVersionableEntity, new()
     {
-        public VersionedDataRepository(IDbContext context)
+        protected VersionedDataRepository(IDbContext context)
             :base(context)
         {
 

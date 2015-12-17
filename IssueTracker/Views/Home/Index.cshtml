@@ -1,14 +1,16 @@
-﻿@model IssueTracker.ViewModels.DashboardViewModel
+﻿@using IssueTracker.Entities
+@model IssueTracker.ViewModels.DashboardViewModel
 @{
     ViewBag.Title = "Home Page";
 }
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     <div class="col-lg-12 page-header">
         <table class="dashboard-header">
             <tr>
-                <td>Dashboard</td>
+                <td>@SharedStrings.DashboardTitle</td>
                 <td>
                     <div class="project-select">
                         @Html.LabelFor(model => model.ProjectId, htmlAttributes: new { @class = "control-label" })
@@ -29,13 +31,13 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">@Model.QuestionCount</div>
-                        <div>Questions</div>
+                        <div>@SharedStrings.DashboardQuestions</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
+            <a href="@Url.Action("Index", "Issues", new { searchType = IssueType.Question })">
                 <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
+                    <span class="pull-left">@SharedStrings.ViewDetails</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
@@ -51,13 +53,13 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">@Model.TaskCount</div>
-                        <div>Tasks</div>
+                        <div>@SharedStrings.DashboardTasks</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
+            <a href="@Url.Action("Index", "Issues", new { searchType = IssueType.Task })">
                 <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
+                    <span class="pull-left">@SharedStrings.ViewDetails</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
@@ -73,13 +75,13 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">@Model.BugCount</div>
-                        <div>Bugs</div>
+                        <div>@SharedStrings.DashboardBugs</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
+            <a href="@Url.Action("Index", "Issues", new { searchType = IssueType.Bug })">
                 <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
+                    <span class="pull-left">@SharedStrings.ViewDetails</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
@@ -90,229 +92,36 @@
 
 <div class="row">
     <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <i class="fa fa-bell fa-fw"></i> Notifications Panel
-            </div>
-            <!-- /.panel-heading -->
-            <div class="panel-body">
-                <div class="list-group">
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-comment fa-fw"></i> New Question
-                        <span class="pull-right text-muted small">
-                            <em>4 minutes ago</em>
-                        </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-tasks fa-fw"></i> New Task
-                        <span class="pull-right text-muted small">
-                            <em>43 minutes ago</em>
-                        </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-bug fa-fw"></i> 3 New Bugs
-                        <span class="pull-right text-muted small">
-                            <em>12 minutes ago</em>
-                        </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-envelope fa-fw"></i> Message Sent
-                        <span class="pull-right text-muted small">
-                            <em>27 minutes ago</em>
-                        </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                        <span class="pull-right text-muted small">
-                            <em>11:32 AM</em>
-                        </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                        <span class="pull-right text-muted small">
-                            <em>11:13 AM</em>
-                        </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-warning fa-fw"></i> Server Not Responding
-                        <span class="pull-right text-muted small">
-                            <em>10:57 AM</em>
-                        </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-                        <span class="pull-right text-muted small">
-                            <em>9:49 AM</em>
-                        </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-money fa-fw"></i> Payment Received
-                        <span class="pull-right text-muted small">
-                            <em>Yesterday</em>
-                        </span>
-                    </a>
-                </div>
-                <!-- /.list-group -->
-                <a href="#" class="btn btn-default btn-block">View All Alerts</a>
-            </div>
-            <!-- /.panel-body -->
-        </div>
-    </div>
-    <div class="col-md-4">
         <!-- /.panel -->
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-bar-chart-o fa-fw"></i> Donut Chart Example
+                <i class="fa fa-pie-chart fa-fw"></i> @SharedStrings.DashboardCurrentStatus
             </div>
             <div class="panel-body">
-                <div id="morris-donut-chart">
-                    <svg height="367" version="1.1" width="283" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="overflow: hidden; left: -0.65625px;">
-                        <desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.2</desc>
-                        <defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
-                        <path fill="none" stroke="#0b62a4" d="M141.5,273.6666666666667A87.66666666666667,87.66666666666667,0,0,0,224.4125105355438,214.47736015043859" stroke-width="2" opacity="0" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path>
-                        <path fill="#0b62a4" stroke="#ffffff" d="M141.5,276.6666666666667A90.66666666666667,90.66666666666667,0,0,0,227.24982078200725,215.4518705738376L261.13991539254323,227.09185618665947A126.5,126.5,0,0,1,141.5,312.5Z" stroke-width="3" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-                        <path fill="none" stroke="#3980b5" d="M224.4125105355438,214.47736015043859A87.66666666666667,87.66666666666667,0,0,0,62.8718822023325,147.23063663096116" stroke-width="2" opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1;"></path>
-                        <path fill="#3980b5" stroke="#ffffff" d="M227.24982078200725,215.4518705738376A90.66666666666667,90.66666666666667,0,0,0,60.181186156024495,145.90392837878875L23.557823303498765,127.84595494644175A131.5,131.5,0,0,1,265.8687658033157,228.71604022565785Z"
-                              stroke-width="3" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-                        <path fill="none" stroke="#679dc6" d="M62.8718822023325,147.23063663096116A87.66666666666667,87.66666666666667,0,0,0,141.47245870485656,273.6666623404901" stroke-width="2" opacity="0" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path>
-                        <path fill="#679dc6" stroke="#ffffff" d="M60.181186156024495,145.90392837878875A90.66666666666667,90.66666666666667,0,0,0,141.471516227076,276.66666219244604L141.46025885358583,312.4999937574753A126.5,126.5,0,0,1,28.042316714012117,130.05713536672914Z"
-                              stroke-width="3" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-                        <text x="141.5" y="176" text-anchor="middle" font-family="&quot;Arial&quot;" font-size="15px" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 15px; font-weight: 800;"
-                              font-weight="800" transform="matrix(1.3603,0,0,1.3603,-50.9888,-67.3845)" stroke-width="0.7351077313054499">
-                            <tspan dy="6" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">In-Store Sales</tspan>
-                        </text>
-                        <text x="141.5" y="196" text-anchor="middle" font-family="&quot;Arial&quot;" font-size="14px" stroke="none" fill="#000000" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 14px;" transform="matrix(1.8264,0,0,1.8264,-116.934,-155.3611)"
-                              stroke-width="0.5475285171102661">
-                            <tspan dy="5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">30</tspan>
-                        </text>
-                    </svg>
-                </div>
-                <a href="#" class="btn btn-default btn-block">View Details</a>
+                <div id="chart_div"></div>
+                <a href="@Url.Action("Index", "Issues")" class="btn btn-default btn-block">@SharedStrings.ViewDetails</a>
             </div>
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
     </div>
-    <div class="col-md-4">
-        <div class="chat-panel panel panel-default">
+    <div class="col-md-8">
+        <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-comments fa-fw"></i> Chat
-                <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-chevron-down"></i>
-                    </button>
-                    <ul class="dropdown-menu slidedown">
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-refresh fa-fw"></i> Refresh
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-check-circle fa-fw"></i> Available
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-times fa-fw"></i> Busy
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-clock-o fa-fw"></i> Away
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-sign-out fa-fw"></i> Sign Out
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <i class="fa fa-bar-chart-o fa-fw"></i> @SharedStrings.DashboardRaisedVsResolved
             </div>
-            <!-- /.panel-heading -->
             <div class="panel-body">
-                <ul class="chat">
-                    <li class="left clearfix">
-                        <span class="chat-img pull-left">
-                            <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle">
-                        </span>
-                        <div class="chat-body clearfix">
-                            <div class="header">
-                                <strong class="primary-font">Jack Sparrow</strong>
-                                <small class="pull-right text-muted">
-                                    <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
-                                </small>
-                            </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                            </p>
-                        </div>
-                    </li>
-                    <li class="right clearfix">
-                        <span class="chat-img pull-right">
-                            <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle">
-                        </span>
-                        <div class="chat-body clearfix">
-                            <div class="header">
-                                <small class=" text-muted">
-                                    <i class="fa fa-clock-o fa-fw"></i> 13 mins ago
-                                </small>
-                                <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                            </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                            </p>
-                        </div>
-                    </li>
-                    <li class="left clearfix">
-                        <span class="chat-img pull-left">
-                            <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle">
-                        </span>
-                        <div class="chat-body clearfix">
-                            <div class="header">
-                                <strong class="primary-font">Jack Sparrow</strong>
-                                <small class="pull-right text-muted">
-                                    <i class="fa fa-clock-o fa-fw"></i> 14 mins ago
-                                </small>
-                            </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                            </p>
-                        </div>
-                    </li>
-                    <li class="right clearfix">
-                        <span class="chat-img pull-right">
-                            <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle">
-                        </span>
-                        <div class="chat-body clearfix">
-                            <div class="header">
-                                <small class=" text-muted">
-                                    <i class="fa fa-clock-o fa-fw"></i> 15 mins ago
-                                </small>
-                                <strong class="pull-right primary-font">Bhaumik Patel</strong>
-                            </div>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-                            </p>
-                        </div>
-                    </li>
-                </ul>
+                <div id="bar_chart_div"></div>
+                <a href="@Url.Action("Index", "Issues")" class="btn btn-default btn-block">@SharedStrings.ViewDetails</a>
             </div>
             <!-- /.panel-body -->
-            <div class="panel-footer">
-                <div class="input-group">
-                    <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here...">
-                    <span class="input-group-btn">
-                        <button class="btn btn-warning btn-sm" id="btn-chat">
-                            Send
-                        </button>
-                    </span>
-                </div>
-            </div>
-            <!-- /.panel-footer -->
         </div>
-        <!-- /.panel .chat-panel -->
+        <!-- /.panel -->
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    @Html.Hidden("ProjectCode", Model.ProjectCode)
+    @Scripts.Render("~/bundles/charts")
+}

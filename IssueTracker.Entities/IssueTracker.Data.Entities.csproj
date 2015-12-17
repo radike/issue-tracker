@@ -79,6 +79,10 @@
       <Project>{0cbfee98-7111-496b-88bd-3f4206fc10f9}</Project>
       <Name>Common.Data.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IssueTracker.Locale\IssueTracker.Locale.csproj">
+      <Project>{11898d27-3ed6-420c-9044-84a387962bc7}</Project>
+      <Name>IssueTracker.Locale</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

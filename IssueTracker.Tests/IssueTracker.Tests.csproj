@@ -107,6 +107,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
     <Compile Include="Repositories\StateRepositoryTest.cs" />
+    <Compile Include="Repositories\ProjectRepositoryTest.cs" />
+    <Compile Include="Repositories\IssueRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -118,6 +120,10 @@
     <ProjectReference Include="..\Common.Data.Core\Common.Data.Core.csproj">
       <Project>{0CBFEE98-7111-496B-88BD-3F4206FC10F9}</Project>
       <Name>Common.Data.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IssueTracker.Data.Contracts\IssueTracker.Data.Contracts.csproj">
+      <Project>{5aec97d4-f022-488f-a1b5-230e7b94cf51}</Project>
+      <Name>IssueTracker.Data.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\IssueTracker.Data\IssueTracker.Data.csproj">
       <Project>{b14a4987-9c13-4a5a-a46d-603a16a94433}</Project>

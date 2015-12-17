@@ -28,7 +28,6 @@
     {
         <script>
 		    var menu = new gnMenu(document.getElementById('gn-menu'));
-		    // menu._openIconMenu();
 
 		    // Wrap everything in an IIFE
 		    (function($, viewport) {
@@ -50,18 +49,7 @@
 						    e.preventDefault();
 					    }
 				    });
-				    // var hammertime = new Hammer($('.gn-scroller'));
-				    // hammertime.on("swipe", function(e) {
-				    // 	if ((this.scrollTop === ($('.gn-scroller').get(0).scrollHeight - $('.gn-scroller').height()) && d < 0) || (this.scrollTop === 0 && d > 0)) {
-				    // 		e.preventDefault();
-				    // 	}
-				    // });
-
-				    // $("html, body").hammer().on("swipeup", function(e) {
-				    // 	// do scroll down stuff
-				    //
-				    // });
-
+				    
 				    // Executes only in XS breakpoint
 				    if (viewport.is('xs')) {
 					    // ...

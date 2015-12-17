@@ -5,10 +5,10 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using Microsoft.Owin.Security.Google;
-using IssueTracker.Data.Entities;
 using IssueTracker.Data;
 using System.Web.Mvc;
 using System.Web;
+using IssueTracker.Entities;
 using IssueTracker.Extensions;
 
 namespace IssueTracker

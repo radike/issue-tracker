@@ -2,19 +2,18 @@
 
 @{
     Layout = "~/Views/Shared/_SettingsTabbedLayout.cshtml";
-    ViewBag.Title = "Transition detail";
+    ViewBag.Title = StateWorkflowStrings.TitleDetails;
 }
 
-<h2>Transition detail</h2>
+<h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>State workflow transition</h4>
     <hr />
     <div id="create-button" class="float-right">
-        <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "StateWorkflows", new {id = Model.Code})'">
+        <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "StateWorkflows", new {id = Model.Id})'">
             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> @SharedStrings.ButtonEdit
         </button>
-        <button type="button" class="btn btn-default" onclick="location.href = '@Url.Action("Delete", "StateWorkflows", new { id = Model.Code })'">
+        <button type="button" class="btn btn-default" onclick="location.href = '@Url.Action("Delete", "StateWorkflows", new { id = Model.Id })'">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> @SharedStrings.ButtonDelete
         </button>
     </div>
@@ -26,17 +25,20 @@
         <dd>
             @Html.DisplayFor(model => model.FromState.Title)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ToStateId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ToState.Title)
-        </dd>
-
     </dl>
+
+    <div class="alter-position-after-buttons">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ToStateId)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ToState.Title)
+            </dd>
+        </dl>
+    </div>
 </div>
 <p>
-    @Html.ActionLink("Back to Workflows List", "Index")
+    @Html.ActionLink(SharedStrings.BackToList, "Index")
 </p>

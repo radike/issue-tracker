@@ -1,7 +1,9 @@
+using IssueTracker.Entities;
+
 namespace IssueTracker.Migrations
 {
     using Data;
-    using Data.Entities;
+    using IssueTracker.Models;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
@@ -32,8 +34,8 @@ namespace IssueTracker.Migrations
             var roleManager = new RoleManager<IdentityRole>(roleStore);
             var roles = new List<IdentityRole>()
             {
-                new IdentityRole { Name = UserRoles.Administrators.ToString() },
-                new IdentityRole { Name = UserRoles.Users.ToString() }
+                new IdentityRole { Name = UserRoles.Administrators },
+                new IdentityRole { Name = UserRoles.Users }
             };
 
             roles.ForEach(role =>
@@ -48,8 +50,8 @@ namespace IssueTracker.Migrations
             var userManager = new ApplicationUserManager(userStore);
             var users = new List<User>
             {
-                new User(Guid.NewGuid(), "admin@admin.com", "Password@123", UserRoles.Administrators),
-                new User(Guid.NewGuid(), "user@user.com", "Password@123", UserRoles.Users)
+                new User(Guid.NewGuid(), "admin@admin.com", "Password@123", UserRoles.AdministratorsUserRole),
+                new User(Guid.NewGuid(), "user@user.com", "Password@123", UserRoles.UsersUserRole)
             };
 
             users.ForEach(user =>
@@ -76,24 +78,6 @@ namespace IssueTracker.Migrations
                 UserName = userName;
                 Password = password;
                 Role = role;
-            }
-        }
-
-        private class UserRoles
-        {
-            public static UserRoles Administrators = new UserRoles("Administrators");
-            public static UserRoles Users = new UserRoles("Users");
-
-            private string name;
-
-            private UserRoles(string name)
-            {
-                this.name = name;
-            }
-
-            public override string ToString()
-            {
-                return name;
             }
         }
     }

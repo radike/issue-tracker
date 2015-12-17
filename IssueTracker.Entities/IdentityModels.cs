@@ -1,14 +1,9 @@
 ﻿using System;
+using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.Entity;
-using Common.Data.Core.Contracts;
 
-namespace IssueTracker.Data.Entities
+namespace IssueTracker.Entities
 {
 
     public class ApplicationUserRole : IdentityUserRole<Guid> {}
@@ -35,17 +30,18 @@ namespace IssueTracker.Data.Entities
     {
         public string Description { get; set; }
 
-        public ApplicationRole() : base() { }
+        public ApplicationRole()
+        { }
         public ApplicationRole(string name)
             : this()
         {
-            this.Name = name;
+            Name = name;
         }
 
         public ApplicationRole(string name, string description)
             : this(name)
         {
-            this.Description = description;
+            Description = description;
         }
     }
 
@@ -54,15 +50,6 @@ namespace IssueTracker.Data.Entities
     {
         public ApplicatonUserStore(DbContext context)
             : base(context)
-        {
-        }
-    }
-
-    public class ApplicationDbContext
-        : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IDbContext
-    {
-        public ApplicationDbContext()
-            : base("DefaultConnection")
         {
         }
     }

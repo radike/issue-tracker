@@ -18,14 +18,14 @@
 
 @{
     Layout = "~/Views/Shared/_SettingsTabbedLayout.cshtml";
-    ViewBag.Title = "Index";
+    ViewBag.Title = StateStrings.TitleIndex;
 }
 
-<h2>All States</h2>
+<h2>@ViewBag.Title</h2>
 
 @if (Model.ToList().Count == 0)
 {
-    <i>No state found. Create @Html.ActionLink("a new state", "Create").</i>
+    <i>@Html.Raw(string.Format(StateStrings.ListNoResult, Html.ActionLink(StateStrings.ListNoResultNew, "Create")))</i>
 }
 else
 {
@@ -53,21 +53,21 @@ else
                         <span class="label state" style="background-color: @Html.DisplayFor(modelItem => item.Colour);">@Html.DisplayFor(modelItem => item.Title)</span>
                         @if (item.IsInitial)
                         {
-                            <span class="label initial">INITIAL</span>
+                            <span class="label initial">@StateStrings.TypeInitial</span>
                             hasInitialState = true;
                         }
                         @foreach (var finalState in ViewBag.FinalStates)
                         {
                             if (finalState == item.Id)
                             {
-                                <span class="label final">FINAL</span>
+                                <span class="label final">@StateStrings.TypeFinal</span>
                             }
                         }
                     </td>
                     <td class="align-right">
-                        @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
-                        @Html.ActionLink("Details", "Details", new {id = item.Id}) |
-                        @Html.ActionLink("Delete", "Delete", new {id = item.Id})
+                        @Html.ActionLink(SharedStrings.ButtonEdit, "Edit", new {id = item.Id}) |
+                        @Html.ActionLink(SharedStrings.ButtonDetails, "Details", new {id = item.Id}) |
+                        @Html.ActionLink(SharedStrings.ButtonDelete, "Delete", new {id = item.Id})
                     </td>
                 </tr>
             }
@@ -75,6 +75,6 @@ else
     </table>
     if (!hasInitialState)
     {
-        <i class="text-danger">No state is set as initial.</i>
+        <i class="text-danger">@StateStrings.MessageNoInitialState</i>
     }
 }

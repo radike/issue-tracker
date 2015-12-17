@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
 using IssueTracker.Data;
-using System;
 using System.Web.Mvc;
 
 namespace IssueTracker

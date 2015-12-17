@@ -1,15 +1,15 @@
-﻿using IssueTracker.Data.Contracts.Repository_Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using IssueTracker.Data.Contracts.Repository_Interfaces;
+using IssueTracker.Entities;
 
-namespace IssueTracker.Services
+namespace IssueTracker.Data.Services
 {
     public class StateService : IStateService
     {
-        private IStateRepository _stateRepo;
-        private IStateWorkflowRepository _stateWorkflowRepo;
+        private readonly IStateRepository _stateRepo;
+        private readonly IStateWorkflowRepository _stateWorkflowRepo;
 
         public StateService(IStateRepository stateRepository, IStateWorkflowRepository stateWorkflowRepository )
         {
@@ -17,13 +17,22 @@ namespace IssueTracker.Services
             _stateWorkflowRepo = stateWorkflowRepository;
         }
 
-
         public IEnumerable<Guid> GetFinalStateIds()
         {
             var statesWithTransition = _stateWorkflowRepo.Fetch().GroupBy(x => x.FromStateId).Select(g => g.FirstOrDefault()).Select(x => x.FromStateId);
             var allStates = _stateRepo.Fetch().Select(x => x.Id);
 
             return allStates.Except(statesWithTransition).ToList();
+        }
+
+        public ICollection<State> GetInitialStates()
+        {
+            return _stateRepo.FindBy(s => s.IsInitial).ToList();
+        }
+
+        public IEnumerable<State> GetStatesOrderedByIndex()
+        {
+            return _stateRepo.Fetch().OrderBy(x => x.OrderIndex).ToList();
         }
     }
 }

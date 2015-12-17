@@ -1,5 +1,7 @@
 ﻿@model PagedList.IPagedList<IssueTracker.ViewModels.IssueIndexViewModel>
+@using IssueTracker.Entities
 @using Microsoft.AspNet.Identity
+@using IssueTracker.Extensions
 @using PagedList.Mvc;
 
 @section AddToHead {
@@ -57,9 +59,12 @@
                 @Html.DropDownList("SearchAssignee", null, IssueStrings.SelectAssigneeDefault, new { @class = "form-control" })
             </td>
             <td>
-                @Html.DropDownList("SearchReporter", null, IssueStrings.SelectReporterDefault, new { @class = "form-control" })
+                @Html.DropDownList("SearchReporter", null, IssueStrings.SelectReporterDefault, new {@class = "form-control"})
             </td>
-            <td colspan="2" align="right">
+            <td>
+                @Html.DropDownList("SearchType", EnumHelper.GetSelectList(typeof(IssueType)), IssueStrings.SelectTypeDefault, new { @class = "form-control" })
+            </td>
+            <td>
                 <table class="right-align">
                     <tr>
                         <td>
@@ -87,34 +92,46 @@ else
 
     <table class="table">
         <tr>
+            <th></th>
             <th>
-                    @Html.ActionLink(IssueStrings.IssueTitle, "Index", new { sort = ViewBag.SummarySort })
-                </th>
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Assignee).ToString(), "Index", new { sort = ViewBag.AssigneeSort })
-                </th>
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Created).ToString(), "Index", new { sort = ViewBag.CreatedSort })
-                </th>
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Reporter).ToString(), "Index", new { sort = ViewBag.ReporterSort })
-                </th>
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Project).ToString(), "Index", new { sort = ViewBag.ProjectSort })
-                </th>
-                <th>
-                    @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().State).ToString(), "Index", new { sort = ViewBag.StatusSort })
-                </th>
+                @Html.ActionLink(IssueStrings.IssueTitle, "Index", new {sort = ViewBag.SummarySort})
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Assignee).ToString(), "Index", new {sort = ViewBag.AssigneeSort})
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Created).ToString(), "Index", new {sort = ViewBag.CreatedSort})
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Reporter).ToString(), "Index", new {sort = ViewBag.ReporterSort})
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Project).ToString(), "Index", new {sort = ViewBag.ProjectSort})
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().State).ToString(), "Index", new {sort = ViewBag.StatusSort})
+            </th>
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
                 <td>
-                    @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new { id = item.Code }, null)
+                    <small class="issue-type">[@Html.DisplayEnum(item.Type)]</small>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Assignee.Email)
+                    @Html.ActionLink(Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Issues", new {id = item.Code}, null)
+                </td>
+                <td>
+                    @if (item.Assignee != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Assignee.Email)
+                        ;
+                    }
+                    else
+                    {
+                        <span>unassigned</span>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Created)
