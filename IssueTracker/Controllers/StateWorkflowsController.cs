@@ -15,8 +15,8 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage(Roles = UserRoles.Administrators)]
     public class StateWorkflowsController : Controller
     {
-        private IStateWorkflowRepository _stateWorkflowRepo;
-        private IStateRepository _stateRepo;
+        private readonly IStateWorkflowRepository _stateWorkflowRepo;
+        private readonly IStateRepository _stateRepo;
         
         public StateWorkflowsController(IStateWorkflowRepository stateWorkflowRepository, IStateRepository stateRepository)
         {
@@ -32,6 +32,7 @@ namespace IssueTracker.Controllers
                 stateWorkflow.FromState = _stateRepo.Get(stateWorkflow.FromStateId);
                 stateWorkflow.ToState = _stateRepo.Get(stateWorkflow.ToStateId);
             }
+
             return View(Mapper.Map<IEnumerable<StateWorkflowViewModel>>(stateWorkflows).ToList());
         }
 
@@ -162,18 +163,13 @@ namespace IssueTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            var stateWorkflow = _stateWorkflowRepo.Get((Guid)id);
+            var stateWorkflow = _stateWorkflowRepo.Get(id);
 
             _stateWorkflowRepo.Remove(stateWorkflow);
 
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
-        
         /// <summary>
         /// Creates JSON of states and worflows within the states for GOJS visualization.
         /// </summary>

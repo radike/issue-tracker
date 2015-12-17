@@ -30,17 +30,18 @@ namespace IssueTracker.Entities
     {
         public string Description { get; set; }
 
-        public ApplicationRole() : base() { }
+        public ApplicationRole()
+        { }
         public ApplicationRole(string name)
             : this()
         {
-            this.Name = name;
+            Name = name;
         }
 
         public ApplicationRole(string name, string description)
             : this(name)
         {
-            this.Description = description;
+            Description = description;
         }
     }
 

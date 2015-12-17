@@ -9,8 +9,6 @@ namespace IssueTracker.Data.Model_Configuration
         {
             Property(p => p.FromStateId).IsRequired();
             Property(p => p.ToStateId).IsRequired();
-            //Ignore(p => p.FromState);
-            //Ignore(p => p.ToState);
         }
     }
 }

@@ -9,10 +9,11 @@ namespace IssueTracker.Data
 {
     public class DataModule : Module
     {
-        private string connStr;
+        private string _connStr;
+
         public DataModule(string connString)
         {
-            this.connStr = connString;
+            _connStr = connString;
         }
 
         protected override void Load(ContainerBuilder builder)

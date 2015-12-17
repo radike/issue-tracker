@@ -6,23 +6,14 @@ namespace IssueTracker.Data.Services
 {
     public interface IProjectService
     {
-
-        Guid? GetProjectId(String code);
-
+        Guid? GetProjectId(string code);
         IEnumerable<Project> GetProjects();
-
         IEnumerable<Project> GetProjectsForUser(Guid userId);
-
-        Project GetProject(String code);
-
+        Project GetProject(string code);
         Project GetProject(Guid id);
-
         void CreateProject(Project project);
-
         void EditProject(Project project);
-
-        void DeleteProject(String code);
-
-        bool ProjectCodeIsNotUnique(String code);
+        void DeleteProject(string code);
+        bool ProjectCodeIsNotUnique(string code);
     }
 }

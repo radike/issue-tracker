@@ -11,9 +11,9 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage]
     public class CommentsController : Controller
     {
-        private ICommentRepository _commentRepo;
-        private IIssueRepository _issueRepo;
-        private IApplicationUserRepository _userRepo;
+        private readonly ICommentRepository _commentRepo;
+        private readonly IIssueRepository _issueRepo;
+        private readonly IApplicationUserRepository _userRepo;
 
         public CommentsController(ICommentRepository commentRepository, IIssueRepository issueRepository, IApplicationUserRepository applicationUserRepository)
         {
@@ -26,6 +26,7 @@ namespace IssueTracker.Controllers
         public ActionResult Create(Guid id)
         {
             ViewBag.IssueId = id;
+
             return View();
         }
 
@@ -48,6 +49,7 @@ namespace IssueTracker.Controllers
             }
 
             comment.Issue = _issueRepo.Get(comment.IssueId);
+
             return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
         }
 
@@ -64,6 +66,7 @@ namespace IssueTracker.Controllers
                 TempData["ErrorMessage"] = "Only owners can edit their comments.";
                 return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
+
             return View(Mapper.Map<CommentViewModel>(comment));
         }
 
@@ -107,6 +110,7 @@ namespace IssueTracker.Controllers
                 return RedirectToAction("Details", "Issues", new { id = comment.Issue.Code });
             }
             ViewBag.IssueCode = comment.Issue.Code;
+
             return View(Mapper.Map<CommentViewModel>(comment));
         }
 
@@ -119,11 +123,6 @@ namespace IssueTracker.Controllers
             _commentRepo.Remove(id);
 
             return RedirectToAction("Details", "Issues", new { id = issue.Code });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
         }
 
         private ApplicationUser getLoggedUser()

@@ -10,7 +10,7 @@ namespace IssueTracker.Data.Data_Repositories
     public abstract class VersionedDataRepository<TEntity> : DataRepositoryBase<TEntity>
         where TEntity : class, IIdentifiableEntity, IVersionableEntity, new()
     {
-        public VersionedDataRepository(IDbContext context)
+        protected VersionedDataRepository(IDbContext context)
             :base(context)
         {
 

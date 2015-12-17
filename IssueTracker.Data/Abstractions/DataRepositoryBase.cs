@@ -9,8 +9,9 @@ namespace IssueTracker.Data.Abstractions
     public abstract class DataRepositoryBase<TEntity> : IDataRepository<TEntity>
         where TEntity : class, IIdentifiableEntity, new()
     {
-        private IDbContext _context;
-        public DataRepositoryBase(IDbContext context)
+        private readonly IDbContext _context;
+
+        protected DataRepositoryBase(IDbContext context)
         {
             _context = context;
         }

@@ -14,7 +14,6 @@ namespace IssueTracker.Entities
         }
 
         public ApplicationUser(string userName)
-            : base()
         {
             UserName = userName;
         }

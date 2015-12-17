@@ -17,7 +17,7 @@ namespace IssueTracker.Data.Data_Repositories
 
         public IEnumerable<StateWorkflow> GetPossibleWorkflows(Guid fromStateId)
         {
-            return base.GetAll().Where(c => c.FromStateId == fromStateId).ToList();
+            return GetAll().Where(c => c.FromStateId == fromStateId).ToList();
         }
     }
 }

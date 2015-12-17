@@ -18,12 +18,12 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage]
     public class IssuesController : Controller
     {
-        private IIssueService _issueService;
-        private IStateService _stateService;
-        private IStateWorkflowRepository stateWorkflowRepo;
-        private IApplicationUserRepository applicationUserRepo;
-        private IStateRepository stateRepo;
-        private IProjectService _projectService;
+        private readonly IIssueService _issueService;
+        private readonly IStateService _stateService;
+        private readonly IStateWorkflowRepository _stateWorkflowRepo;
+        private readonly IApplicationUserRepository _applicationUserRepo;
+        private readonly IStateRepository _stateRepo;
+        private readonly IProjectService _projectService;
 
         private const int ProjectsPerPage = 20;
 
@@ -34,9 +34,9 @@ namespace IssueTracker.Controllers
             _projectService = projectService;
             _issueService = issueService;
             _stateService = stateService;
-            stateWorkflowRepo = stateWorkflowRepository;
-            applicationUserRepo = applicationUserRepository;
-            stateRepo = stateRepository;
+            _stateWorkflowRepo = stateWorkflowRepository;
+            _applicationUserRepo = applicationUserRepository;
+            _stateRepo = stateRepository;
         }
 
         // GET: Issues
@@ -52,7 +52,7 @@ namespace IssueTracker.Controllers
             ViewBag.StatusSort = sort == "status" ? "status_desc" : "status";
 
             ViewBag.SearchProject = new SelectList(_projectService.GetProjects(), "Id", "Title");
-            ViewBag.SearchAssignee = ViewBag.SearchReporter = new SelectList(applicationUserRepo.GetAll(), "Id", "Email");
+            ViewBag.SearchAssignee = ViewBag.SearchReporter = new SelectList(_applicationUserRepo.GetAll(), "Id", "Email");
             ViewBag.SearchState = new SelectList(_stateService.GetStatesOrderedByIndex(), "Id", "Title");
             
             var issuesTemp = _issueService.GetAllIssues().ToList();
@@ -61,21 +61,22 @@ namespace IssueTracker.Controllers
             issuesTemp = searchIssues(issuesTemp, searchName, searchTitle, searchAssignee, searchReporter, searchProject, searchState, searchType);
 
             var issues = Mapper.Map<IEnumerable<IssueIndexViewModel>>(issuesTemp);
-            issues = GetSortedIssues(issues, sort);
+            issues = getSortedIssues(issues, sort);
 
             var pageNumber = page ?? 1;
+
             return View(issues.ToPagedList(pageNumber, ProjectsPerPage));
         }
 
         private static List<Issue> searchIssues(List<Issue> issues, string searchName, string searchTitle,
             Guid? searchAssignee, Guid? searchReporter, Guid? searchProject, Guid? searchState, IssueType? searchType)
         {
-            if (!String.IsNullOrEmpty(searchName))
+            if (!string.IsNullOrEmpty(searchName))
             {
                 issues = issues.Where(s => s.Name.ToLower().Contains(searchName.ToLower())).ToList();
             }
 
-            if (!String.IsNullOrEmpty(searchTitle))
+            if (!string.IsNullOrEmpty(searchTitle))
             {
                 issues = issues.Where(s => (s.Project.Code + s.CodeNumber + ": " + s.Name).ToLower().Contains(searchTitle.ToLower())).ToList();
             }
@@ -108,12 +109,12 @@ namespace IssueTracker.Controllers
             return issues;
         }
 
-        private UsersByEmailComparer usersComparer = new UsersByEmailComparer();
-        private ProjectsByTitleComparer projectsComparer = new ProjectsByTitleComparer();
-        private StatesByTitleComparer statesComparer = new StatesByTitleComparer();
-        private IFacade _facade;
+        private readonly UsersByEmailComparer _usersComparer = new UsersByEmailComparer();
+        private readonly ProjectsByTitleComparer _projectsComparer = new ProjectsByTitleComparer();
+        private readonly StatesByTitleComparer _statesComparer = new StatesByTitleComparer();
+        private readonly IFacade _facade;
 
-        private IEnumerable<IssueIndexViewModel> GetSortedIssues(IEnumerable<IssueIndexViewModel> issues, string sortKey)
+        private IEnumerable<IssueIndexViewModel> getSortedIssues(IEnumerable<IssueIndexViewModel> issues, string sortKey)
         {
             switch (sortKey)
             {
@@ -122,21 +123,21 @@ namespace IssueTracker.Controllers
                 case "summary_desc":
                     return issues.OrderByDescending(ii => ii.Name);
                 case "reporter_desc":
-                    return issues.OrderByDescending(ii => ii.Reporter, usersComparer);
+                    return issues.OrderByDescending(ii => ii.Reporter, _usersComparer);
                 case "reporter":
-                    return issues.OrderBy(ii => ii.Reporter, usersComparer);
+                    return issues.OrderBy(ii => ii.Reporter, _usersComparer);
                 case "status_desc":
-                    return issues.OrderByDescending(ii => ii.State, statesComparer);
+                    return issues.OrderByDescending(ii => ii.State, _statesComparer);
                 case "status":
-                    return issues.OrderBy(ii => ii.State, statesComparer);
+                    return issues.OrderBy(ii => ii.State, _statesComparer);
                 case "assignee_desc":
-                    return issues.OrderByDescending(ii => ii.Assignee, usersComparer);
+                    return issues.OrderByDescending(ii => ii.Assignee, _usersComparer);
                 case "assignee":
-                    return issues.OrderBy(ii => ii.Assignee, usersComparer);
+                    return issues.OrderBy(ii => ii.Assignee, _usersComparer);
                 case "project_desc":
-                    return issues.OrderByDescending(ii => ii.Project, projectsComparer);
+                    return issues.OrderByDescending(ii => ii.Project, _projectsComparer);
                 case "project":
-                    return issues.OrderBy(ii => ii.Project, projectsComparer);
+                    return issues.OrderBy(ii => ii.Project, _projectsComparer);
                 case "created_desc":
                     return issues.OrderByDescending(ii => ii.Created);
                 default:
@@ -171,7 +172,7 @@ namespace IssueTracker.Controllers
         // GET: Issues/Details/5
         public ActionResult Details(string id, IssueSubDetail? sub)
         {
-            IssueCode code = IssueCode.Parse(id);
+            var code = IssueCode.Parse(id);
             if (code == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -188,10 +189,10 @@ namespace IssueTracker.Controllers
             }
 
             // possible workflows
-            var workflows = stateWorkflowRepo.GetPossibleWorkflows(viewModel.Issue.State.Id);
+            var workflows = _stateWorkflowRepo.GetPossibleWorkflows(viewModel.Issue.State.Id);
             foreach (var stateWorkflow in workflows)
             {
-                stateWorkflow.ToState = stateRepo.Get(stateWorkflow.ToStateId);
+                stateWorkflow.ToState = _stateRepo.Get(stateWorkflow.ToStateId);
             }
             viewModel.StateWorkflows = Mapper.Map<IEnumerable<StateWorkflowViewModel>>(workflows);
 
@@ -201,7 +202,7 @@ namespace IssueTracker.Controllers
             viewModel.Comments = Mapper.Map<IEnumerable<CommentViewModel>>(comments);
             foreach (var comment in viewModel.Comments)
             {
-                comment.User = applicationUserRepo.Get(comment.AuthorId);
+                comment.User = _applicationUserRepo.Get(comment.AuthorId);
             }
 
             viewModel.Changes = getHistory(viewModel.Issue.Id, comments);
@@ -281,9 +282,10 @@ namespace IssueTracker.Controllers
         {
             ViewBag.ErrorSQL = TempData["ErrorSQL"] as string;
             ViewBag.ErrorInvalidProject = TempData["ErrorInvalidProject"] as string;
-            ViewBag.AssigneeId = new SelectList(System.Linq.Enumerable.Empty<UserEmailViewModel>(), "Id", "Email");
+            ViewBag.AssigneeId = new SelectList(Enumerable.Empty<UserEmailViewModel>(), "Id", "Email");
             ViewBag.ProjectId = new SelectList(_projectService.GetProjectsForUser(getLoggedUser().Id), "Id", "Title");
             ViewBag.ReporterId = getLoggedUser().Id;
+
             return View();
         }
 
@@ -347,12 +349,9 @@ namespace IssueTracker.Controllers
 
         private IEnumerable<UserEmailViewModel> loadProjectUsersAsUserEmailViewModel(Guid projectId)
         {
-            IEnumerable<UserEmailViewModel> users = Enumerable.Empty<UserEmailViewModel>();
-            if (projectId != null)
-            {
-                var project = _projectService.GetProject(projectId);
-                users = projectUsersToUserEmailViewModel(project);
-            }
+            var project = _projectService.GetProject(projectId);
+            var users = projectUsersToUserEmailViewModel(project);
+            
             return users;
         }
 
@@ -360,7 +359,7 @@ namespace IssueTracker.Controllers
         {
             try
             {
-                return stateRepo.GetInitialState();
+                return _stateRepo.GetInitialState();
             }
             catch (InvalidOperationException)
             {
@@ -372,16 +371,16 @@ namespace IssueTracker.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                ApplicationUser user = applicationUserRepo.GetAll().First(dbUser => dbUser.Email == User.Identity.Name);
+                var user = _applicationUserRepo.GetAll().First(dbUser => dbUser.Email == User.Identity.Name);
                 return user;
             }
             return null;
         }
 
         // GET: Issues/Edit/5
-        public ActionResult Edit(String id)
+        public ActionResult Edit(string id)
         {
-            IssueCode code = IssueCode.Parse(id);
+            var code = IssueCode.Parse(id);
             if (code == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -412,7 +411,7 @@ namespace IssueTracker.Controllers
                 ViewBag.ProjectId = new SelectList(_projectService.GetProjectsForUser(getLoggedUser().Id), "Id", "Title", viewModel.ProjectId);
                 return View(viewModel);
             }
-            IssueCode code = IssueCode.Parse(viewModel.Code);
+            var code = IssueCode.Parse(viewModel.Code);
             if (code == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -490,9 +489,9 @@ namespace IssueTracker.Controllers
             public string ProjectCode;
             public int IssueNumber;
 
-            public static IssueCode Parse(String code)
+            public static IssueCode Parse(string code)
             {
-                if (code == null || !MatchIssueCodePattern(code))
+                if (code == null || !matchIssueCodePattern(code))
                     return null;
 
                 var splittedCode = code.Split('-');
@@ -504,7 +503,7 @@ namespace IssueTracker.Controllers
                 return new IssueCode { ProjectCode = projectCode, IssueNumber = issueNumber };
             }
 
-            private static bool MatchIssueCodePattern(string s)
+            private static bool matchIssueCodePattern(string s)
             {
                 var rgx = new Regex(@"^[A-Z]+[-][0-9]+$"); // E.g.: CODE-19
                 return rgx.IsMatch(s);
@@ -512,7 +511,6 @@ namespace IssueTracker.Controllers
 
             private IssueCode()
             {
-                ;
             }
         }
 

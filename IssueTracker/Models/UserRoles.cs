@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace IssueTracker.Models
+﻿namespace IssueTracker.Models
 {
     public class UserRoles
     {
-        public const String Administrators = "Administrators";
+        public const string Administrators = "Administrators";
         public static UserRoles AdministratorsUserRole = new UserRoles(Administrators);
-        public const String Users = "Users";
+        public const string Users = "Users";
         public static UserRoles UsersUserRole = new UserRoles(Users);
         private string name;
 

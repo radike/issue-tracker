@@ -9,17 +9,13 @@ namespace IssueTracker.Data.Services
 {
     public class IssueService : IIssueService
     {
-        private IIssueRepository _issueRepo;
-        private IProjectRepository _projectRepo;
-        private ICommentRepository _commentRepo;
-        private IStateWorkflowRepository _stateWfRepo;
+        private readonly IIssueRepository _issueRepo;
+        private readonly ICommentRepository _commentRepo;
 
-        public IssueService(IIssueRepository issueRepository, IProjectRepository projectRepository, ICommentRepository commentRepo, IStateWorkflowRepository stateWorkflowRepository)
+        public IssueService(IIssueRepository issueRepository, ICommentRepository commentRepo)
         {
             _issueRepo = issueRepository;
-            _projectRepo = projectRepository;
             _commentRepo = commentRepo;
-            _stateWfRepo = stateWorkflowRepository;
         }
 
         public ICollection<Issue> GetAllIssues()
@@ -176,8 +172,8 @@ namespace IssueTracker.Data.Services
 
         public ICollection<Issue> GetRaisedIssues(Guid? projectId, int year, int monthFrom, int monthTo)
         {
-            DateTime fromDate = new DateTime(year, monthFrom, 1, 0, 0, 0);
-            DateTime toDate = new DateTime(year, monthTo, DateTime.DaysInMonth(year, monthTo), 23, 59, 59);
+            var fromDate = new DateTime(year, monthFrom, 1, 0, 0, 0);
+            var toDate = new DateTime(year, monthTo, DateTime.DaysInMonth(year, monthTo), 23, 59, 59);
 
             return GetRaisedIssues(projectId, fromDate, toDate);
         }
@@ -205,8 +201,8 @@ namespace IssueTracker.Data.Services
 
         public ICollection<Issue> GetResolvedIssues(Guid? projectId, int year, int monthFrom, int monthTo)
         {
-            DateTime fromDate = new DateTime(year, monthFrom, 1, 0, 0, 0);
-            DateTime toDate = new DateTime(year, monthTo, DateTime.DaysInMonth(year, monthTo), 23, 59, 59);
+            var fromDate = new DateTime(year, monthFrom, 1, 0, 0, 0);
+            var toDate = new DateTime(year, monthTo, DateTime.DaysInMonth(year, monthTo), 23, 59, 59);
 
             return GetResolvedIssues(projectId, fromDate, toDate);
         }

@@ -8,15 +8,14 @@ namespace IssueTracker.Data.Services
 {
     public class StateService : IStateService
     {
-        private IStateRepository _stateRepo;
-        private IStateWorkflowRepository _stateWorkflowRepo;
+        private readonly IStateRepository _stateRepo;
+        private readonly IStateWorkflowRepository _stateWorkflowRepo;
 
         public StateService(IStateRepository stateRepository, IStateWorkflowRepository stateWorkflowRepository )
         {
             _stateRepo = stateRepository;
             _stateWorkflowRepo = stateWorkflowRepository;
         }
-
 
         public IEnumerable<Guid> GetFinalStateIds()
         {

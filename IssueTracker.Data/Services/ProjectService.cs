@@ -9,9 +9,9 @@ namespace IssueTracker.Data.Services
 {
     public class ProjectService : IProjectService
     {
-        private IProjectRepository _projectRepo;
-        private IIssueRepository _issueRepo;
-        private IApplicationUserRepository _userRepo;
+        private readonly IProjectRepository _projectRepo;
+        private readonly IIssueRepository _issueRepo;
+        private readonly IApplicationUserRepository _userRepo;
 
         public ProjectService(IProjectRepository projectRepository, IIssueRepository issueRepository, IApplicationUserRepository applicationUserRepository)
         {
@@ -20,12 +20,11 @@ namespace IssueTracker.Data.Services
             _userRepo = applicationUserRepository;
         }
 
-        public Guid? GetProjectId(String code)
+        public Guid? GetProjectId(string code)
         {
             var project = _projectRepo.FindSingleBy(x => x.Code == code);
-            if (project == null)
-                return null;
-            return project.Id;
+
+            return project?.Id;
         }
 
         public IEnumerable<Project> GetProjects()
@@ -37,7 +36,7 @@ namespace IssueTracker.Data.Services
                 .ToList();
         }
 
-        public Project GetProject(String code)
+        public Project GetProject(string code)
         {
             var project = _projectRepo.Fetch()
                 .AsQueryable()
@@ -47,11 +46,14 @@ namespace IssueTracker.Data.Services
                 .Include(p => p.Owner)
                 .Include(p => p.Users)
                 .FirstOrDefault();
+
             if (project == null)
             {
                 return null;
             }
+
             project.Issues = _issueRepo.Fetch().Where(i => i.ProjectId == project.Id).ToList();
+
             return project;
         }
 
@@ -73,6 +75,7 @@ namespace IssueTracker.Data.Services
             {
                 throw new ProjectCodeIsInUseException();
             }
+
             project.Id = Guid.NewGuid();
             project.Code = project.Code.ToUpper();
             project.CreatedAt = DateTime.Now;
@@ -101,14 +104,15 @@ namespace IssueTracker.Data.Services
             _projectRepo.Add(project);
         }
 
-        public void DeleteProject(String code)
+        public void DeleteProject(string code)
         {
-            _projectRepo.Remove(GetProjectId(code).Value);
+            var projectId = GetProjectId(code);
+            if (projectId != null) _projectRepo.Remove(projectId.Value);
         }
 
         private static void addProjectOwnerToProjectUsers(Project project)
         {
-            project.SelectedUsers = project.SelectedUsers != null ? project.SelectedUsers.Union(new[] { project.OwnerId }).ToList() : new List<Guid> { project.OwnerId };
+            project.SelectedUsers = project.SelectedUsers?.Union(new[] { project.OwnerId }).ToList() ?? new List<Guid> { project.OwnerId };
         }
     }
 }

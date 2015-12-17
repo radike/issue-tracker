@@ -25,7 +25,7 @@ namespace IssueTracker.Abstractions
 
             foreach (var code in cultureCodes)
             {
-                var requestedCulture = ParseCulture(code);
+                var requestedCulture = parseCulture(code);
 
                 if (requestedCulture == null)
                 {
@@ -53,7 +53,7 @@ namespace IssueTracker.Abstractions
 
         public static bool IsSupportedCulture(string cultureCode)
         {
-            return SupportedCultures.Contains(ParseCulture(cultureCode));
+            return SupportedCultures.Contains(parseCulture(cultureCode));
         }
 
         public static string[] GetCultureForCookie(HttpCookie cultureCookie)
@@ -61,7 +61,7 @@ namespace IssueTracker.Abstractions
             return cultureCookie != null && IsSupportedCulture(cultureCookie.Value) ? new[] { cultureCookie.Value } : null;
         }
 
-        private static CultureInfo ParseCulture(string cultureCode)
+        private static CultureInfo parseCulture(string cultureCode)
         {
             try
             {

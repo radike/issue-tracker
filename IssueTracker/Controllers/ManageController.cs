@@ -373,7 +373,7 @@ namespace IssueTracker.Controllers
             return false;
         }
 
-        private bool HasPhoneNumber()
+        private bool hasPhoneNumber()
         {
             var userId = new Guid(User.Identity.GetUserId());
             var user = UserManager.FindById(userId);

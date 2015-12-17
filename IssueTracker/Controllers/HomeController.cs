@@ -13,9 +13,9 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage]
     public class HomeController : Controller
     {
-        private IIssueRepository _issueRepo;
-        private IProjectService _projectService;
-        private IIssueService _issueService;
+        private readonly IIssueRepository _issueRepo;
+        private readonly IProjectService _projectService;
+        private readonly IIssueService _issueService;
 
         public HomeController(IProjectService projectService, IIssueService issueService, IIssueRepository issueRepository)
         {
@@ -26,14 +26,14 @@ namespace IssueTracker.Controllers
 
         public ActionResult Index([Bind(Include = "ProjectId")] DashboardViewModel viewModel)
         {
-            Guid userId = new Guid(User.Identity.GetUserId());
+            var userId = new Guid(User.Identity.GetUserId());
             var usersProjects = _projectService.GetProjectsForUser(userId);
-            Project projectToDisplay = viewModel.ProjectId == null ? usersProjects.FirstOrDefault() : usersProjects.Single(p => p.Id == viewModel.ProjectId);
+            var projectToDisplay = viewModel.ProjectId == null ? usersProjects.FirstOrDefault() : usersProjects.Single(p => p.Id == viewModel.ProjectId);
 
             viewModel.ProjectCode = projectToDisplay.Code;
-            viewModel.QuestionCount = _issueService.GetIssueCount(Entities.IssueType.Question, projectToDisplay, false);
-            viewModel.TaskCount = _issueService.GetIssueCount(Entities.IssueType.Task, projectToDisplay, false);
-            viewModel.BugCount = _issueService.GetIssueCount(Entities.IssueType.Bug, projectToDisplay, false);
+            viewModel.QuestionCount = _issueService.GetIssueCount(IssueType.Question, projectToDisplay, false);
+            viewModel.TaskCount = _issueService.GetIssueCount(IssueType.Task, projectToDisplay, false);
+            viewModel.BugCount = _issueService.GetIssueCount(IssueType.Bug, projectToDisplay, false);
             ViewBag.UsersList = new SelectList(usersProjects, "Id", "Title");
 
             return View(viewModel);

@@ -111,7 +111,7 @@ namespace IssueTracker
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             var user = filterContext.RequestContext.HttpContext.User;
-            if (user.Identity.IsAuthenticated == false)//user == null || user.Identity == null)
+            if (user.Identity.IsAuthenticated == false)
             {
                 base.HandleUnauthorizedRequest(filterContext);
             }

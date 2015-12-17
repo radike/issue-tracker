@@ -14,12 +14,12 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage]
     public class UsersController : Controller
     {
-        private IssueTrackerContext db = new IssueTrackerContext();
+        private readonly IssueTrackerContext _db = new IssueTrackerContext();
 
         // GET: Users
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            return View(_db.Users.ToList());
         }
 
         // GET: Users/Details/5
@@ -29,11 +29,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApplicationUser applicationUser = db.Users.Find(id);
+
+            var applicationUser = _db.Users.Find(id);
+
             if (applicationUser == null)
             {
                 return HttpNotFound();
             }
+
             return View(applicationUser);
         }
 
@@ -45,8 +48,6 @@ namespace IssueTracker.Controllers
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AuthorizeOrErrorPage(Roles = UserRoles.Administrators)]
@@ -54,8 +55,8 @@ namespace IssueTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(applicationUser);
-                db.SaveChanges();
+                _db.Users.Add(applicationUser);
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -70,7 +71,9 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApplicationUser applicationUser = db.Users.Find(id);
+
+            var applicationUser = _db.Users.Find(id);
+
             if (applicationUser == null)
             {
                 return HttpNotFound();
@@ -79,23 +82,22 @@ namespace IssueTracker.Controllers
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AuthorizeOrErrorPage(Roles = UserRoles.Administrators)]
         public ActionResult Edit([Bind(Include = "Id,Email,PhoneNumber,UserName")] UserEditViewModel viewModel)
         {
-            var entityNew = db.Users.Find(viewModel.Id);
+            var entityNew = _db.Users.Find(viewModel.Id);
 
             if (ModelState.IsValid)
             {
                 entityNew = Mapper.Map(viewModel, entityNew);
 
-                db.Entry(entityNew).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(entityNew).State = EntityState.Modified;
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             return View(entityNew);
         }
 
@@ -107,11 +109,14 @@ namespace IssueTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ApplicationUser applicationUser = db.Users.Find(id);
+
+            var applicationUser = _db.Users.Find(id);
+
             if (applicationUser == null)
             {
                 return HttpNotFound();
             }
+
             return View(applicationUser);
         }
 
@@ -121,9 +126,10 @@ namespace IssueTracker.Controllers
         [AuthorizeOrErrorPage(Roles = UserRoles.Administrators)]
         public ActionResult DeleteConfirmed(Guid? id)
         {
-            ApplicationUser applicationUser = db.Users.Find(id);
-            db.Users.Remove(applicationUser);
-            db.SaveChanges();
+            var applicationUser = _db.Users.Find(id);
+            _db.Users.Remove(applicationUser);
+            _db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
@@ -131,7 +137,7 @@ namespace IssueTracker.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

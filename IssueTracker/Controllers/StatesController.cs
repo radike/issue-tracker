@@ -16,8 +16,8 @@ namespace IssueTracker.Controllers
     [AuthorizeOrErrorPage(Roles = UserRoles.Administrators)]
     public class StatesController : Controller
     {
-        private IStateRepository _stateRepo;
-        private IStateService _stateService;
+        private readonly IStateRepository _stateRepo;
+        private readonly IStateService _stateService;
 
         public StatesController(IStateRepository stateRepository, IStateService stateService)
         {
@@ -72,8 +72,7 @@ namespace IssueTracker.Controllers
                 {
                     removeInitialState(viewModel.Id);
                 }
-                //  var test = _stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
-                //    viewModel.OrderIndex = _stateRepo.GetAll().Max(x => (int?)x.OrderIndex) + 1 ?? 1;
+
                 viewModel.OrderIndex = _stateRepo.GetStatesOrderIndex();
                 _stateRepo.Add(Mapper.Map<State>(viewModel));
 
@@ -157,7 +156,7 @@ namespace IssueTracker.Controllers
             {
                 TempData["ErrorSQL"] = Locale.StateStrings.ErrorMessageCannotRemove;
 
-                return RedirectToAction("Delete", "States", new { id = id });
+                return RedirectToAction("Delete", "States", new {id });
             }
 
         }
@@ -197,12 +196,6 @@ namespace IssueTracker.Controllers
 
             _stateRepo.GetAll().First(c => c.Id == id).OrderIndex = toPosition;
             _stateRepo.Save();
-        }
-
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
         }
 
         /// <summary>

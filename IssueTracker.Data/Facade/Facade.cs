@@ -8,9 +8,9 @@ namespace IssueTracker.Data.Facade
 {
     public class IssueTrackerFacade : IFacade
     {
-        private IIssueService _issueService;
-        private IProjectService _projectService;
-        private IStateService _stateService;
+        private readonly IIssueService _issueService;
+        private readonly IProjectService _projectService;
+        private readonly IStateService _stateService;
 
         public IssueTrackerFacade(IIssueService issueService, IStateService stateService, IProjectService projectService)
         {
@@ -18,6 +18,7 @@ namespace IssueTracker.Data.Facade
             _projectService = projectService;
             _stateService = stateService;
         }
+
         public ICollection<Issue> GetIssuesInProgress()
         {
             throw new NotImplementedException();
@@ -25,14 +26,14 @@ namespace IssueTracker.Data.Facade
 
         public ICollection<Issue> GetIssuesInProgress(string projectCode)
         {
-            Project project = _projectService.GetProject(projectCode);
+            var project = _projectService.GetProject(projectCode);
 
             return GetIssuesInProgress(project);
         }
 
         public ICollection<Issue> GetIssuesInProgress(Project project)
         {
-            Guid? projectId = project != null ? project.Id : default(Guid?);
+            var projectId = project?.Id;
             return GetIssuesInProgress(projectId);
         }
 
@@ -51,18 +52,13 @@ namespace IssueTracker.Data.Facade
 
         public ICollection<Issue> GetNewIssues(string projectCode)
         {
-            Project project = _projectService.GetProject(projectCode);
+            var project = _projectService.GetProject(projectCode);
             return GetNewIssues(project.Id);
         }
 
         public ICollection<Issue> GetNewIssues(Guid? projectId)
         {
             return _issueService.GetNewIssues(projectId);
-        }
-
-        public int GetRaisedIssueCount(DateTime fromDate, DateTime toDate)
-        {
-            return GetRaisedIssueCount(fromDate, toDate);
         }
 
         public int GetRaisedIssueCount(Guid? projectId, DateTime fromDate, DateTime toDate)
@@ -72,7 +68,7 @@ namespace IssueTracker.Data.Facade
 
         public ICollection<Issue> GetResolvedIssues(string projectCode)
         {
-            Project project = _projectService.GetProject(projectCode);
+            var project = _projectService.GetProject(projectCode);
             return GetResolvedIssues(project.Id);
         }
 
@@ -95,7 +91,7 @@ namespace IssueTracker.Data.Facade
 
         public ICollection<Tuple<string, int, int>> GetIssueBurndownChartData(string projectCode, int numberOfMonths)
         {
-            Project project = _projectService.GetProject(projectCode);
+            var project = _projectService.GetProject(projectCode);
             return GetIssueBurndownChartData(project.Id, numberOfMonths);
         }
 
@@ -106,7 +102,6 @@ namespace IssueTracker.Data.Facade
             var chartData = new List<Tuple<string, int, int>>();
             for (int i = numberOfMonths - 1; i >= 0; i--)
             {
-                //int month = currentMonth - i < 1 ? currentMonth - i; uprav year a month
                 int month = currentMonth - i;
                 var raisedIssues = _issueService.GetRaisedIssues(projectId, currentYear, month).Count;
                 var resolvedIssues = _issueService.GetResolvedIssues(projectId, currentYear, month).Count;

@@ -11,12 +11,6 @@ namespace IssueTracker.Data
 {
     public class IssueTrackerContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserLogin, ApplicationUserRole, ApplicationUserClaim>, IDbContext
     {
-        public IssueTrackerContext() : base()
-        {
-            //  Database.SetInitializer<IssueTrackerContext>(null);
-            //DbContext
-        }
-
         public virtual DbSet<Issue> Issues { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<State> States { get; set; }
@@ -39,9 +33,6 @@ namespace IssueTracker.Data
             modelBuilder.Entity<Comment>().HasKey(c => new { c.Id, c.CreatedAt });
             modelBuilder.Entity<Issue>().HasKey(i => new { i.Id, i.CreatedAt });
             modelBuilder.Entity<Project>().HasKey(p => new { p.Id, p.CreatedAt });
-
-            
-
         }
 
         public static IssueTrackerContext Create()

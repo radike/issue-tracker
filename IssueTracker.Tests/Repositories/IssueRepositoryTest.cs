@@ -21,7 +21,7 @@ namespace IssueTracker.Tests.Repositories
             Mock<IStateWorkflowRepository> fakeStateWorkflowRepo = new Mock<IStateWorkflowRepository>();
             Mock<ICommentRepository> fakeCommentRepo = new Mock<ICommentRepository>();
 
-            var issueService = new IssueService(fakeIssueRepo.Object, fakeProjectRepo.Object, fakeCommentRepo.Object, fakeStateWorkflowRepo.Object);
+            var issueService = new IssueService(fakeIssueRepo.Object, fakeCommentRepo.Object);
 
             var firstIssueId = Guid.NewGuid();
             var secondIssueId = Guid.NewGuid();
@@ -53,7 +53,7 @@ namespace IssueTracker.Tests.Repositories
             Mock<IStateWorkflowRepository> fakeStateWorkflowRepo = new Mock<IStateWorkflowRepository>();
             Mock<ICommentRepository> fakeCommentRepo = new Mock<ICommentRepository>();
 
-            var issueService = new IssueService(fakeIssueRepo.Object, fakeProjectRepo.Object, fakeCommentRepo.Object, fakeStateWorkflowRepo.Object);
+            var issueService = new IssueService(fakeIssueRepo.Object, fakeCommentRepo.Object);
 
             var firstIssueId = Guid.NewGuid();
             var secondIssueId = Guid.NewGuid();
@@ -97,7 +97,7 @@ namespace IssueTracker.Tests.Repositories
             Mock<IStateWorkflowRepository> fakeStateWorkflowRepo = new Mock<IStateWorkflowRepository>();
             Mock<ICommentRepository> fakeCommentRepo = new Mock<ICommentRepository>();
 
-            var issueService = new IssueService(fakeIssueRepo.Object, fakeProjectRepo.Object, fakeCommentRepo.Object, fakeStateWorkflowRepo.Object);
+            var issueService = new IssueService(fakeIssueRepo.Object, fakeCommentRepo.Object);
 
             var firstProject = new Project() { Code = "COD"};
             var secodProject = new Project() { Code = "COP" };
@@ -133,7 +133,7 @@ namespace IssueTracker.Tests.Repositories
             Mock<IStateWorkflowRepository> fakeStateWorkflowRepo = new Mock<IStateWorkflowRepository>();
             Mock<ICommentRepository> fakeCommentRepo = new Mock<ICommentRepository>();
 
-            var issueService = new IssueService(fakeIssueRepo.Object, fakeProjectRepo.Object, fakeCommentRepo.Object, fakeStateWorkflowRepo.Object);
+            var issueService = new IssueService(fakeIssueRepo.Object, fakeCommentRepo.Object);
 
             var firstProjectId = Guid.NewGuid();
             var secondProjectId = Guid.NewGuid();
@@ -180,7 +180,7 @@ namespace IssueTracker.Tests.Repositories
             Mock<IStateWorkflowRepository> fakeStateWorkflowRepo = new Mock<IStateWorkflowRepository>();
             Mock<ICommentRepository> fakeCommentRepo = new Mock<ICommentRepository>();
 
-            var issueService = new IssueService(fakeIssueRepo.Object, fakeProjectRepo.Object, fakeCommentRepo.Object, fakeStateWorkflowRepo.Object);
+            var issueService = new IssueService(fakeIssueRepo.Object, fakeCommentRepo.Object);
 
             var firstProjectId = Guid.NewGuid();
             var secondProjectId = Guid.NewGuid();
@@ -228,7 +228,7 @@ namespace IssueTracker.Tests.Repositories
             Mock<IStateWorkflowRepository> fakeStateWorkflowRepo = new Mock<IStateWorkflowRepository>();
             Mock<ICommentRepository> fakeCommentRepo = new Mock<ICommentRepository>();
 
-            var issueService = new IssueService(fakeIssueRepo.Object, fakeProjectRepo.Object, fakeCommentRepo.Object, fakeStateWorkflowRepo.Object);
+            var issueService = new IssueService(fakeIssueRepo.Object, fakeCommentRepo.Object);
 
             var firstProjectId = Guid.NewGuid();
             var secondProjectId = Guid.NewGuid();
@@ -278,7 +278,7 @@ namespace IssueTracker.Tests.Repositories
             Mock<IStateWorkflowRepository> fakeStateWorkflowRepo = new Mock<IStateWorkflowRepository>();
             Mock<ICommentRepository> fakeCommentRepo = new Mock<ICommentRepository>();
 
-            var issueService = new IssueService(fakeIssueRepo.Object, fakeProjectRepo.Object, fakeCommentRepo.Object, fakeStateWorkflowRepo.Object);
+            var issueService = new IssueService(fakeIssueRepo.Object, fakeCommentRepo.Object);
 
             var firstProjectId = Guid.NewGuid();
             var secondProjectId = Guid.NewGuid();

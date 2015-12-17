@@ -21,7 +21,7 @@ namespace IssueTracker.Data.Data_Repositories
 
         public override Issue FindSingleBy(Expression<Func<Issue, bool>> predicate)
         {
-            return base.FindBy(predicate).OrderByDescending(x => x.Created).First();
+            return FindBy(predicate).OrderByDescending(x => x.Created).First();
         }
     }
 }
