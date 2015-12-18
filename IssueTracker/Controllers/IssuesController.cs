@@ -149,6 +149,18 @@ namespace IssueTracker.Controllers
         {
             public int Compare(ApplicationUser x, ApplicationUser y)
             {
+                if (x == null && y == null)
+                {
+                    return 0;
+                } 
+                else if (x == null && y != null)
+                {
+                    return 1;
+                }
+                else if (x != null && y == null)
+                {
+                    return -1;
+                }
                 return x.Email.CompareTo(y.Email);
             }
         }
