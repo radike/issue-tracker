@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <a href="@Url.Action("Index", "Issues", new { searchType = IssueType.Question })">
+            <a href="@Url.Action("Index", "Issues", new { searchType = IssueType.Question, searchProject = Model.ProjectId })">
                 <div class="panel-footer">
                     <span class="pull-left">@SharedStrings.ViewDetails</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <a href="@Url.Action("Index", "Issues", new { searchType = IssueType.Task })">
+            <a href="@Url.Action("Index", "Issues", new { searchType = IssueType.Task, searchProject = Model.ProjectId })">
                 <div class="panel-footer">
                     <span class="pull-left">@SharedStrings.ViewDetails</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -79,7 +79,7 @@
                     </div>
                 </div>
             </div>
-            <a href="@Url.Action("Index", "Issues", new { searchType = IssueType.Bug })">
+            <a href="@Url.Action("Index", "Issues", new { searchType = IssueType.Bug, searchProject = Model.ProjectId })">
                 <div class="panel-footer">
                     <span class="pull-left">@SharedStrings.ViewDetails</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
